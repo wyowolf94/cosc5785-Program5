@@ -14,6 +14,7 @@
 
 #include "attributes.h"
 #include "node.hpp"
+#include "symbol.h"
 #include "program5.tab.h"
 
 using namespace std;
