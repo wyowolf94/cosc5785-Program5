@@ -9,15 +9,29 @@
 
 using namespace std;
 
+/*
 void updateVariable(Variable * var, string iden, string type){
   var->iden = iden;
   var->type = type;
   return;
 }
+*/
 
-void updateMethod(Method * method, string iden, string returnType, vector<tuple<string,string> *> params){
+/*
+void updateConstructor(Method * method, string iden,
+                  vector<tuple<string,string> *> params){
+  method->iden = iden;
+  method->params = params;
+  return;
+}
+*/
+
+/*
+void updateMethod(Method * method, string iden, string returnType, 
+                  vector<tuple<string,string> *> params){
   method->iden = iden;
   method->returnType = returnType;
   method->params = params;
   return;
 }
+*/

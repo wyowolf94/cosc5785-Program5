@@ -14,8 +14,10 @@ YACCFLAGS=--report=state -W -d
 
 .PHONY: clean
 
-program5: program5.tab.c program5.tab.h program5_lex.cpp program5.cpp attributes.h node.hpp symbol.h symboltable.hpp
-	${CXX} ${CXXFLAGS} program5.cpp program5.tab.c program5_lex.cpp attributes.cpp symbol.cpp -o program5
+program5: program5.tab.c program5.tab.h program5_lex.cpp program5.cpp \
+		attributes.h node.hpp symbol.h symboltable.hpp
+	${CXX} ${CXXFLAGS} program5.cpp program5.tab.c program5_lex.cpp \
+		attributes.cpp symbol.cpp -o program5
 
 program5.tab.c : program5.y node.hpp attributes.h
 	${YACC} ${YACCFLAGS} program5.y

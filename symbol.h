@@ -21,20 +21,31 @@ using std::tuple;
 using std::vector;
 
 struct Variable{
-  bool valid;
-  string iden;
   string type;
+  string iden;
+  bool valid;
 };
 
-void updateVariable(Variable * var, string iden, string type);
+//void updateVariable(Variable * var, string iden, string type);
 
-struct Method{
+/*
+struct Constructor{
   bool valid;
-  string iden;
-  string returnType;
   vector<tuple<string,string> *> params;
 };
 
-void updateMethod(Method * method, string iden, string returnType, vector<tuple<string,string> *> params);
+void updateConstructor(Method * method, string iden, 
+                  vector<Variable*> params);
+*/
+
+struct Method{
+  string returnType;
+  string iden;
+  vector<Variable*> params;
+  bool valid;
+};
+
+//void updateMethod(Method * method, string iden, string returnType, 
+//                  vector<Variable*> params);
 
 #endif
