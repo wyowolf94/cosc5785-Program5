@@ -33,6 +33,8 @@ struct Method{
   bool valid;
 };
 
+void printParamsExplicit(vector<Variable*> params);
+
 void printParams(vector<Variable*> params);
 
 #endif

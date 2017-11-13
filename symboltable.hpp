@@ -16,6 +16,10 @@
 #define INVALIDVAR "invalid variable"
 #define INVALIDMETHOD "invalid method"
 #define INVALIDSYM "invalid symbol"
+#define CLASSTYPE "Class"
+#define CONSTRUCTOR "Constructor"
+#define METHODTYPE "Method"
+#define BLOCKTYPE "Block"
 
 using std::string;
 using std::endl;
@@ -30,14 +34,16 @@ class SymbolTable
 {
   public:
     // Constructor
-    SymbolTable(SymbolTable * p) {
+    SymbolTable(SymbolTable * p, string t) {
       parent = p;
       level = p->level + 1;
+      type = t;
     }
     
-    SymbolTable() {
+    SymbolTable() { 
       parent = 0;
       level = 0;
+      type = "Program";
     }
 
     // Destructor
@@ -122,7 +128,7 @@ class SymbolTable
       }
     }
     
-    // Looks up a variable in the vars map of this symbol table. 
+    // Looks up a variable in the vars map of this symbol table by key 
     // If it exists, return it's type, if not, return INVALIDVAR
     string lookupCurrentVar(string iden) {
       unordered_map<string,Variable*>::const_iterator var = vars.find(iden);
@@ -133,7 +139,7 @@ class SymbolTable
       }
     }
     
-    // Looks up a methods in the methods map of this symbol table. 
+    // Looks up a methods in the methods map of this symbol table by key
     // If it exists, return it's return type, if not, return INVALIDMETHOD
     string lookupCurrentMethod(string iden) {
       unordered_map<string,Method*>::const_iterator method = methods.find(iden);
@@ -144,7 +150,7 @@ class SymbolTable
       return method->second->returnType;
     }
     
-    // Looks up a symbol in this symbol table
+    // Looks up a symbol in this symbol table by key
     // If it exists, return it's type/returnType, if not, return INVALIDSYM
     string lookupCurrent(string iden) {
       string type1 = "";
@@ -188,8 +194,8 @@ class SymbolTable
       return true;
     }
     
-    // Print SymbolTable and all of it's decendents
-    void printTable() {
+    // Print SymbolTable and all of it's decendents pre-order with validity flags
+    void printTableExplicit() {
       cout << "------------------------------------" << endl;
       cout << "Level: " << level << endl;
 
@@ -213,19 +219,63 @@ class SymbolTable
              << "\t" << it->second->returnType 
              << "\t" << it->second->iden
              << endl << "    Parameters:\t";
-        printParams(it->second->params);
+        printParamsExplicit(it->second->params);
         cout << endl;
       }
         
       
       for(unsigned int i = 0; i < children.size(); i++) {
-        children[i]->printTable();
+        children[i]->printTableExplicit();
       }
       
     }
+    
+    // Print SymbolTable and all of it's decendents in-order
+    void printTable() {
+      string indent = "";
+      for(int i = 1; i < level; i++) {
+        indent = indent + "  ";
+      }
+      
+      for(auto it = vars.begin(); it != vars.end(); ++it) {
+        cout << indent 
+             << "  " << it->second->type 
+             << "  " << it->second->iden 
+             << endl;
+      }
+      
+      if(level == 0) { // print classes
+        int i = children.size()-1;
+        cout << "i: " << i << endl;
+        for(auto it = methods.begin(); it != methods.end(); ++it) {
+          cout << children[i]->type
+               << "  " << it->second->iden
+               << "  ";
+          cout << endl;
+          children[i]->printTable();
+          i--;
+        }
+      } else {
+        int i = children.size()-1;
+        for(auto it = methods.begin(); it != methods.end(); ++it) {
+          cout << indent
+              << "  " << children[i]->type
+              << ((children[i]->type == CONSTRUCTOR) ? "" : ("  " + it->second->returnType))
+              << "  " << it->second->iden
+              << "  ";
+          printParams(it->second->params);
+          cout << endl;
+          children[i]->printTable();
+          i--;
+        }
+      }
+    }
   
   protected:
+    string type;
+    
     SymbolTable* parent;
+    vector<string> classes;
     vector<SymbolTable*> children;
     int level;
     

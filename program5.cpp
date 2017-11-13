@@ -48,107 +48,115 @@ int main() {
     cout << endl;
   }
   
-  SymbolTable* parent = new SymbolTable();
+  SymbolTable* root = new SymbolTable();
   
-  SymbolTable* child = new SymbolTable(parent);
-  parent->addChild(child);
+  SymbolTable* class1 = new SymbolTable(root, CLASSTYPE);
+  root->addChild(class1);
   
-  SymbolTable* grandchild1 = new SymbolTable(child);
-  child->addChild(grandchild1);
+  SymbolTable* class2 = new SymbolTable(root, CLASSTYPE);
+  root->addChild(class2);
   
-  SymbolTable* grandchild2 = new SymbolTable(child);
-  child->addChild(grandchild2);
+  SymbolTable* const1 = new SymbolTable(class1, CONSTRUCTOR);
+  class1->addChild(const1);
+  
+  SymbolTable* method1 = new SymbolTable(class1, METHODTYPE);
+  class1->addChild(method1);
+  
+  SymbolTable* method2 = new SymbolTable(class1, METHODTYPE);
+  class1->addChild(method2);
+  
+  SymbolTable* const2 = new SymbolTable(class2, CONSTRUCTOR);
+  class2->addChild(const2);
+  
+  SymbolTable* method3 = new SymbolTable(class2, METHODTYPE);
+  class2->addChild(method3);
   
   Variable* var1 = new struct Variable;
   var1->valid = true;
   var1->type = "t1";
   var1->iden = "var1";
-  parent->insert(var1);
   
   Variable* var2 = new struct Variable;
-  var2->valid = false;
+  var2->valid = true;
   var2->type = "t2";
   var2->iden = "var2";
-  child->insert(var2);
-  
-  Variable* var5 = new struct Variable;
-  var5->valid = false;
-  var5->type = "t5";
-  var5->iden = "var2";
-  child->insert(var5);
-  grandchild1->insert(var5);
-  
-  Method* meth1 = new struct Method;
-  meth1->valid = true;
-  meth1->returnType = "rt1";
-  meth1->iden = "method1";
-  vector<Variable*> parameters;
-  parameters.push_back(var1);
-  parameters.push_back(var2);
-  meth1->params = parameters;
-  child->insert(meth1);
-  
-  Method* meth4 = new struct Method;
-  meth4->valid = true;
-  meth4->returnType = "rt4";
-  meth4->iden = "method1";
-  meth4->params = parameters;
-  child->insert(meth4);
-  grandchild2->insert(meth4);
-  
-  Method* meth2 = new struct Method;
-  meth2->valid = false;
-  meth2->returnType = "rt2";
-  meth2->iden = "method2";
-  parameters.pop_back();
-  meth2->params = parameters;
-  child->insert(meth2);
   
   Variable* var3 = new struct Variable;
   var3->valid = true;
   var3->type = "t3";
   var3->iden = "var3";
-  grandchild1->insert(var3);
-  grandchild2->insert(var3);
-  
-  Variable* fakevar3 = new struct Variable;
-  fakevar3->valid = true;
-  fakevar3->type = "t3";
-  fakevar3->iden = "var3";
-  bool fail = grandchild1->insert(fakevar3);
-  cout << "False(0): " << fail << endl;
   
   Variable* var4 = new struct Variable;
   var4->valid = true;
   var4->type = "t4";
   var4->iden = "var4";
-  grandchild2->insert(var4);
+  
+  Variable* var5 = new struct Variable;
+  var5->valid = true;
+  var5->type = "t5";
+  var5->iden = "var5";
+  
+  Variable* var6 = new struct Variable;
+  var6->valid = true;
+  var6->type = "t6";
+  var6->iden = "var6";
+ 
+  Variable* var7 = new struct Variable;
+  var7->valid = true;
+  var7->type = "t7";
+  var7->iden = "var7";
+  
+  Method* meth1 = new struct Method;
+  meth1->valid = true;
+  meth1->returnType = "m1";
+  meth1->iden = "meth1";
+  meth1->params.push_back(var1);
+  meth1->params.push_back(var5);
+  
+  Method* meth2 = new struct Method;
+  meth2->valid = true;
+  meth2->returnType = "m2";
+  meth2->iden = "meth2";
+  meth2->params.push_back(var3);
+  meth2->params.push_back(var4);
   
   Method* meth3 = new struct Method;
   meth3->valid = true;
-  meth3->returnType = "rt3";
-  meth3->iden = "method3";
-  parameters.push_back(var2);
-  parameters.push_back(var3);
-  parameters.push_back(var4);
-  meth3->params = parameters;
-  grandchild2->insert(meth3);
+  meth3->returnType = "m3";
+  meth3->iden = "meth3";
+  meth3->params.push_back(var2);
   
-  parent->printTable();
+  Method* meth4 = new struct Method;
+  meth4->valid = true;
+  meth4->returnType = "m4";
+  meth4->iden = "meth4";
   
-  cout << "LookupAll var1 (Grandchild1): " << grandchild1->lookupAll(var1->iden) << endl;
-  cout << "LookupAll var2 (Grandchild1): " << grandchild1->lookupAll(var2->iden) << endl;
-  cout << "LookupAll var2 (Grandchild2): " << grandchild2->lookupAll(var2->iden) << endl;
-  cout << "LookupAll var4 (Grandchild1): " << grandchild1->lookupAll(var4->iden) << endl;
+  Method* meth5 = new struct Method;
+  meth5->valid = true;
+  meth5->returnType = "m5";
+  meth5->iden = "meth5";
+  meth5->params.push_back(var1);
+  meth5->params.push_back(var3);
+  meth5->params.push_back(var5);
   
-  cout << "LookupAll method3 (grandchild1): " << grandchild1->lookupAll(meth3->iden) << endl;
-  cout << "LookupAll method3 (grandchild2): " << grandchild2->lookupAll(meth3->iden) << endl;
-  cout << "LookupAll method1 (grandchild2): " << grandchild2->lookupAll(meth1->iden) << endl;
-  cout << "LookupAll method2 (Child): " << child->lookupAll(meth2->iden) << endl;
+  class1->insert(var1);
+  class1->insert(var2);
+  class1->insert(meth1);
+  class1->insert(meth2);
+  class1->insert(meth3);
   
-  cout << "LookupAll var1 (Child): " << child->lookupAll(var1->iden) << endl;
-  cout << "LookupAll var2 (Child): " << child->lookupAll(var2->iden) << endl;
-  cout << "LookupAll var2 (Parent): " << parent->lookupAll(var2->iden) << endl;
+  const1->insert(var3);
+  method1->insert(var4);
+  method1->insert(var5);
+  method2->insert(var5);
+  
+  class2->insert(meth4);
+  class2->insert(meth5);
+  
+  const2->insert(var6);
+  method3->insert(var7);
+  
+  root->printTable();
   
   delete atts;
   
