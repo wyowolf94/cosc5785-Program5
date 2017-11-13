@@ -4,8 +4,8 @@
 // symbol.h
 // 11/16/2017
 
-#ifndef SYMBOL_H
-#define SYMBOL_H
+#ifndef SYMBOLOLD_H
+#define SYMBOLOLD_H
 
 #include<iostream>
 #include<string.h>
@@ -25,6 +25,15 @@ struct Variable{
   string iden;
   bool valid;
 };
+
+struct Method{
+  string returnType;
+  string iden;
+  vector<Variable*> params;
+  bool valid;
+};
+
+void printParamsExplicit(vector<Variable*> params);
 
 void printParams(vector<Variable*> params);
 

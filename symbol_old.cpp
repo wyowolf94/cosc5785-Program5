@@ -5,9 +5,17 @@
 // 11/16/2017
 
 #include<string>
-#include "symbol.h"
+#include "symbol_old.h"
 
 using namespace std;
+
+void printParamsExplicit(vector<Variable*> params) {
+  for(unsigned int i = 0; i < params.size(); i++) {
+    cout << params[i]->type << "\t" << params[i]->iden << endl;
+    cout << "\t\t";
+  }
+  return;
+}
 
 void printParams(vector<Variable*> params) {
   cout << "(";
