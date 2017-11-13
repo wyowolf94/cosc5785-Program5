@@ -1,0 +1,5 @@
+TODO:
++ Lookup checks all the way up the tree, insert just checks current tree?
+- Overloading methods within current scope?
+- Allow Methods as Parameters --> not when you declare it but possible when called --> will this work?
+- Apply to Bison

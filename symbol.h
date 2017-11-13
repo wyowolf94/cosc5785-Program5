@@ -26,18 +26,6 @@ struct Variable{
   bool valid;
 };
 
-//void updateVariable(Variable * var, string iden, string type);
-
-/*
-struct Constructor{
-  bool valid;
-  vector<tuple<string,string> *> params;
-};
-
-void updateConstructor(Method * method, string iden, 
-                  vector<Variable*> params);
-*/
-
 struct Method{
   string returnType;
   string iden;
@@ -45,7 +33,6 @@ struct Method{
   bool valid;
 };
 
-//void updateMethod(Method * method, string iden, string returnType, 
-//                  vector<Variable*> params);
+void printParams(vector<Variable*> params);
 
 #endif
