@@ -48,6 +48,7 @@ int main() {
     cout << endl;
   }
   
+  /*
   SymbolTable* root = new SymbolTable();
   
   SymbolTable* class1 = new SymbolTable(root, CLASSTYPE);
@@ -157,7 +158,8 @@ int main() {
   method3->insert(var7);
   
   root->printTable();
-  
+  */
+
   delete atts;
   
   return 0 ;

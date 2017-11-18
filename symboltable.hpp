@@ -35,7 +35,7 @@ class SymbolTable
     // Constructor
     SymbolTable(SymbolTable * p) {
       type = BLOCKTYPE;
-    }
+    } 
 
     // Destructor
     virtual ~SymbolTable() {
@@ -45,16 +45,15 @@ class SymbolTable
     // Look up variable in current symbol table
     // If it already exists, return false, if not, add it and return true
     bool insert(Variable * var) {
-
+      return false;
     }
     
     // Look up method in current symbol table
     // If it already exists, return false, if not, add it and return true
-    bool insert(Method * method) {
-
+    bool insert(SymbolTable * method) {
+      return false;
     }
-    
-    
+     
     // Print SymbolTable and all of it's decendents in-order
     void printTable() {
 
@@ -62,35 +61,36 @@ class SymbolTable
   
   protected:
     string iden;
-    vector<Varialbe*> vardecs;
+    vector<Variable*> vardecs;
     SymbolTable * parent;
-    vector<SymbolTable*> children;
+    //vector<SymbolTable*> children;
+    unordered_map<string, SymbolTable*> children;
     string type;
 };
 
 class MethodDec : public SymbolTable
 {
   public:
-    MethodDec(SymbolTable * p) : SymbolTable (/*SymbolTable * p*/) {
+    MethodDec(SymbolTable * p) : SymbolTable (p) {
       type = METHODTYPE;
     } 
 
     
   private:
     string returnType;
-    vector<Varialbe*> params;    
+    vector<Variable*> params;    
 };
 
 class ConstrDec : public SymbolTable
 {
   public:
-    ConstrDec(SymbolTable * p) : SymbolTable (/*SymbolTable * p*/) {
+    ConstrDec(SymbolTable * p) : SymbolTable (p) {
       type = CONSTRUCTOR;
     } 
 
     
   private:
-    vector<Varialbe*> params;    
+    vector<Variable*> params;    
 };
 
 #endif
