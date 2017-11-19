@@ -33,6 +33,7 @@ using std::pair;
 class SymbolTable 
 {
   public:
+    string iden;
     // Constructor
     SymbolTable(SymbolTable * p, string id) {
       parent = p;
@@ -58,6 +59,7 @@ class SymbolTable
     // Looks up mangled name and return INVALIDSYM if it isn't here
     string lookup_here(string iden) {
       // Check the vars
+      iden = mangle(iden);
       unordered_map<string,Variable*>::const_iterator var 
         = vardecs.find(iden);
       if(var != vardecs.end()) {
@@ -78,6 +80,7 @@ class SymbolTable
     // If it exists, return it's type, if not, return INVALIDSYM
     string lookup_all(string iden) {
       // Check current local symbol table
+      iden = mangle(iden);
       string type = lookup_here(iden);
       if(type != INVALIDSYM) {
         return type;
@@ -144,17 +147,19 @@ class SymbolTable
         return false;
       }
       
-      addChild(method);
+      return addChild(method);
     }
      
     // Print SymbolTable and all of it's decendents in-order
     virtual void printTable() {
-      cout << "Default Print Statement" << endl;
+      for(unsigned int i = 0; i < order.size(); i++) {
+        children.find(order[i])->second->printTable();
+      }
     }
   
   protected:
     string type;
-    string iden;
+    //string iden;
     int level;
     
     SymbolTable * parent;
@@ -214,7 +219,7 @@ class MethodDec : public SymbolTable
     
     string mangle(string name) {
       string temp = '$' + name + '$';
-      for(int i = 0; i < params.size(); i++) {
+      for(unsigned int i = 0; i < params.size(); i++) {
         temp = temp + params[i]->iden + '$';
       }
       return temp;
@@ -267,7 +272,7 @@ class ConstrDec : public SymbolTable
     
     string mangle(string name) {
       string temp = '$' + name + '$';
-      for(int i = 0; i < params.size(); i++) {
+      for(unsigned int i = 0; i < params.size(); i++) {
         temp = temp + params[i]->iden + '$';
       }
       return temp;

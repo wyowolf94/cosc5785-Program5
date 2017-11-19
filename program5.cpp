@@ -34,6 +34,7 @@ int main() {
   yyparse();
   
   // Print the Parse Tree
+  /*
   if(forest.size() > 0) {
     cout << endl << "<Program> -> ";
     for(unsigned int i = 0; i < forest.size(); i++) {
@@ -46,7 +47,7 @@ int main() {
       delete forest[i];
     }
     cout << endl;
-  }
+  }*/
   
   SymbolTable* root = new SymbolTable();
   
@@ -78,20 +79,20 @@ int main() {
   class2->insert(method3);
   
   
-  BlockDec* block1 = new BlockDec*(const1, "b1");
-  const1->insert(block1);
+  BlockDec* b1 = new BlockDec(const1, "b1");
+  const1->insert(b1);
   
-  BlockDec* block2 = new BlockDec*(const2, "b2");
-  const2->insert(block2);
+  BlockDec* b2 = new BlockDec(const2, "b2");
+  const2->insert(b2);
   
-  BlockDec* block3 = new BlockDec*(method1, "b3");
-  method1->insert(block3);
+  BlockDec* b3 = new BlockDec(method1, "b3");
+  method1->insert(b3);
   
-  BlockDec* block4 = new BlockDec*(method1, "b4");
-  method1->insert(block4);
+  BlockDec* b4 = new BlockDec(method1, "b4");
+  method1->insert(b4);
   
-  BlockDec* block5 = new BlockDec*(method3, "b5");
-  method3->insert(block5);
+  BlockDec* b5 = new BlockDec(method3, "b5");
+  method3->insert(b5);
   
   
   Variable* var1 = new struct Variable;
@@ -142,11 +143,19 @@ int main() {
   method2->insert(var5);
   const2->insert(var6);
   method3->insert(var7);
-  block1->insert(var2);
-  block2->insert(var8);
-  block4->insert(var8);
-  block4->insert(var8);
+  b1->insert(var2);
+  b2->insert(var8);
+  b4->insert(var8);
+  b4->insert(var8);
   
+  method1->add_param(var1);
+  method1->add_param(var2);
+  method2->add_param(var3);
+  const1->add_param(var4);
+  const3->add_param(var5);
+  const3->add_param(var6);
+  const3->add_param(var7);
+
   root->printTable();
   
   cout << endl << "Root (true)" << endl;
@@ -167,10 +176,10 @@ int main() {
   cout << "0 - " << class2->lookup_here(const2->iden) << endl;
   cout << "1 - " << class2->lookup_here(const3->iden) << endl;
   cout << "2 - " << class2->lookup_here(method3->iden) << endl;
-  cout << "3 - " << class3->lookup_all(class1->iden) << endl;  
+  cout << "3 - " << class2->lookup_all(class1->iden) << endl;  
   
   cout << endl << "Const1 (true)" << endl;
-  cout << "0 - " << const1->lookup_here(block1->iden) << endl;
+  cout << "0 - " << const1->lookup_here(b1->iden) << endl;
   cout << "1 - " << const1->lookup_here(var3->iden) << endl;
   cout << "2 - " << const1->lookup_all(var1->iden) << endl;  
   cout << "3 - " << const1->lookup_all(var2->iden) << endl; 
@@ -178,7 +187,7 @@ int main() {
   cout << "5 - " << const1->lookup_all(method2->iden) << endl;     
   
   cout << endl << "Const2 (true)" << endl;
-  cout << "0 - " << const2->lookup_here(block2->iden) << endl;
+  cout << "0 - " << const2->lookup_here(b2->iden) << endl;
   cout << "1 - " << const2->lookup_here(var6->iden) << endl;
   cout << "2 - " << const2->lookup_all(const3->iden) << endl;  
   cout << "3 - " << const2->lookup_all(method3->iden) << endl; 
@@ -188,8 +197,8 @@ int main() {
   cout << "1 - " << const3->lookup_all(method3->iden) << endl;  
   
   cout << endl << "Method1 (true)" << endl;
-  cout << "0 - " << method1->lookup_here(block3->iden) << endl;
-  cout << "1 - " << method1->lookup_here(block4->iden) << endl; 
+  cout << "0 - " << method1->lookup_here(b3->iden) << endl;
+  cout << "1 - " << method1->lookup_here(b4->iden) << endl; 
   cout << "2 - " << method1->lookup_here(var4->iden) << endl;  
   cout << "3 - " << method1->lookup_here(var5->iden) << endl;   
   cout << "4 - " << method1->lookup_all(var1->iden) << endl;  
@@ -205,7 +214,7 @@ int main() {
   cout << "4 - " << method2->lookup_all(method1->iden) << endl; 
   
   cout << endl << "Method3 (true)" << endl;
-  cout << "0 - " << method3->lookup_here(block5->iden) << endl; 
+  cout << "0 - " << method3->lookup_here(b5->iden) << endl; 
   cout << "1 - " << method3->lookup_here(var7->iden) << endl; 
   cout << "2 - " << method3->lookup_all(const2->iden) << endl; 
   cout << "3 - " << method3->lookup_all(const3->iden) << endl; 
