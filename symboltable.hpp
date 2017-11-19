@@ -16,7 +16,7 @@
 #define INVALIDVAR "invalid variable"
 #define INVALIDMETHOD "invalid method"
 #define INVALIDSYM "invalid symbol"
-#define CONSTRUCTOR "Constructor"
+#define CONSTRTYPE "Constructor"
 #define METHODTYPE "Method"
 #define CLASSTYPE "Class"
 #define BLOCKTYPE "Block"
@@ -37,11 +37,13 @@ class SymbolTable
     SymbolTable(SymbolTable * p, string id) {
       parent = p;
       iden = id;
+      level = parent->level + 1;
     } 
     
     SymbolTable() {
       parent = 0;
       iden = "root";
+      level = 0;
     }
 
     // Destructor
@@ -153,6 +155,7 @@ class SymbolTable
   protected:
     string type;
     string iden;
+    int level;
     
     SymbolTable * parent;
     
@@ -178,7 +181,17 @@ class ClassDec : public SymbolTable
     }
     
     void printTable() {
+      cout << type << " -> " << iden << endl;
       
+      for(auto it = vardecs.begin(); it != vardecs.end(); ++it) {
+        cout << "  " << it->second->type 
+             << "  " << it->second->iden 
+             << endl;
+      }
+      
+      for(unsigned int i = 0; i < order.size(); i++) {
+        children.find(order[i])->second->printTable();
+      }
     }
 
 };
@@ -211,6 +224,26 @@ class MethodDec : public SymbolTable
       return returnType;
     }
     
+    void printTable() {
+      cout << "  "
+           << type << " -> " 
+           << "  " << returnType 
+           << "  " << iden;
+           
+      printParams(params);
+      
+      for(auto it = vardecs.begin(); it != vardecs.end(); ++it) {
+        cout << "  " 
+             << "  "   << it->second->type 
+             << "  "   << it->second->iden 
+             << endl;
+      }
+      
+      for(unsigned int i = 0; i < order.size(); i++) {
+        children.find(order[i])->second->printTable();
+      }
+    }
+    
   private:
     string returnType;
     vector<Variable*> params;    
@@ -220,7 +253,7 @@ class ConstrDec : public SymbolTable
 {
   public:
     ConstrDec(SymbolTable * p, string id) : SymbolTable (p, id) {
-      type = CONSTRUCTOR;
+      type = CONSTRTYPE;
       iden = id;
     } 
 
@@ -244,6 +277,24 @@ class ConstrDec : public SymbolTable
       return iden;
     }
     
+    void printTable() {        
+      cout << "  " << type << " -> " 
+           << "  " << iden;
+           
+      printParams(params);
+      
+      for(auto it = vardecs.begin(); it != vardecs.end(); ++it) {
+        cout << "  " 
+             << "  "   << it->second->type 
+             << "  "   << it->second->iden 
+             << endl;
+      }
+      
+      for(unsigned int i = 0; i < order.size(); i++) {
+        children.find(order[i])->second->printTable();
+      }
+    }
+    
   private:
     vector<Variable*> params;    
 };
@@ -258,6 +309,26 @@ class BlockDec : public SymbolTable
     
     string return_type() {
         return BLOCKTYPE;
+    }
+    
+    void printTable() {
+      string indent = "";
+      for(int i = 1; i < level; i++) {
+        indent = indent + "  ";
+      }      
+        
+      cout << indent << type << " -> " << endl;
+                 
+      for(auto it = vardecs.begin(); it != vardecs.end(); ++it) {
+        cout << indent 
+             << "  "   << it->second->type 
+             << "  "   << it->second->iden 
+             << endl;
+      }
+      
+      for(unsigned int i = 0; i < order.size(); i++) {
+        children.find(order[i])->second->printTable();
+      }
     }
 };
 

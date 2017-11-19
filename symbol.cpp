@@ -17,7 +17,7 @@ void printParams(vector<Variable*> params) {
       cout << ", " << params[i]->type << " " << params[i]->iden;
     }
   }
-  cout << ")";
+  cout << ")" << endl;
   
   return;
 }
