@@ -18,6 +18,7 @@
 #define INVALIDSYM "invalid symbol"
 #define CONSTRUCTOR "Constructor"
 #define METHODTYPE "Method"
+#define CLASSTYPE "Class"
 #define BLOCKTYPE "Block"
 
 using std::string;
@@ -33,48 +34,182 @@ class SymbolTable
 {
   public:
     // Constructor
-    SymbolTable(SymbolTable * p) {
-      type = BLOCKTYPE;
+    SymbolTable(SymbolTable * p, string id) {
+      parent = p;
+      iden = id;
     } 
+    
+    SymbolTable() {
+      parent = 0;
+      iden = "root";
+    }
 
     // Destructor
     virtual ~SymbolTable() {
-
+      delete parent;
+      
+      vardecs.clear();
+      order.clear();       
+      children.clear(); 
+    }
+    
+    // Looks up mangled name and return INVALIDSYM if it isn't here
+    string lookup_here(string iden) {
+      // Check the vars
+      unordered_map<string,Variable*>::const_iterator var 
+        = vardecs.find(iden);
+      if(var != vardecs.end()) {
+        return var->second->type;
+      } 
+      
+      // Check the children, but not all decendents
+      unordered_map<string,SymbolTable*>::const_iterator child 
+        = children.find(iden);
+      if(child != children.end()) {
+        child->second->return_type();
+      }
+      
+      return INVALIDSYM;
+    }
+    
+    // Looks up a variable in this symbol table and all of it's ancestors
+    // If it exists, return it's type, if not, return INVALIDSYM
+    string lookup_all(string iden) {
+      // Check current local symbol table
+      string type = lookup_here(iden);
+      if(type != INVALIDSYM) {
+        return type;
+      }
+      
+      // Check to see if it is the root
+      if(parent == 0) {
+        return INVALIDSYM;
+      } 
+      
+      // Check parent 
+      return parent->lookup_all(iden);
+    }
+    
+    // Mangles the identifier of a child being added
+    virtual string mangle(string name) {
+      return '$' + name + '$';
+    }
+    
+    // Unmangles the identifier by taking the iden out
+    // from the mangled name
+    string unmangle(string name) {
+      size_t pos = name.find("$");
+      return name.substr(1, pos);
+    }
+    
+    virtual string return_type() {
+        return "";
+    }
+    
+    // Adds a symbol table child
+    bool addChild(SymbolTable* st) {
+        if(st != 0) {
+            string new_iden = st->mangle(st->iden);
+            pair<string, SymbolTable*> newChild (new_iden, st);
+            pair<unordered_map<string,SymbolTable*>::const_iterator,bool> 
+              ok = children.insert(newChild);
+            if(ok.second) {
+              order.push_back(new_iden);
+              return true;
+            } 
+        }
+        return false;
     }
 
     // Look up variable in current symbol table
     // If it already exists, return false, if not, add it and return true
     bool insert(Variable * var) {
-      return false;
+      string mangled = mangle(var->iden);
+      if(lookup_here(mangled) != INVALIDSYM) {
+        return false;
+      } 
+      
+      pair<string, Variable*> newVar (mangled, var);
+      vardecs.insert(newVar);
+      return true;
     }
     
     // Look up method in current symbol table
     // If it already exists, return false, if not, add it and return true
     bool insert(SymbolTable * method) {
-      return false;
+      string mangled = mangle(method->iden);
+      if(lookup_here(mangled) != INVALIDSYM) {
+        return false;
+      }
+      
+      addChild(method);
     }
      
     // Print SymbolTable and all of it's decendents in-order
-    void printTable() {
-
+    virtual void printTable() {
+      cout << "Default Print Statement" << endl;
     }
   
   protected:
-    string iden;
-    vector<Variable*> vardecs;
-    SymbolTable * parent;
-    //vector<SymbolTable*> children;
-    unordered_map<string, SymbolTable*> children;
     string type;
+    string iden;
+    
+    SymbolTable * parent;
+    
+    unordered_map<string, Variable*> vardecs;
+    unordered_map<string, SymbolTable*> children;
+    vector<string> order;
+};
+
+class ClassDec : public SymbolTable
+{
+  public:
+    ClassDec(SymbolTable * p, string id) : SymbolTable (p, id) {
+      type = CLASSTYPE;
+      iden = id;
+    } 
+    
+    string mangle(string name) {
+      return '$' + name + '$';
+    }
+
+    string return_type() {
+      return iden;
+    }
+    
+    void printTable() {
+      
+    }
+
 };
 
 class MethodDec : public SymbolTable
 {
   public:
-    MethodDec(SymbolTable * p) : SymbolTable (p) {
+    MethodDec(SymbolTable * p, string id) : SymbolTable (p, id) {
       type = METHODTYPE;
+      iden = id;
     } 
 
+    bool add_param (Variable* param) {
+      if(param != 0) {
+        params.push_back(param);
+        return true;
+      }
+      return false;
+    }
+    
+    string mangle(string name) {
+      string temp = '$' + name + '$';
+      for(int i = 0; i < params.size(); i++) {
+        temp = temp + params[i]->iden + '$';
+      }
+      return temp;
+    }
+    
+    string return_type() {
+      return returnType;
+    }
     
   private:
     string returnType;
@@ -84,13 +219,46 @@ class MethodDec : public SymbolTable
 class ConstrDec : public SymbolTable
 {
   public:
-    ConstrDec(SymbolTable * p) : SymbolTable (p) {
+    ConstrDec(SymbolTable * p, string id) : SymbolTable (p, id) {
       type = CONSTRUCTOR;
+      iden = id;
     } 
 
+    bool add_param (Variable* param) {
+      if(param != 0) {
+        params.push_back(param);
+        return true;
+      }
+      return false;
+    }
+    
+    string mangle(string name) {
+      string temp = '$' + name + '$';
+      for(int i = 0; i < params.size(); i++) {
+        temp = temp + params[i]->iden + '$';
+      }
+      return temp;
+    }
+    
+    string return_type() {
+      return iden;
+    }
     
   private:
     vector<Variable*> params;    
+};
+
+class BlockDec : public SymbolTable
+{
+  public:
+    BlockDec(SymbolTable * p, string id) : SymbolTable (p, id) {
+      type = BLOCKTYPE;
+      iden = id;
+    } 
+    
+    string return_type() {
+        return BLOCKTYPE;
+    }
 };
 
 #endif
