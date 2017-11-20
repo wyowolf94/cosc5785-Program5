@@ -159,137 +159,137 @@ int main() {
   root->printTable();
   
   cout << endl << "Root (true)" << endl;
-  cout << "0 - " << root->lookup_here(class1->iden) << endl;
-  cout << "1 - " << root->lookup_here(class2->iden) << endl;
-  cout << "2 - " << root->lookup_all(class1->iden) << endl;
-  cout << "3 - " << root->lookup_all(class2->iden) << endl;
+  cout << "0 - " << root->lookup_here(class1) << endl;
+  cout << "1 - " << root->lookup_here(class2) << endl;
+  cout << "2 - " << root->lookup_all(class1) << endl;
+  cout << "3 - " << root->lookup_all(class2) << endl;
   
   cout << endl << "Class1 (true)" << endl;
-  cout << "0 - " << class1->lookup_here(const1->iden) << endl;
-  cout << "1 - " << class1->lookup_here(method1->iden) << endl;
-  cout << "2 - " << class1->lookup_here(method2->iden) << endl;
-  cout << "3 - " << class1->lookup_here(var1->iden) << endl;
-  cout << "4 - " << class1->lookup_here(var2->iden) << endl;
-  cout << "5 - " << class1->lookup_all(class2->iden) << endl;  
+  cout << "0 - " << class1->lookup_here(const1) << endl;
+  cout << "1 - " << class1->lookup_here(method1) << endl;
+  cout << "2 - " << class1->lookup_here(method2) << endl;
+  cout << "3 - " << class1->lookup_here(var1) << endl;
+  cout << "4 - " << class1->lookup_here(var2) << endl;
+  cout << "5 - " << class1->lookup_all(class2) << endl;  
   
   cout << endl << "Class2 (true)" << endl;
-  cout << "0 - " << class2->lookup_here(const2->iden) << endl;
-  cout << "1 - " << class2->lookup_here(const3->iden) << endl;
-  cout << "2 - " << class2->lookup_here(method3->iden) << endl;
-  cout << "3 - " << class2->lookup_all(class1->iden) << endl;  
+  cout << "0 - " << class2->lookup_here(const2) << endl;
+  cout << "1 - " << class2->lookup_here(const3) << endl;
+  cout << "2 - " << class2->lookup_here(method3) << endl;
+  cout << "3 - " << class2->lookup_all(class1) << endl;  
   
   cout << endl << "Const1 (true)" << endl;
-  cout << "0 - " << const1->lookup_here(b1->iden) << endl;
-  cout << "1 - " << const1->lookup_here(var3->iden) << endl;
-  cout << "2 - " << const1->lookup_all(var1->iden) << endl;  
-  cout << "3 - " << const1->lookup_all(var2->iden) << endl; 
-  cout << "4 - " << const1->lookup_all(method1->iden) << endl;
-  cout << "5 - " << const1->lookup_all(method2->iden) << endl;     
+  cout << "0 - " << const1->lookup_here(b1) << endl;
+  cout << "1 - " << const1->lookup_here(var3) << endl;
+  cout << "2 - " << const1->lookup_all(var1) << endl;  
+  cout << "3 - " << const1->lookup_all(var2) << endl; 
+  cout << "4 - " << const1->lookup_all(method1) << endl;
+  cout << "5 - " << const1->lookup_all(method2) << endl;     
   
   cout << endl << "Const2 (true)" << endl;
-  cout << "0 - " << const2->lookup_here(b2->iden) << endl;
-  cout << "1 - " << const2->lookup_here(var6->iden) << endl;
-  cout << "2 - " << const2->lookup_all(const3->iden) << endl;  
-  cout << "3 - " << const2->lookup_all(method3->iden) << endl; 
+  cout << "0 - " << const2->lookup_here(b2) << endl;
+  cout << "1 - " << const2->lookup_here(var6) << endl;
+  cout << "2 - " << const2->lookup_all(const3) << endl;  
+  cout << "3 - " << const2->lookup_all(method3) << endl; 
 
   cout << endl << "Const3 (true)" << endl;
-  cout << "0 - " << const3->lookup_all(const2->iden) << endl; 
-  cout << "1 - " << const3->lookup_all(method3->iden) << endl;  
+  cout << "0 - " << const3->lookup_all(const2) << endl; 
+  cout << "1 - " << const3->lookup_all(method3) << endl;  
   
   cout << endl << "Method1 (true)" << endl;
-  cout << "0 - " << method1->lookup_here(b3->iden) << endl;
-  cout << "1 - " << method1->lookup_here(b4->iden) << endl; 
-  cout << "2 - " << method1->lookup_here(var4->iden) << endl;  
-  cout << "3 - " << method1->lookup_here(var5->iden) << endl;   
-  cout << "4 - " << method1->lookup_all(var1->iden) << endl;  
-  cout << "5 - " << method1->lookup_all(var2->iden) << endl; 
-  cout << "6 - " << method1->lookup_all(const1->iden) << endl;
-  cout << "7 - " << method1->lookup_all(method2->iden) << endl; 
+  cout << "0 - " << method1->lookup_here(b3) << endl;
+  cout << "1 - " << method1->lookup_here(b4) << endl; 
+  cout << "2 - " << method1->lookup_here(var4) << endl;  
+  cout << "3 - " << method1->lookup_here(var5) << endl;   
+  cout << "4 - " << method1->lookup_all(var1) << endl;  
+  cout << "5 - " << method1->lookup_all(var2) << endl; 
+  cout << "6 - " << method1->lookup_all(const1) << endl;
+  cout << "7 - " << method1->lookup_all(method2) << endl; 
   
   cout << endl << "Method2 (true)" << endl;
-  cout << "0 - " << method2->lookup_here(var5->iden) << endl; 
-  cout << "1 - " << method2->lookup_all(var1->iden) << endl;  
-  cout << "2 - " << method2->lookup_all(var2->iden) << endl; 
-  cout << "3 - " << method2->lookup_all(const1->iden) << endl;
-  cout << "4 - " << method2->lookup_all(method1->iden) << endl; 
+  cout << "0 - " << method2->lookup_here(var5) << endl; 
+  cout << "1 - " << method2->lookup_all(var1) << endl;  
+  cout << "2 - " << method2->lookup_all(var2) << endl; 
+  cout << "3 - " << method2->lookup_all(const1) << endl;
+  cout << "4 - " << method2->lookup_all(method1) << endl; 
   
   cout << endl << "Method3 (true)" << endl;
-  cout << "0 - " << method3->lookup_here(b5->iden) << endl; 
-  cout << "1 - " << method3->lookup_here(var7->iden) << endl; 
-  cout << "2 - " << method3->lookup_all(const2->iden) << endl; 
-  cout << "3 - " << method3->lookup_all(const3->iden) << endl; 
+  cout << "0 - " << method3->lookup_here(b5) << endl; 
+  cout << "1 - " << method3->lookup_here(var7) << endl; 
+  cout << "2 - " << method3->lookup_all(const2) << endl; 
+  cout << "3 - " << method3->lookup_all(const3) << endl; 
   
   cout << endl << "Block1 (true)" << endl;
-  cout << "0 - " << b1->lookup_here(var2->iden) << endl;
-  cout << "1 - " << b1->lookup_all(var1->iden) << endl;
-  cout << "2 - " << b1->lookup_all(var2->iden) << endl;
-  cout << "3 - " << b1->lookup_all(var3->iden) << endl;
-  cout << "4 - " << b1->lookup_all(const1->iden) << endl;
-  cout << "5 - " << b1->lookup_all(method1->iden) << endl;
-  cout << "6 - " << b1->lookup_all(method2->iden) << endl;
-  cout << "7 - " << b1->lookup_all(class1->iden) << endl;
-  cout << "8 - " << b1->lookup_all(class2->iden) << endl;
-  cout << "9 - " << b1->lookup_all(root->iden) << endl;
+  cout << "0 - " << b1->lookup_here(var2) << endl;
+  cout << "1 - " << b1->lookup_all(var1) << endl;
+  cout << "2 - " << b1->lookup_all(var2) << endl;
+  cout << "3 - " << b1->lookup_all(var3) << endl;
+  cout << "4 - " << b1->lookup_all(const1) << endl;
+  cout << "5 - " << b1->lookup_all(method1) << endl;
+  cout << "6 - " << b1->lookup_all(method2) << endl;
+  cout << "7 - " << b1->lookup_all(class1) << endl;
+  cout << "8 - " << b1->lookup_all(class2) << endl;
+  cout << "9 - " << b1->lookup_all(rootn) << endl;
   
   cout << endl << "Root (false)" << endl;
-  cout << "0 - " << root->lookup_here(const1->iden) << endl;
-  cout << "1 - " << root->lookup_here(method3->iden) << endl;
-  cout << "2 - " << root->lookup_all(var1->iden) << endl;
-  cout << "3 - " << root->lookup_all(b2->iden) << endl;
+  cout << "0 - " << root->lookup_here(const1) << endl;
+  cout << "1 - " << root->lookup_here(method3) << endl;
+  cout << "2 - " << root->lookup_all(var1) << endl;
+  cout << "3 - " << root->lookup_all(b2) << endl;
   
   cout << endl << "Class1 (false)" << endl;
-  cout << "0 - " << class1->lookup_here(var3->iden) << endl;
-  cout << "1 - " << class1->lookup_here(var8->iden) << endl;
-  cout << "2 - " << class1->lookup_all(const2->iden) << endl;
-  cout << "3 - " << class1->lookup_all(b5->iden) << endl;
+  cout << "0 - " << class1->lookup_here(var3) << endl;
+  cout << "1 - " << class1->lookup_here(var8) << endl;
+  cout << "2 - " << class1->lookup_all(const2) << endl;
+  cout << "3 - " << class1->lookup_all(b5) << endl;
   
   cout << endl << "Class2 (false)" << endl;
-  cout << "0 - " << class2->lookup_here(class1->iden) << endl;
-  cout << "1 - " << class2->lookup_here(var6->iden) << endl;
-  cout << "2 - " << class2->lookup_all(method1->iden) << endl;
-  cout << "3 - " << class2->lookup_all(var1->iden) << endl;
+  cout << "0 - " << class2->lookup_here(class1) << endl;
+  cout << "1 - " << class2->lookup_here(var6) << endl;
+  cout << "2 - " << class2->lookup_all(method1) << endl;
+  cout << "3 - " << class2->lookup_all(var1) << endl;
   
   cout << endl << "Const1 (false)" << endl;
-  cout << "0 - " << const1->lookup_here(var2->iden) << endl;
-  cout << "1 - " << const1->lookup_here(method1->iden) << endl;
-  cout << "2 - " << const1->lookup_all(var4->iden) << endl;
-  cout << "3 - " << const1->lookup_all(var8->iden) << endl;
+  cout << "0 - " << const1->lookup_here(var2) << endl;
+  cout << "1 - " << const1->lookup_here(method1) << endl;
+  cout << "2 - " << const1->lookup_all(var4) << endl;
+  cout << "3 - " << const1->lookup_all(var8) << endl;
   
   cout << endl << "Const2 (false)" << endl;
-  cout << "0 - " << const2->lookup_here(var8->iden) << endl;
-  cout << "1 - " << const2->lookup_here(var7->iden) << endl;
-  cout << "2 - " << const2->lookup_all(method1->iden) << endl;
-  cout << "3 - " << const2->lookup_all(b3->iden) << endl;
+  cout << "0 - " << const2->lookup_here(var8) << endl;
+  cout << "1 - " << const2->lookup_here(var7) << endl;
+  cout << "2 - " << const2->lookup_all(method1) << endl;
+  cout << "3 - " << const2->lookup_all(b3) << endl;
   
   cout << endl << "Const3 (false)" << endl;
-  cout << "0 - " << const3->lookup_here(const2->iden) << endl;
-  cout << "1 - " << const3->lookup_here(class2->iden) << endl;
-  cout << "2 - " << const3->lookup_all(b2->iden) << endl;
-  cout << "3 - " << const3->lookup_all(var1->iden) << endl;
+  cout << "0 - " << const3->lookup_here(const2) << endl;
+  cout << "1 - " << const3->lookup_here(class2) << endl;
+  cout << "2 - " << const3->lookup_all(b2) << endl;
+  cout << "3 - " << const3->lookup_all(var1) << endl;
   
   cout << endl << "Method1 (false)" << endl;
-  cout << "0 - " << method1->lookup_here(var3->iden) << endl;
-  cout << "1 - " << method1->lookup_here(class1->iden) << endl;
-  cout << "2 - " << method1->lookup_all(b1->iden) << endl;
-  cout << "3 - " << method1->lookup_all(const3->iden) << endl;
+  cout << "0 - " << method1->lookup_here(var3) << endl;
+  cout << "1 - " << method1->lookup_here(class1) << endl;
+  cout << "2 - " << method1->lookup_all(b1) << endl;
+  cout << "3 - " << method1->lookup_all(const3) << endl;
   
   cout << endl << "Method2 (false)" << endl;
-  cout << "0 - " << method2->lookup_here(method1->iden) << endl;
-  cout << "1 - " << method2->lookup_here(var7->iden) << endl;
-  cout << "2 - " << method2->lookup_all(var4->iden) << endl;
-  cout << "3 - " << method2->lookup_all(var1->iden) << endl;
+  cout << "0 - " << method2->lookup_here(method1) << endl;
+  cout << "1 - " << method2->lookup_here(var7) << endl;
+  cout << "2 - " << method2->lookup_all(var4) << endl;
+  cout << "3 - " << method2->lookup_all(var1) << endl;
   
   cout << endl << "Method3 (false)" << endl;
-  cout << "0 - " << method3->lookup_here(const3->iden) << endl;
-  cout << "1 - " << method3->lookup_here(method1->iden) << endl;
-  cout << "2 - " << method3->lookup_all(var6->iden) << endl;
-  cout << "3 - " << method3->lookup_all(var1->iden) << endl;
+  cout << "0 - " << method3->lookup_here(const3) << endl;
+  cout << "1 - " << method3->lookup_here(method1) << endl;
+  cout << "2 - " << method3->lookup_all(var6) << endl;
+  cout << "3 - " << method3->lookup_all(var1) << endl;
   
   cout << endl << "Block2 (false)" << endl;
-  cout << "0 - " << b2->lookup_here(var6->iden) << endl;
-  cout << "1 - " << b2->lookup_here(class2->iden) << endl;
-  cout << "2 - " << b2->lookup_all(var7->iden) << endl;
-  cout << "3 - " << b2->lookup_all(method2->iden) << endl;
+  cout << "0 - " << b2->lookup_here(var6) << endl;
+  cout << "1 - " << b2->lookup_here(class2) << endl;
+  cout << "2 - " << b2->lookup_all(var7) << endl;
+  cout << "3 - " << b2->lookup_all(method2) << endl;
 
   delete atts;
   

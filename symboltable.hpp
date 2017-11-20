@@ -33,7 +33,6 @@ using std::pair;
 class SymbolTable 
 {
   public:
-    string iden;
     // Constructor
     SymbolTable(SymbolTable * p, string id) {
       parent = p;
@@ -56,10 +55,17 @@ class SymbolTable
       children.clear(); 
     }
     
+    string lookup_here(Variable* var) {
+        return lookup_here(mangle(var->iden));
+    }
+    
+    string lookup_here(SymbolTable* st) {
+        return lookup_here(mangle(st->iden));
+    }
+    
     // Looks up mangled name and return INVALIDSYM if it isn't here
     string lookup_here(string iden) {
       // Check the vars
-      iden = mangle(iden);
       unordered_map<string,Variable*>::const_iterator var 
         = vardecs.find(iden);
       if(var != vardecs.end()) {
@@ -76,11 +82,18 @@ class SymbolTable
       return INVALIDSYM;
     }
     
+    string lookup_all(Variable* var) {
+        return lookup_all(mangle(var->iden));
+    }
+    
+    string lookup_all(SymbolTable* st) {
+        return lookup_all(mangle(st->iden));
+    }
+    
     // Looks up a variable in this symbol table and all of it's ancestors
     // If it exists, return it's type, if not, return INVALIDSYM
     string lookup_all(string iden) {
       // Check current local symbol table
-      iden = mangle(iden);
       string type = lookup_here(iden);
       if(type != INVALIDSYM) {
         return type;
@@ -159,7 +172,7 @@ class SymbolTable
   
   protected:
     string type;
-    //string iden;
+    string iden;
     int level;
     
     SymbolTable * parent;
