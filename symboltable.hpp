@@ -56,15 +56,27 @@ class SymbolTable
     }
     
     string lookup_here(Variable* var) {
-        return lookup_here(var->iden);
+        string name = mangle(var->iden);
+        unordered_map<string,Variable*>::const_iterator newvar
+          = vardecs.find(name);
+        if(newvar != vardecs.end()) {
+          return newvar->second->type;
+        }
+        return INVALIDSYM;
     }
     
     string lookup_here(SymbolTable* st) {
-        return lookup_here(st->iden);
+        string name = st->mangle(st->iden);
+        unordered_map<string,SymbolTable*>::const_iterator child
+          = children.find(name);
+        if(child != children.end()) {
+          return child->second->return_type();
+        }
+        return INVALIDSYM;
     }
     
     // Looks up mangled name and return INVALIDSYM if it isn't here
-    string lookup_here(string iden) {
+    /*string lookup_here(string iden) {
       // Check the vars
       unordered_map<string,Variable*>::const_iterator var 
         = vardecs.find(iden);
@@ -80,19 +92,39 @@ class SymbolTable
       }
       
       return INVALIDSYM;
-    }
+    }*/
     
     string lookup_all(Variable* var) {
-        return lookup_all(var->iden);
+      //string name = mangle(var->iden);
+      string type = lookup_here(var);
+      if(type != INVALIDSYM) {
+        return type;
+      }
+      
+      if(parent == 0){
+        return INVALIDSYM;
+      }
+
+      return parent->lookup_all(var);
     }
     
     string lookup_all(SymbolTable* st) {
-        return lookup_all(st->iden);
+      //string name = st->mangle(st->iden);
+      string type = lookup_here(st);
+      if(type != INVALIDSYM) {
+        return type;
+      }
+
+      if(parent == 0) {
+        return INVALIDSYM;
+      } 
+    
+      return parent->lookup_all(st);
     }
     
     // Looks up a variable in this symbol table and all of it's ancestors
     // If it exists, return it's type, if not, return INVALIDSYM
-    string lookup_all(string iden) {
+    /*string lookup_all(string iden) {
       // Check current local symbol table
       string type = lookup_here(iden);
       if(type != INVALIDSYM) {
@@ -106,7 +138,7 @@ class SymbolTable
       
       // Check parent 
       return parent->lookup_all(iden);
-    }
+    }*/
     
     // Mangles the identifier of a child being added
     virtual string mangle(string name) {
@@ -142,12 +174,12 @@ class SymbolTable
     // Look up variable in current symbol table
     // If it already exists, return false, if not, add it and return true
     bool insert(Variable * var) {
-      string mangled = mangle(var->iden);
-      if(lookup_here(mangled) != INVALIDSYM) {
+      //string mangled = mangle(var->iden);
+      if(lookup_here(var) != INVALIDSYM) {
         return false;
       } 
       
-      pair<string, Variable*> newVar (mangled, var);
+      pair<string, Variable*> newVar (mangle(var->iden), var);
       vardecs.insert(newVar);
       return true;
     }
@@ -155,8 +187,8 @@ class SymbolTable
     // Look up method in current symbol table
     // If it already exists, return false, if not, add it and return true
     bool insert(SymbolTable * method) {
-      string mangled = method->mangle(method->iden);
-      if(lookup_here(mangled) != INVALIDSYM) {
+      //string mangled = method->mangle(method->iden);
+      if(lookup_here(method) != INVALIDSYM) {
         return false;
       }
       
