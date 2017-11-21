@@ -56,13 +56,11 @@ class SymbolTable
     }
     
     string lookup_here(Variable* var) {
-      cout << var->iden << " --> " << mangle(var->iden) << endl;
-      return lookup_here(mangle(var->iden));
+        return lookup_here(var->iden);
     }
     
     string lookup_here(SymbolTable* st) {
-      cout << st->iden << " --> " << mangle(st->iden) << endl;
-      return lookup_here(mangle(st->iden));
+        return lookup_here(st->iden);
     }
     
     // Looks up mangled name and return INVALIDSYM if it isn't here
@@ -85,13 +83,11 @@ class SymbolTable
     }
     
     string lookup_all(Variable* var) {
-      cout << var->iden << " --> " << mangle(var->iden) << endl;
-      return lookup_all(mangle(var->iden));
+        return lookup_all(var->iden);
     }
     
     string lookup_all(SymbolTable* st) {
-      cout << st->iden << " --> " << mangle(st->iden) << endl;
-      return lookup_all(mangle(st->iden));
+        return lookup_all(st->iden);
     }
     
     // Looks up a variable in this symbol table and all of it's ancestors
@@ -131,12 +127,11 @@ class SymbolTable
     // Adds a symbol table child
     bool addChild(SymbolTable* st) {
         if(st != 0) {
-            string new_iden = mangle(st->iden);
+            string new_iden = st->mangle(st->iden);
             pair<string, SymbolTable*> newChild (new_iden, st);
             pair<unordered_map<string,SymbolTable*>::const_iterator,bool> 
               ok = children.insert(newChild);
             if(ok.second) {
-              cout << "Added: " << new_iden << endl;
               order.push_back(new_iden);
               return true;
             } 
@@ -160,7 +155,7 @@ class SymbolTable
     // Look up method in current symbol table
     // If it already exists, return false, if not, add it and return true
     bool insert(SymbolTable * method) {
-      string mangled = mangle(method->iden);
+      string mangled = method->mangle(method->iden);
       if(lookup_here(mangled) != INVALIDSYM) {
         return false;
       }

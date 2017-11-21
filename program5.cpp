@@ -229,7 +229,7 @@ int main() {
   cout << "6 - " << b1->lookup_all(method2) << endl;
   cout << "7 - " << b1->lookup_all(class1) << endl;
   cout << "8 - " << b1->lookup_all(class2) << endl;
-  cout << "9 - " << b1->lookup_all(root) << endl;
+  cout << "9 - " << b1->lookup_all(rootn) << endl;
   
   cout << endl << "Root (false)" << endl;
   cout << "0 - " << root->lookup_here(const1) << endl;
