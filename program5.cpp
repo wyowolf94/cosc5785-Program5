@@ -49,7 +49,7 @@ int main() {
     cout << endl;
   }*/
   
-
+  SymbolTable* root = new SymbolTable();
   root->printTable();
 
   delete atts;
