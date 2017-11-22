@@ -20,6 +20,7 @@
 #define BLOCKTYPE "Block"
 
 using std::string;
+using std::to_string;
 using std::endl;
 using std::ostream;
 using std::vector;
@@ -56,8 +57,12 @@ class SymbolTable
     string getIden() {
       return iden;
     }
+    
+    unordered_map<string, SymbolTable*> getChildren() {
+      return children;
+    }
 
-    string lookup_here(Variable* var) {
+    string lookup_children(Variable* var) {
       string name = mangle(var->iden);
       unordered_map<string,Variable*>::const_iterator newvar
         = vardecs.find(name);
@@ -67,7 +72,7 @@ class SymbolTable
       return INVALIDSYM;
     }
     
-    string lookup_here(SymbolTable* st) {
+    string lookup_children(SymbolTable* st) {
       string name = st->mangle();
       unordered_map<string,SymbolTable*>::const_iterator child
         = children.find(name);
@@ -77,9 +82,25 @@ class SymbolTable
       return INVALIDSYM;
     }
     
+    string lookup_current(Variable* var) {
+      if(parent != 0) {
+        return parent->lookup_children(var);
+      } else {
+        return INVALIDSYM;
+      }
+    }    
+    
+    string lookup_current(SymbolTable* st) {
+      if(parent != 0) {
+        return parent->lookup_children(st);
+      } else {
+        return INVALIDSYM;
+      }
+    }
+    
     string lookup_all(Variable* var) {
       //string name = mangle(var->iden);
-      string type = lookup_here(var);
+      string type = lookup_current(var);
       
       if(type != INVALIDSYM) {
         return type;
@@ -94,7 +115,7 @@ class SymbolTable
     
     string lookup_all(SymbolTable* st) {
       //string name = st->mangle(st->iden);
-      string type = lookup_here(st);
+      string type = lookup_current(st);
       
       if(type != INVALIDSYM) {
         return type;
@@ -146,7 +167,7 @@ class SymbolTable
     // If it already exists, return false, if not, add it and return true
     bool insert(Variable * var) {
       //string mangled = mangle(var->iden);
-      if(lookup_here(var) != INVALIDSYM) {
+      if(lookup_children(var) != INVALIDSYM) {
         return false;
       } 
       
@@ -159,7 +180,7 @@ class SymbolTable
     // If it already exists, return false, if not, add it and return true
     bool insert(SymbolTable * method) {
       //string mangled = method->mangle(method->iden);
-      if(lookup_here(method) != INVALIDSYM) {
+      if(lookup_children(method) != INVALIDSYM) {
         return false;
       }
       
@@ -338,6 +359,28 @@ class BlockDec : public SymbolTable
 
     string mangle() {
       return '$' + iden + '$';
+    }
+    
+    string getNewName() {
+      int randNum = 0;
+      string possible = "";
+      string possibleMangled = "";
+      while(1) {
+        randNum = rand() % 10000000;
+        
+        possible = "block_" + to_string(randNum);
+        possibleMangled = '$' + possible + '$';
+        
+        if(parent != 0) {
+          unordered_map<string,SymbolTable*>::const_iterator found
+            = parent->getChildren().find(possibleMangled);
+          if(found == parent->getChildren().end()) {
+            return possible;
+          }
+        } else { // parent == 0 so this is the root and has no parent/siblings
+          return INVALIDSYM;
+        }
+      }
     }
     
     void printTable() {

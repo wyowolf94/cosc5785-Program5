@@ -156,6 +156,11 @@ class classdecNode : public Node
       // Add the ClassDec to the parent
       parent->insert(new_class);
       cout << "Added " << id << " to " << parent->getIden() << endl << endl;
+      
+      // Call buildTable on the children
+      for(unsigned int i = 0; i < children.size(); i++) {
+        //children[i]->buildTable(new_class, ***);
+      }
     }
     
     virtual void printNode(ostream * out = 0) {
@@ -173,6 +178,21 @@ class classbodyNode : public Node
     classbodyNode(string t) : Node () {
       type = t;
     } 
+    
+    /*void buildTable(SymbolTable* parent) {
+      // Create SymbolTable for Class Declaration
+      ClassDec* new_class = new ClassDec(parent, id);
+      cout << "Created: " << id << endl;
+      
+      // Add the ClassDec to the parent
+      parent->insert(new_class);
+      cout << "Added " << id << " to " << parent->getIden() << endl << endl;
+      
+      // Call buildTable on the children
+      for(unsigned int i = 0; i < children.size(); i++) {
+        children[i]->buildTable();
+      }
+    }*/
 
     void printClassBody(string nonterm) {
         cout << "<ClassBody> -> { ";
