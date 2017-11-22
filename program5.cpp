@@ -148,9 +148,9 @@ int main() {
   b4->insert(var8);
   b4->insert(var8);
   
-  method1->returnType = var1;
-  method2->returnType = var2;
-  method3->returnType = var3;
+  method1->set_return_type("method-rt1");
+  method2->set_return_type("method-rt2");
+  method3->set_return_type( "method-rt3");
   
   method1->add_param(var1);
   method1->add_param(var2);

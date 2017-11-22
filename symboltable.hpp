@@ -277,7 +277,11 @@ class MethodDec : public SymbolTable
     string return_type() {
       return returnType;
     }
-    
+   
+    void set_return_type(string type) {
+      returnType = type;
+    }
+ 
     void printTable() {
       cout << "  "
            << type << " -> " 
