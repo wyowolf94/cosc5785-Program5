@@ -155,7 +155,7 @@ class classdecNode : public Node
       
       // Add the ClassDec to the parent
       parent->insert(new_class);
-      cout << "Added " << id << "to parent" << endl;
+      cout << "Added " << id << " to " << parent->getIden() << endl << endl;
     }
     
     virtual void printNode(ostream * out = 0) {

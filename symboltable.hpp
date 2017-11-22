@@ -53,6 +53,10 @@ class SymbolTable
       children.clear(); 
     }
     
+    string getIden() {
+      return iden;
+    }
+
     string lookup_here(Variable* var) {
       string name = mangle(var->iden);
       unordered_map<string,Variable*>::const_iterator newvar
