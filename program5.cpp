@@ -91,7 +91,7 @@ int main() {
   Variable* var2 = new struct Variable;
   var2->valid = true;
   var2->type = "t2";
-  var2->iden = "var2";
+  var2->iden = "Method_Two";
   
   Variable* var3 = new struct Variable;
   var3->valid = true;
@@ -142,7 +142,6 @@ int main() {
   
   method1->add_param(var1);
   method1->add_param(var2);
-  method2->add_param(var3);
   const1->add_param(var4);
   const3->add_param(var5);
   const3->add_param(var6);
