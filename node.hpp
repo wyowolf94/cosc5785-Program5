@@ -21,6 +21,7 @@ class Node
 {
   public:
     vector<Node*> children;
+  
   // Constructor
   Node() {
     reset();
@@ -91,6 +92,8 @@ class Node
   }
 
   protected:
+    //vector<Node*> children;
+
     int lnum;
     int cnum;
 
