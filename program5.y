@@ -326,7 +326,7 @@ param : type IDEN
 statement : SEMI
               {$$ = new statementNode("semi");
                delete $1;}
-          |name EQ exp SEMI 
+          | name EQ exp SEMI 
               {$$ = new statementNode("nameeq");
                if(!$1->getValid() || !$3->getValid()) {
                  $$->setValid(false);
@@ -587,20 +587,22 @@ exp : name
     | NLL
         {$$ = new expNode("null");
          delete $1;}
-    | name LPAREN RPAREN
+    | name LPAREN arglist RPAREN
         {$$ = new expNode("name paren");
          if(!$1->getValid()) {
            $$->setValid(false);
          }
          $$->addChild($1);
+         $$->addChild($3);
          delete $2;
-         delete $3;}
-    | name LPAREN error
+         delete $4;}
+    | name LPAREN arglist error
         {cerr << endl << "Missing ')' after name declaration: line " 
               << $2->lNum << endl << endl;
          $$ = new errorNode("<Expression>");
          $$->setValid(false);
          $$->addChild($1);
+         $$->addChild($3);
          delete $2;
          yyerrok;}
     | READ LPAREN RPAREN

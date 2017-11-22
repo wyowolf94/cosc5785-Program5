@@ -34,7 +34,7 @@ int main() {
   yyparse();
   
   // Print the Parse Tree
-  /*
+  
   if(forest.size() > 0) {
     cout << endl << "<Program> -> ";
     for(unsigned int i = 0; i < forest.size(); i++) {
@@ -47,7 +47,7 @@ int main() {
       delete forest[i];
     }
     cout << endl;
-  }*/
+  }
   
   SymbolTable* root = new SymbolTable();
   root->printTable();

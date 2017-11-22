@@ -86,8 +86,8 @@ Grammar
    63 exp: name
    64    | NUM
    65    | NLL
-   66    | name LPAREN RPAREN
-   67    | name LPAREN error
+   66    | name LPAREN arglist RPAREN
+   67    | name LPAREN arglist error
    68    | READ LPAREN RPAREN
    69    | READ LPAREN error
    70    | READ error RPAREN
@@ -254,7 +254,7 @@ brackstar (69)
 expstar (70)
     on left: 83 84 85, on right: 80 84 85
 arglist (71)
-    on left: 86 87, on right: 35 36 37 38 39 40 78 79
+    on left: 86 87, on right: 35 36 37 38 39 40 66 67 78 79
 explist (72)
     on left: 88 89, on right: 87 89
 name (73)
@@ -1332,8 +1332,8 @@ State 100
 State 101
 
    63 exp: name .
-   66    | name . LPAREN RPAREN
-   67    | name . LPAREN error
+   66    | name . LPAREN arglist RPAREN
+   67    | name . LPAREN arglist error
    92 name: name . DOT IDEN
    93     | name . LBRACK exp RBRACK
    94     | name . LBRACK exp error
@@ -1817,11 +1817,28 @@ State 138
 
 State 139
 
-   66 exp: name LPAREN . RPAREN
-   67    | name LPAREN . error
+   66 exp: name LPAREN . arglist RPAREN
+   67    | name LPAREN . arglist error
 
-    error   shift, and go to state 164
-    RPAREN  shift, and go to state 165
+    THIS    shift, and go to state 68
+    IDEN    shift, and go to state 89
+    NUM     shift, and go to state 90
+    NLL     shift, and go to state 91
+    READ    shift, and go to state 92
+    NEW     shift, and go to state 93
+    LPAREN  shift, and go to state 94
+    PLUS    shift, and go to state 95
+    MINUS   shift, and go to state 96
+    BANG    shift, and go to state 97
+
+    $default  reduce using rule 86 (arglist)
+
+    exp      go to state 142
+    newexp   go to state 100
+    arglist  go to state 164
+    explist  go to state 144
+    name     go to state 101
+    unyop    go to state 102
 
 
 State 140
@@ -1846,8 +1863,8 @@ State 141
    73    | exp . sumop exp
    74    | exp . proop exp
 
-    error   shift, and go to state 166
-    RPAREN  shift, and go to state 167
+    error   shift, and go to state 165
+    RPAREN  shift, and go to state 166
     DEQ     shift, and go to state 123
     NEQ     shift, and go to state 124
     LEQ     shift, and go to state 125
@@ -1901,8 +1918,8 @@ State 143
    39          | PRINT LPAREN arglist . RPAREN error
    40          | PRINT LPAREN arglist . error SEMI
 
-    error   shift, and go to state 168
-    RPAREN  shift, and go to state 169
+    error   shift, and go to state 167
+    RPAREN  shift, and go to state 168
 
 
 State 144
@@ -1910,7 +1927,7 @@ State 144
    87 arglist: explist .
    89 explist: explist . COMMA exp
 
-    COMMA  shift, and go to state 170
+    COMMA  shift, and go to state 169
 
     $default  reduce using rule 87 (arglist)
 
@@ -1937,8 +1954,8 @@ State 147
    93 name: name LBRACK exp . RBRACK
    94     | name LBRACK exp . error
 
-    error   shift, and go to state 171
-    RBRACK  shift, and go to state 172
+    error   shift, and go to state 170
+    RBRACK  shift, and go to state 171
     DEQ     shift, and go to state 123
     NEQ     shift, and go to state 124
     LEQ     shift, and go to state 125
@@ -1964,8 +1981,8 @@ State 148
    36          | name LPAREN arglist . RPAREN error
    37          | name LPAREN arglist . error SEMI
 
-    error   shift, and go to state 173
-    RPAREN  shift, and go to state 174
+    error   shift, and go to state 172
+    RPAREN  shift, and go to state 173
 
 
 State 149
@@ -1976,7 +1993,7 @@ State 149
    73    | exp . sumop exp
    74    | exp . proop exp
 
-    error  shift, and go to state 175
+    error  shift, and go to state 174
     DEQ    shift, and go to state 123
     NEQ    shift, and go to state 124
     LEQ    shift, and go to state 125
@@ -1990,7 +2007,7 @@ State 149
     DIVD   shift, and go to state 133
     MOD    shift, and go to state 134
     AND    shift, and go to state 135
-    SEMI   shift, and go to state 176
+    SEMI   shift, and go to state 175
 
     relop  go to state 136
     sumop  go to state 137
@@ -2025,7 +2042,7 @@ State 152
     WHILE   shift, and go to state 74
     PRINT   shift, and go to state 75
 
-    statement      go to state 177
+    statement      go to state 176
     condstatement  go to state 77
     block          go to state 78
     name           go to state 82
@@ -2045,7 +2062,7 @@ State 153
     WHILE   shift, and go to state 74
     PRINT   shift, and go to state 75
 
-    statement      go to state 178
+    statement      go to state 177
     condstatement  go to state 77
     block          go to state 78
     name           go to state 82
@@ -2092,7 +2109,7 @@ State 157
 
     exp      go to state 142
     newexp   go to state 100
-    arglist  go to state 179
+    arglist  go to state 178
     explist  go to state 144
     name     go to state 101
     unyop    go to state 102
@@ -2104,11 +2121,11 @@ State 158
    84 expstar: expstar . LBRACK exp RBRACK
    85        | expstar . LBRACK exp error
 
-    LBRACK  shift, and go to state 180
+    LBRACK  shift, and go to state 179
 
     $default  reduce using rule 81 (brackstar)
 
-    brackstar  go to state 181
+    brackstar  go to state 180
 
 
 State 159
@@ -2182,40 +2199,16 @@ State 163
 
 State 164
 
-   67 exp: name LPAREN error .
+   66 exp: name LPAREN arglist . RPAREN
+   67    | name LPAREN arglist . error
 
-    $default  reduce using rule 67 (exp)
+    error   shift, and go to state 181
+    RPAREN  shift, and go to state 182
 
 
 State 165
 
-   66 exp: name LPAREN RPAREN .
-
-    $default  reduce using rule 66 (exp)
-
-
-State 166
-
    43 statement: WHILE LPAREN exp error . statement
-
-    THIS    shift, and go to state 68
-    LBRACE  shift, and go to state 59
-    IDEN    shift, and go to state 89
-    IF      shift, and go to state 71
-    SEMI    shift, and go to state 72
-    RETURN  shift, and go to state 73
-    WHILE   shift, and go to state 74
-    PRINT   shift, and go to state 75
-
-    statement      go to state 182
-    condstatement  go to state 77
-    block          go to state 78
-    name           go to state 82
-
-
-State 167
-
-   42 statement: WHILE LPAREN exp RPAREN . statement
 
     THIS    shift, and go to state 68
     LBRACE  shift, and go to state 59
@@ -2232,23 +2225,42 @@ State 167
     name           go to state 82
 
 
-State 168
+State 166
+
+   42 statement: WHILE LPAREN exp RPAREN . statement
+
+    THIS    shift, and go to state 68
+    LBRACE  shift, and go to state 59
+    IDEN    shift, and go to state 89
+    IF      shift, and go to state 71
+    SEMI    shift, and go to state 72
+    RETURN  shift, and go to state 73
+    WHILE   shift, and go to state 74
+    PRINT   shift, and go to state 75
+
+    statement      go to state 184
+    condstatement  go to state 77
+    block          go to state 78
+    name           go to state 82
+
+
+State 167
 
    40 statement: PRINT LPAREN arglist error . SEMI
 
-    SEMI  shift, and go to state 184
+    SEMI  shift, and go to state 185
 
 
-State 169
+State 168
 
    38 statement: PRINT LPAREN arglist RPAREN . SEMI
    39          | PRINT LPAREN arglist RPAREN . error
 
-    error  shift, and go to state 185
-    SEMI   shift, and go to state 186
+    error  shift, and go to state 186
+    SEMI   shift, and go to state 187
 
 
-State 170
+State 169
 
    89 explist: explist COMMA . exp
 
@@ -2263,86 +2275,86 @@ State 170
     MINUS   shift, and go to state 96
     BANG    shift, and go to state 97
 
-    exp     go to state 187
+    exp     go to state 188
     newexp  go to state 100
     name    go to state 101
     unyop   go to state 102
 
 
-State 171
+State 170
 
    94 name: name LBRACK exp error .
 
     $default  reduce using rule 94 (name)
 
 
-State 172
+State 171
 
    93 name: name LBRACK exp RBRACK .
 
     $default  reduce using rule 93 (name)
 
 
-State 173
+State 172
 
    37 statement: name LPAREN arglist error . SEMI
 
-    SEMI  shift, and go to state 188
+    SEMI  shift, and go to state 189
 
 
-State 174
+State 173
 
    35 statement: name LPAREN arglist RPAREN . SEMI
    36          | name LPAREN arglist RPAREN . error
 
-    error  shift, and go to state 189
-    SEMI   shift, and go to state 190
+    error  shift, and go to state 190
+    SEMI   shift, and go to state 191
 
 
-State 175
+State 174
 
    34 statement: name EQ exp error .
 
     $default  reduce using rule 34 (statement)
 
 
-State 176
+State 175
 
    33 statement: name EQ exp SEMI .
 
     $default  reduce using rule 33 (statement)
 
 
-State 177
+State 176
 
    48 condstatement: IF LPAREN exp error statement .
    50              | IF LPAREN exp error statement . ELSE statement
 
-    ELSE  shift, and go to state 191
+    ELSE  shift, and go to state 192
 
     $default  reduce using rule 48 (condstatement)
 
 
-State 178
+State 177
 
    47 condstatement: IF LPAREN exp RPAREN statement .
    49              | IF LPAREN exp RPAREN statement . ELSE statement
 
-    ELSE  shift, and go to state 192
+    ELSE  shift, and go to state 193
 
     $default  reduce using rule 47 (condstatement)
 
 
-State 179
+State 178
 
    78 newexp: NEW IDEN LPAREN arglist . RPAREN
    79       | NEW IDEN LPAREN arglist . error
 
-    error   shift, and go to state 193
-    RPAREN  shift, and go to state 194
+    error   shift, and go to state 194
+    RPAREN  shift, and go to state 195
 
 
-State 180
+State 179
 
    84 expstar: expstar LBRACK . exp RBRACK
    85        | expstar LBRACK . exp error
@@ -2358,58 +2370,72 @@ State 180
     MINUS   shift, and go to state 96
     BANG    shift, and go to state 97
 
-    exp     go to state 195
+    exp     go to state 196
     newexp  go to state 100
     name    go to state 101
     unyop   go to state 102
 
 
-State 181
+State 180
 
    80 newexp: NEW simpleType expstar brackstar .
    82 brackstar: brackstar . DOUBBRACK
 
-    DOUBBRACK  shift, and go to state 196
+    DOUBBRACK  shift, and go to state 197
 
     $default  reduce using rule 80 (newexp)
 
 
+State 181
+
+   67 exp: name LPAREN arglist error .
+
+    $default  reduce using rule 67 (exp)
+
+
 State 182
+
+   66 exp: name LPAREN arglist RPAREN .
+
+    $default  reduce using rule 66 (exp)
+
+
+State 183
 
    43 statement: WHILE LPAREN exp error statement .
 
     $default  reduce using rule 43 (statement)
 
 
-State 183
+State 184
 
    42 statement: WHILE LPAREN exp RPAREN statement .
 
     $default  reduce using rule 42 (statement)
 
 
-State 184
+State 185
 
    40 statement: PRINT LPAREN arglist error SEMI .
 
     $default  reduce using rule 40 (statement)
 
 
-State 185
+State 186
 
    39 statement: PRINT LPAREN arglist RPAREN error .
 
     $default  reduce using rule 39 (statement)
 
 
-State 186
+State 187
 
    38 statement: PRINT LPAREN arglist RPAREN SEMI .
 
     $default  reduce using rule 38 (statement)
 
 
-State 187
+State 188
 
    72 exp: exp . relop exp
    73    | exp . sumop exp
@@ -2437,49 +2463,30 @@ State 187
     proop  go to state 138
 
 
-State 188
+State 189
 
    37 statement: name LPAREN arglist error SEMI .
 
     $default  reduce using rule 37 (statement)
 
 
-State 189
+State 190
 
    36 statement: name LPAREN arglist RPAREN error .
 
     $default  reduce using rule 36 (statement)
 
 
-State 190
+State 191
 
    35 statement: name LPAREN arglist RPAREN SEMI .
 
     $default  reduce using rule 35 (statement)
 
 
-State 191
-
-   50 condstatement: IF LPAREN exp error statement ELSE . statement
-
-    THIS    shift, and go to state 68
-    LBRACE  shift, and go to state 59
-    IDEN    shift, and go to state 89
-    IF      shift, and go to state 71
-    SEMI    shift, and go to state 72
-    RETURN  shift, and go to state 73
-    WHILE   shift, and go to state 74
-    PRINT   shift, and go to state 75
-
-    statement      go to state 197
-    condstatement  go to state 77
-    block          go to state 78
-    name           go to state 82
-
-
 State 192
 
-   49 condstatement: IF LPAREN exp RPAREN statement ELSE . statement
+   50 condstatement: IF LPAREN exp error statement ELSE . statement
 
     THIS    shift, and go to state 68
     LBRACE  shift, and go to state 59
@@ -2498,19 +2505,38 @@ State 192
 
 State 193
 
+   49 condstatement: IF LPAREN exp RPAREN statement ELSE . statement
+
+    THIS    shift, and go to state 68
+    LBRACE  shift, and go to state 59
+    IDEN    shift, and go to state 89
+    IF      shift, and go to state 71
+    SEMI    shift, and go to state 72
+    RETURN  shift, and go to state 73
+    WHILE   shift, and go to state 74
+    PRINT   shift, and go to state 75
+
+    statement      go to state 199
+    condstatement  go to state 77
+    block          go to state 78
+    name           go to state 82
+
+
+State 194
+
    79 newexp: NEW IDEN LPAREN arglist error .
 
     $default  reduce using rule 79 (newexp)
 
 
-State 194
+State 195
 
    78 newexp: NEW IDEN LPAREN arglist RPAREN .
 
     $default  reduce using rule 78 (newexp)
 
 
-State 195
+State 196
 
    72 exp: exp . relop exp
    73    | exp . sumop exp
@@ -2518,8 +2544,8 @@ State 195
    84 expstar: expstar LBRACK exp . RBRACK
    85        | expstar LBRACK exp . error
 
-    error   shift, and go to state 199
-    RBRACK  shift, and go to state 200
+    error   shift, and go to state 200
+    RBRACK  shift, and go to state 201
     DEQ     shift, and go to state 123
     NEQ     shift, and go to state 124
     LEQ     shift, and go to state 125
@@ -2539,35 +2565,35 @@ State 195
     proop  go to state 138
 
 
-State 196
+State 197
 
    82 brackstar: brackstar DOUBBRACK .
 
     $default  reduce using rule 82 (brackstar)
 
 
-State 197
+State 198
 
    50 condstatement: IF LPAREN exp error statement ELSE statement .
 
     $default  reduce using rule 50 (condstatement)
 
 
-State 198
+State 199
 
    49 condstatement: IF LPAREN exp RPAREN statement ELSE statement .
 
     $default  reduce using rule 49 (condstatement)
 
 
-State 199
+State 200
 
    85 expstar: expstar LBRACK exp error .
 
     $default  reduce using rule 85 (expstar)
 
 
-State 200
+State 201
 
    84 expstar: expstar LBRACK exp RBRACK .
 
