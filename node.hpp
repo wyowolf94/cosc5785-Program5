@@ -22,74 +22,74 @@ class Node
   public:
     vector<Node*> children;
   
-  // Constructor
-  Node() {
-    reset();
-    ival = 0;
-    dval = 0;
-    valid = true;
-  }
-
-  // Destructor
-  virtual ~Node() {
-    for(unsigned int i = 0; i < children.size(); i++) {
-      delete children[i]; 
+    // Constructor
+    Node() {
+      reset();
+      ival = 0;
+      dval = 0;
+      valid = true;
     }
-  }
 
-  // Get Functions
-  int    getint()   const { return ival; }
-
-  double getdbl()   const { return dval; }
-
-  string getstr()   const { return sval; }
-  
-  bool   getValid() const { return valid;}
-
-  // Set Functions
-  void setVal(int i)          { ival = i; }
-
-  void setVal(double d)       { dval = d; }
-
-  void setVal(const string s) { sval = s; }
-
-  void setVal(const char * c) { sval = c; }
-  
-  void setValid(const bool b) { valid = b; }
-
-  // Reset
-  void reset() {
-    lnum = 1;
-    cnum = 1;
-    sval.clear();
-  } 
-  
-  // Get a Child
-  Node* getChild(unsigned index) {
-    return children[index];
-  }
-
-  // Set a Child
-  void setChild(Node *c, unsigned index){
-    children[index] = c;
-    return;
-  }
-  
-  void addChild(Node *c) {
-    if(c != 0) {
-      children.push_back(c);
+    // Destructor
+    virtual ~Node() {
+      for(unsigned int i = 0; i < children.size(); i++) {
+        delete children[i]; 
+      }
     }
-    return;
-  }
 
-  // Print Node
-  virtual void printNode(ostream * out = 0) {
-    *out << sval;
-    for(unsigned i = 0; i < children.size(); i++) {
-      children[i]->printNode(out);
+    // Get Functions
+    int    getint()   const { return ival; }
+
+    double getdbl()   const { return dval; }
+
+    string getstr()   const { return sval; }
+    
+    bool   getValid() const { return valid;}
+
+    // Set Functions
+    void setVal(int i)          { ival = i; }
+
+    void setVal(double d)       { dval = d; }
+
+    void setVal(const string s) { sval = s; }
+
+    void setVal(const char * c) { sval = c; }
+    
+    void setValid(const bool b) { valid = b; }
+
+    // Reset
+    void reset() {
+      lnum = 1;
+      cnum = 1;
+      sval.clear();
+    } 
+    
+    // Get a Child
+    Node* getChild(unsigned index) {
+      return children[index];
     }
-    return;
-  }
+
+    // Set a Child
+    void setChild(Node *c, unsigned index){
+      children[index] = c;
+      return;
+    }
+    
+    void addChild(Node *c) {
+      if(c != 0) {
+        children.push_back(c);
+      }
+      return;
+    }
+
+    // Print Node
+    virtual void printNode(ostream * out = 0) {
+      *out << sval;
+      for(unsigned i = 0; i < children.size(); i++) {
+        children[i]->printNode(out);
+      }
+      return;
+    }
 
   protected:
     //vector<Node*> children;
