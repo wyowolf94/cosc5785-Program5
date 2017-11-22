@@ -200,7 +200,7 @@ class ClassDec : public SymbolTable
     void printTable() {
       cout << type << " -> " << iden << endl;
       
-      for(auto it = vardecs.begin(); it != vardecs.end(); ++it) {
+      for(auto it = vardecs.end(); it != vardecs.begin(); it--) {
         cout << "  " << it->second->type 
              << "  " << it->second->iden 
              << endl;
@@ -253,7 +253,7 @@ class MethodDec : public SymbolTable
            
       printParams(params);
       
-      for(auto it = vardecs.begin(); it != vardecs.end(); ++it) {
+      for(auto it = vardecs.end(); it != vardecs.begin(); it--) {
         cout << "  " 
              << "  " << it->second->type 
              << "  " << it->second->iden
@@ -304,7 +304,7 @@ class ConstrDec : public SymbolTable
            
       printParams(params);
       
-      for(auto it = vardecs.begin(); it != vardecs.end(); ++it) {
+      for(auto it = vardecs.end(); it != vardecs.begin(); it--) {
         cout << "  " 
              << "  "   << it->second->type 
              << "  "   << it->second->iden 
@@ -344,7 +344,7 @@ class BlockDec : public SymbolTable
         
       cout << indent << type << " -> " << iden  << endl;
                  
-      for(auto it = vardecs.begin(); it != vardecs.end(); ++it) {
+      for(auto it = vardecs.end(); it != vardecs.begin(); it--) {
         cout << indent 
              << "  "   << it->second->type 
              << "  "   << it->second->iden
