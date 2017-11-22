@@ -249,8 +249,7 @@ int main() {
   cout << "5 - " << b1->lookup_all(method1) << endl;
   cout << "6 - " << b1->lookup_all(method2) << endl;
   cout << "7 - " << b1->lookup_all(class1) << endl;
-  cout << "8 - " << b1->lookup_all(class2) << endl;
-  cout << "9 - " << b1->lookup_all(root) << endl;
+  cout << "8 - " << b1->lookup_all(class2) << endl; 
   
   cout << endl << "Root (false)" << endl;
   cout << "0 - " << root->lookup_here(const1) << endl;
@@ -298,7 +297,6 @@ int main() {
   cout << "0 - " << method2->lookup_here(method1) << endl;
   cout << "1 - " << method2->lookup_here(var7) << endl;
   cout << "2 - " << method2->lookup_all(var4) << endl;
-  cout << "3 - " << method2->lookup_all(var1) << endl;
   
   cout << endl << "Method3 (false)" << endl;
   cout << "0 - " << method3->lookup_here(const3) << endl;

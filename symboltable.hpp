@@ -97,6 +97,7 @@ class SymbolTable
     string lookup_all(Variable* var) {
       //string name = mangle(var->iden);
       string type = lookup_here(var);
+      
       if(type != INVALIDSYM) {
         return type;
       }
@@ -111,6 +112,7 @@ class SymbolTable
     string lookup_all(SymbolTable* st) {
       //string name = st->mangle(st->iden);
       string type = lookup_here(st);
+      
       if(type != INVALIDSYM) {
         return type;
       }
@@ -146,7 +148,7 @@ class SymbolTable
     }
 
     virtual string mangle() {
-      return "";
+      return "root";
     }
     
     // Unmangles the identifier by taking the iden out
@@ -366,7 +368,11 @@ class BlockDec : public SymbolTable
     } 
     
     string return_type() {
-        return BLOCKTYPE;
+      return BLOCKTYPE;
+    }
+
+    string mangle() {
+      return '$' + iden + '$';
     }
     
     void printTable() {
@@ -375,7 +381,7 @@ class BlockDec : public SymbolTable
         indent = indent + "  ";
       }      
         
-      cout << indent << type << " -> " << endl;
+      cout << indent << type << " -> " << iden  << endl;
                  
       for(auto it = vardecs.begin(); it != vardecs.end(); ++it) {
         cout << indent 
