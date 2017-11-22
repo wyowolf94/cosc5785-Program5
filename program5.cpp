@@ -35,6 +35,7 @@ int main() {
   
   // Print the Parse Tree
   
+  /*
   if(forest.size() > 0) {
     cout << endl << "<Program> -> ";
     for(unsigned int i = 0; i < forest.size(); i++) {
@@ -48,8 +49,19 @@ int main() {
     }
     cout << endl;
   }
-  
+  */
+  // Build Symbol Table
   SymbolTable* root = new SymbolTable();
+  
+  if(forest.size() > 0) {
+    for(unsigned int i = 0; i < forest.size(); i++) {
+      forest[i]->buildTable(root);
+    }
+  }
+  
+  // Type Check
+  
+  // Print Symbol Table
   root->printTable();
 
   delete atts;

@@ -9,6 +9,7 @@
 #include<iostream>
 #include<string>
 #include<vector>
+#include "symboltable.hpp"
 
 using std::string;
 using std::endl;
@@ -81,6 +82,11 @@ class Node
       }
       return;
     }
+    
+    virtual void buildTable(SymbolTable* st) {
+      cout << "PROBLEM!PROBLEM!PROBLEM!PROBLEM!PROBLEM!PROBLEM!" << endl;
+      return;
+    }
 
     // Print Node
     virtual void printNode(ostream * out = 0) {
@@ -142,6 +148,16 @@ class classdecNode : public Node
       id = i;
     } 
 
+    void buildTable(SymbolTable* parent) {
+      // Create SymbolTable for Class Declaration
+      ClassDec* new_class = new ClassDec(parent, id);
+      cout << "Created: " << id << endl;
+      
+      // Add the ClassDec to the parent
+      parent->insert(new_class);
+      cout << "Added " << id << "to parent" << endl;
+    }
+    
     virtual void printNode(ostream * out = 0) {
       cout << endl << "<ClassDec> -> class identifier (" << id << ") <ClassBody>" << endl;
       children[0]->printNode();
