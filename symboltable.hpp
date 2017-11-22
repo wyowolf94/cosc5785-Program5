@@ -66,7 +66,7 @@ class SymbolTable
     }
     
     string lookup_here(SymbolTable* st) {
-        string name = st->mangle(st->iden);
+        string name = st->mangle();
         unordered_map<string,SymbolTable*>::const_iterator child
           = children.find(name);
         if(child != children.end()) {
@@ -159,7 +159,7 @@ class SymbolTable
     // Adds a symbol table child
     bool addChild(SymbolTable* st) {
         if(st != 0) {
-            string new_iden = st->mangle(st->iden);
+            string new_iden = st->mangle();
             pair<string, SymbolTable*> newChild (new_iden, st);
             pair<unordered_map<string,SymbolTable*>::const_iterator,bool> 
               ok = children.insert(newChild);
@@ -222,8 +222,8 @@ class ClassDec : public SymbolTable
       iden = id;
     } 
     
-    string mangle(string name) {
-      return '$' + name + '$';
+    string mangle() {
+      return '$' + iden + '$';
     }
 
     string return_type() {
@@ -262,10 +262,10 @@ class MethodDec : public SymbolTable
       return false;
     }
     
-    string mangle(string name) {
-      string temp = '$' + name + '$';
+    string mangle() {
+      string temp = '$' + iden + '$';
       for(unsigned int i = 0; i < params.size(); i++) {
-        temp = temp + params[i]->iden + '$';
+        temp = temp + params[i]->type + '$';
       }
       return temp;
     }
@@ -315,10 +315,10 @@ class ConstrDec : public SymbolTable
       return false;
     }
     
-    string mangle(string name) {
-      string temp = '$' + name + '$';
+    string mangle() {
+      string temp = '$' + iden + '$';
       for(unsigned int i = 0; i < params.size(); i++) {
-        temp = temp + params[i]->iden + '$';
+        temp = temp + params[i]->type + '$';
       }
       return temp;
     }
