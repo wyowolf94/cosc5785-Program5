@@ -13,8 +13,6 @@
 
 #include "symbol.h"
 
-#define INVALIDVAR "invalid variable"
-#define INVALIDMETHOD "invalid method"
 #define INVALIDSYM "invalid symbol"
 #define CONSTRTYPE "Constructor"
 #define METHODTYPE "Method"
@@ -75,25 +73,6 @@ class SymbolTable
       return INVALIDSYM;
     }
     
-    // Looks up mangled name and return INVALIDSYM if it isn't here
-    /*string lookup_here(string iden) {
-      // Check the vars
-      unordered_map<string,Variable*>::const_iterator var 
-        = vardecs.find(iden);
-      if(var != vardecs.end()) {
-        return var->second->type;
-      } 
-      
-      // Check the children, but not all decendents
-      unordered_map<string,SymbolTable*>::const_iterator child 
-        = children.find(iden);
-      if(child != children.end()) {
-        child->second->return_type();
-      }
-      
-      return INVALIDSYM;
-    }*/
-    
     string lookup_all(Variable* var) {
       //string name = mangle(var->iden);
       string type = lookup_here(var);
@@ -123,24 +102,6 @@ class SymbolTable
     
       return parent->lookup_all(st);
     }
-    
-    // Looks up a variable in this symbol table and all of it's ancestors
-    // If it exists, return it's type, if not, return INVALIDSYM
-    /*string lookup_all(string iden) {
-      // Check current local symbol table
-      string type = lookup_here(iden);
-      if(type != INVALIDSYM) {
-        return type;
-      }
-      
-      // Check to see if it is the root
-      if(parent == 0) {
-        return INVALIDSYM;
-      } 
-      
-      // Check parent 
-      return parent->lookup_all(iden);
-    }*/
     
     // Mangles the identifier of a child being added
     virtual string mangle(string name) {
