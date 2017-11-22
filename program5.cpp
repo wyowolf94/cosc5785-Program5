@@ -148,6 +148,10 @@ int main() {
   b4->insert(var8);
   b4->insert(var8);
   
+  method1->returnType = var1;
+  method2->returnType = var2;
+  method3->returnType = var3;
+  
   method1->add_param(var1);
   method1->add_param(var2);
   method2->add_param(var3);
