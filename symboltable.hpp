@@ -56,23 +56,23 @@ class SymbolTable
     }
     
     string lookup_here(Variable* var) {
-        string name = mangle(var->iden);
-        unordered_map<string,Variable*>::const_iterator newvar
-          = vardecs.find(name);
-        if(newvar != vardecs.end()) {
-          return newvar->second->type;
-        }
-        return INVALIDSYM;
+      string name = mangle(var->iden);
+      unordered_map<string,Variable*>::const_iterator newvar
+        = vardecs.find(name);
+      if(newvar != vardecs.end()) {
+        return newvar->second->type;
+      }
+      return INVALIDSYM;
     }
     
     string lookup_here(SymbolTable* st) {
-        string name = st->mangle();
-        unordered_map<string,SymbolTable*>::const_iterator child
-          = children.find(name);
-        if(child != children.end()) {
-          return child->second->return_type();
-        }
-        return INVALIDSYM;
+      string name = st->mangle();
+      unordered_map<string,SymbolTable*>::const_iterator child
+        = children.find(name);
+      if(child != children.end()) {
+        return child->second->return_type();
+      }
+      return INVALIDSYM;
     }
     
     // Looks up mangled name and return INVALIDSYM if it isn't here
@@ -144,6 +144,10 @@ class SymbolTable
     virtual string mangle(string name) {
       return '$' + name + '$';
     }
+
+    virtual string mangle() {
+      return "";
+    }
     
     // Unmangles the identifier by taking the iden out
     // from the mangled name
@@ -153,22 +157,22 @@ class SymbolTable
     }
     
     virtual string return_type() {
-        return "";
+      return "";
     }
     
     // Adds a symbol table child
     bool addChild(SymbolTable* st) {
-        if(st != 0) {
-            string new_iden = st->mangle();
-            pair<string, SymbolTable*> newChild (new_iden, st);
-            pair<unordered_map<string,SymbolTable*>::const_iterator,bool> 
-              ok = children.insert(newChild);
-            if(ok.second) {
-              order.push_back(new_iden);
-              return true;
-            } 
-        }
-        return false;
+      if(st != 0) {
+        string new_iden = st->mangle();
+        pair<string, SymbolTable*> newChild (new_iden, st);
+        pair<unordered_map<string,SymbolTable*>::const_iterator,bool> 
+          ok = children.insert(newChild);
+        if(ok.second) {
+          order.push_back(new_iden);
+          return true;
+        } 
+      }
+      return false;
     }
 
     // Look up variable in current symbol table
@@ -284,8 +288,8 @@ class MethodDec : public SymbolTable
       
       for(auto it = vardecs.begin(); it != vardecs.end(); ++it) {
         cout << "  " 
-             << "  "   << it->second->type 
-             << "  "   << it->second->iden 
+             << "  " << it->second->type 
+             << "  " << it->second->iden
              << endl;
       }
       
@@ -372,7 +376,7 @@ class BlockDec : public SymbolTable
       for(auto it = vardecs.begin(); it != vardecs.end(); ++it) {
         cout << indent 
              << "  "   << it->second->type 
-             << "  "   << it->second->iden 
+             << "  "   << it->second->iden
              << endl;
       }
       

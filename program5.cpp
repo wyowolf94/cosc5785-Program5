@@ -53,46 +53,46 @@ int main() {
   
   
   ClassDec* class1 = new ClassDec(root, "Class_One");
-  root->insert(class1);
+  //root->insert(class1);
   
   ClassDec* class2 = new ClassDec(root, "Class_Two");
-  root->insert(class2);
+  //root->insert(class2);
   
   
   ConstrDec* const1 = new ConstrDec(class1, "Constr_One");
-  class1->insert(const1);
+  //class1->insert(const1);
   
   ConstrDec* const2 = new ConstrDec(class2, "Constr_Two");
-  class2->insert(const2);
+  //class2->insert(const2);
   
   ConstrDec* const3 = new ConstrDec(class2, "Constr_Three");
-  class2->insert(const3);
+  //class2->insert(const3);
   
   
   MethodDec* method1 = new MethodDec(class1, "Method_One");
-  class1->insert(method1);
+  //class1->insert(method1);
   
   MethodDec* method2 = new MethodDec(class1, "Method_Two");
-  class1->insert(method2);
+  //class1->insert(method2);
   
   MethodDec* method3 = new MethodDec(class2, "Method_Three");
-  class2->insert(method3);
+  //class2->insert(method3);
   
   
   BlockDec* b1 = new BlockDec(const1, "b1");
-  const1->insert(b1);
+  //const1->insert(b1);
   
   BlockDec* b2 = new BlockDec(const2, "b2");
-  const2->insert(b2);
+  //const2->insert(b2);
   
   BlockDec* b3 = new BlockDec(method1, "b3");
-  method1->insert(b3);
+  //method1->insert(b3);
   
   BlockDec* b4 = new BlockDec(method1, "b4");
-  method1->insert(b4);
+  //method1->insert(b4);
   
   BlockDec* b5 = new BlockDec(method3, "b5");
-  method3->insert(b5);
+  //method3->insert(b5);
   
   
   Variable* var1 = new struct Variable;
@@ -155,6 +155,23 @@ int main() {
   const3->add_param(var5);
   const3->add_param(var6);
   const3->add_param(var7);
+
+  root->insert(class1);
+  root->insert(class2);
+
+  class1->insert(const1);
+  class2->insert(const2);
+  class2->insert(const3);
+
+  class1->insert(method1);
+  class1->insert(method2);
+  class2->insert(method3);
+
+  const1->insert(b1);
+  const2->insert(b2);
+  method1->insert(b3);
+  method1->insert(b4);
+  method3->insert(b5);
 
   root->printTable();
   
