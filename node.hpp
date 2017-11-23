@@ -57,6 +57,20 @@ class Node
     void setVal(const char * c) { sval = c; }
     
     void setValid(const bool b) { valid = b; }
+    
+    // Crap code
+    virtual string getType() {
+      return INVALIDSYM;
+    }
+    
+    virtual Variable* getParam() {
+      return 0;
+    }
+    
+    virtual vector<Variable*> getParams() {
+      vector<Variable*> no;
+      return no;
+    }
 
     // Reset
     void reset() {
@@ -134,6 +148,12 @@ class plusstarNode : public Node
     plusstarNode() : Node () {
       // Nada
     } 
+    
+    void buildTable(SymbolTable* parent) {
+      for(unsigned int i = 0; i < children.size(); i++) {
+        children[i]->buildTable(parent);
+      }
+    }
 
     virtual void printNode(ostream * out = 0) {
       // Don't print anything
@@ -191,8 +211,20 @@ class classbodyNode : public Node
       
       // Call buildTable on the children
       for(unsigned int i = 0; i < children.size(); i++) {
-        //children[i]->buildTable();
+        children[i]->buildTable(new_classBlock);
       }
+      /*
+      if (type == "vdecs" || type == "cdecs" || type == "mdecs") {
+        children[0]->buildTable();
+      } else if (type == "vcdecs" || type == "cmdecs" || type = "vmdecs") {
+        children[0]->buildTable();
+        children[1]->buildTable();
+      } else if (type == "vcmdecs") {
+        children[0]->buildTable();
+        children[1]->buildTable();
+        children[2]->buildTable();
+      } 
+      */
     }
 
     void printClassBody(string nonterm) {
@@ -279,6 +311,23 @@ class varDecNode : public Node
     varDecNode(string i) : Node () {
       identifier = i;
     } 
+    
+    void buildTable(SymbolTable* parent) {
+      // Create SymbolTable for Class Declaration
+      string new_type = children[0]->getType();
+      Variable* new_var = new Variable{new_type, identifier, true};
+      cout << "Created: " << new_var->type << " " << new_var->iden << endl;
+      
+      // Add the ClassDec to the parent
+      parent->insert(new_var);
+      cout << "Added " << new_var->iden << " to " 
+           << parent->getIden() << endl << endl;
+      
+      // Call buildTable on the children
+      for(unsigned int i = 0; i < children.size(); i++) {
+        //children[i]->buildTable(new_class);
+      }
+    }
 
     virtual void printNode(ostream * out = 0) {
       cout << endl << "<VarDec> -> <Type> identifier (" 
@@ -296,6 +345,25 @@ class constdecNode : public Node
     constdecNode(string i) : Node () {
       id = i;
     } 
+    
+    void buildTable(SymbolTable* parent) {
+      // Create SymbolTable for Class Declaration
+      ConstrDec* new_const = new ConstrDec(parent, id);
+      new_const->setParams(children[0]->getParams());
+      cout << "Created: " << id ;
+      printParams(new_const->getParams());
+      cout << endl;
+      
+      // Add the ClassDec to the parent
+      parent->insert(new_const);
+      cout << "Added " << new_const->getIden() << " to " 
+           << parent->getIden() << endl << endl;
+      
+      // Call buildTable on the children
+      for(unsigned int i = 0; i < children.size(); i++) {
+        //children[i]->buildTable(new_class);
+      }
+    }
 
     virtual void printNode(ostream * out = 0) {
       cout << endl << "<ConstDec> -> identifier (" << id
@@ -315,6 +383,34 @@ class methoddecNode : public Node
       type = t;
       id = i;
     } 
+    
+    void buildTable(SymbolTable* parent) {
+      // Create SymbolTable for Class Declaration
+      MethodDec* new_method = new MethodDec(parent, id);
+      if(type == "type") {
+        new_method->set_returnType(children[0]->getType());
+      } else if (type == "void") {
+        new_method->set_returnType(type);
+      } else { 
+        cout << "PROBLEM IN METHODDECNODE - BUILDTABLE" << endl;
+        new_method->set_returnType(INVALIDSYM);
+      }
+      new_method->setParams(children[1]->getParams());
+      cout << "Created: " << new_method->return_type() 
+           << " " << new_method->getIden();
+           printParams(new_method->getParams());
+      cout << endl;
+      
+      // Add the ClassDec to the parent
+      parent->insert(new_method);
+      cout << "Added " << new_method->getIden() << " to " 
+           << parent->getIden() << endl << endl;
+      
+      // Call buildTable on the children
+      for(unsigned int i = 0; i < children.size(); i++) {
+        //children[i]->buildTable(new_class);
+      }
+    }
 
     virtual void printNode(ostream * out = 0) {
       if(type == "type") {
@@ -346,6 +442,13 @@ class paramlistNode : public Node
       type = t;
     } 
 
+    vector<Variable*> getParams() {
+      vector<Variable*> new_paramList;
+      for(unsigned int i = 0; i < children[0]->children.size(); i++) {
+        new_paramList.push_back(children[0]->children[i]->getParam());
+      }
+    }
+    
     void printParamList() {
         cout << "<ParameterList> -> ";
         for(unsigned int i = 0; i < children[0]->children.size() - 1; i++) {
@@ -355,9 +458,9 @@ class paramlistNode : public Node
     }
     
     void printChildren() {
-        for(unsigned int i = 0; i < children[0]->children.size(); i++) {
-          children[0]->children[i]->printNode();
-        }
+      for(unsigned int i = 0; i < children[0]->children.size(); i++) {
+        children[0]->children[i]->printNode();
+      }
     }
     
     virtual void printNode(ostream * out = 0) {
@@ -380,7 +483,17 @@ class paramNode : public Node
   public:
     paramNode(string i) : Node () {
       id = i;
+      string new_type = children[0]->getType();
+      param = new Variable{new_type,id,true};
     } 
+    
+    ~paramNode() {
+      delete param;
+    }
+    
+    Variable* getParam() {
+      return param;
+    }
 
     virtual void printNode(ostream * out = 0) {
       cout << endl << "<Parameter> -> <Type> identifier (" << id << ")" << endl;
@@ -388,6 +501,7 @@ class paramNode : public Node
     }
   private:
     string id;
+    Variable* param;
 }; 
 
 // Statement Node ... for now just a simple statement
@@ -739,6 +853,17 @@ class typeNode : public Node
     typeNode(string t) : Node () {
       type = t;
     } 
+    
+    string getType() {
+      if(type == "simpleType") {
+        return children[0]->getType();
+      } else if(type == "type") {
+      return children[0]->getType() + "[]";
+      } else {
+        cout << "PROBLEM IN TYPE  NODE - GETTYPE()" << endl;
+        return INVALIDSYM;
+      }
+    }
 
     virtual void printNode(ostream * out = 0) {
       cout << "<Type> -> ";
@@ -764,6 +889,17 @@ class simpleTypeNode : public Node
       type = t;
       id = i;
     } 
+    
+    string getType() {
+      if(type == "int") {
+        return type;
+      } else if (type == "id") {
+        return id;
+      } else {
+        cout << "PROBLEM IN SIMPLETYPE - GETTYPE" << endl;
+        return INVALIDSYM;
+      }
+    }
 
     virtual void printNode(ostream * out = 0) {
       if(type == "int") {

@@ -268,12 +268,24 @@ class MethodDec : public SymbolTable
       return false;
     }
     
+    void setParams(vector<Variable*> new_params) {
+      params = new_params;
+    }
+    
+    vector<Variable*> getParams() {
+      return params;
+    }
+    
     string mangle() {
       string temp = '$' + iden + '$';
       for(unsigned int i = 0; i < params.size(); i++) {
         temp = temp + params[i]->type + '$';
       }
       return temp;
+    }
+    
+    void set_returnType (string new_type) {
+      returnType = new_type;
     }
     
     string return_type() {
@@ -331,6 +343,14 @@ class ConstrDec : public SymbolTable
         temp = temp + params[i]->type + '$';
       }
       return temp;
+    }
+    
+    void setParams(vector<Variable*> new_params) {
+      params = new_params;
+    }
+    
+    vector<Variable*> getParams() {
+      return params;
     }
     
     string return_type() {
