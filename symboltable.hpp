@@ -427,7 +427,7 @@ class BlockDec : public SymbolTable
       
       if(parent->getParent()->getParent() != 0) {
         string tag_indent = "";
-        for(int i = 1; i < level-2; i++) {
+        for(int i = 2; i < level-1; i++) {
           indent = tag_indent + "  ";
         } 
         if(parent->getParent()->getParent()->return_type() == BLOCKTYPE) {
