@@ -340,6 +340,8 @@ class varDecNode : public Node
       if(found_type != INVALIDSYM) {
         return true;
       } else {
+        cerr << "Type Error: Invalid Type " << var->type << " at " 
+             << lnum << endl;
         return false;
       }
     }
