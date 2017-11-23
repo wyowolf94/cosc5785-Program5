@@ -59,6 +59,9 @@ int main() {
     }
   }
 
+  // Print Symbol Table
+  root->printTable();
+  
   // Type Check
   if(forest.size() > 0) {
     for(unsigned int i = 0; i < forest.size(); i++) {
@@ -66,9 +69,6 @@ int main() {
       cout << "Correct: " << correct << endl;
     }
   }
-  
-  // Print Symbol Table
-  root->printTable();
   
   // Free Memory
   if(forest.size() > 0) {
