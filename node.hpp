@@ -484,15 +484,11 @@ class paramNode : public Node
   public:
     paramNode(string i) : Node () {
       id = i;
-      string new_type = children[0]->getType();
-      param = new Variable{new_type,id,true};
     } 
     
-    ~paramNode() {
-      delete param;
-    }
-    
     Variable* getParam() {
+      string new_type = children[0]->getType();
+      Variable* param = new Variable{new_type,id,true};
       return param;
     }
 
@@ -502,7 +498,6 @@ class paramNode : public Node
     }
   private:
     string id;
-    Variable* param;
 }; 
 
 // Statement Node ... for now just a simple statement
