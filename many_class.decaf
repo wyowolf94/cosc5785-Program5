@@ -48,6 +48,7 @@ class boo {
 
     a = b;
     {
+      int c;
       more less;
       more = less;
     }
