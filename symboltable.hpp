@@ -419,7 +419,7 @@ class BlockDec : public SymbolTable
     
     void printTable() {
       string indent = "";
-      for(int i = 1; i < level; i++) {
+      for(int i = 1; i < level-1; i++) {
         indent = indent + "  ";
       }      
           
@@ -428,8 +428,9 @@ class BlockDec : public SymbolTable
       } */
       
       for(auto it = vardecs.begin(); it != vardecs.end(); ++it) {
-        cout << indent << it->second->type 
-             << "  "   << it->second->iden
+        cout << indent 
+             << "  " << it->second->type 
+             << "  " << it->second->iden
              << endl;
       }
         

@@ -499,8 +499,14 @@ class statementNode : public Node
       type = t;
     } 
     
-    void buildTable(SymbolTable* st) {
-      return;
+    void buildTable(SymbolTable* parent) {
+      if(type == "cond"){
+        children[0]->buildTable(parent);
+      } else if(type == "while") {
+        children[1]->buildTable(parent);
+      } else if(type == "block") {
+        children[0]->buildTable(parent);
+      }
     }
 
     virtual void printNode(ostream * out = 0) {
@@ -547,6 +553,15 @@ class condstatementNode : public Node
       type = t;
     } 
 
+    void buildTable(SymbolTable* parent){
+      if(type == "if"){
+        children[1]->buildTable(parent);
+      } else if(type == "if-else"){
+        children[1]->buildTable(parent);
+        children[2]->buildTable(parent);
+      }
+    }
+    
     virtual void printNode(ostream * out = 0) {
       if(type == "if") {
         cout << "<ConditionalStatement> -> if ( <Expression> ) <Statement>" << endl;
