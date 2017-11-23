@@ -447,6 +447,7 @@ class paramlistNode : public Node
       for(unsigned int i = 0; i < children[0]->children.size(); i++) {
         new_paramList.push_back(children[0]->children[i]->getParam());
       }
+      return new_paramList;
     }
     
     void printParamList() {
