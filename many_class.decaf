@@ -17,6 +17,13 @@ class foo {
   {
     b=a;
     return 1;
+    if(x == 5) {
+      int b;
+      a=b;
+    } else {
+      foo c;
+      b=c;
+    }
   }
 
 }
@@ -29,6 +36,11 @@ class goo {
   int main()
   {
     foo f;
+
+    while(a == b) {
+      int b;
+      b = b+1; 
+    }
 
     if( x > 5) print(x);
     return 0;
