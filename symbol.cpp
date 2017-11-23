@@ -27,9 +27,8 @@ string lookupParams(vector<Variable*> params, Variable* var) {
     for(unsigned int i = 0; i < params.size(); i++) {
       if(params[i]->iden == var->iden) {
         return params[i]->type;
-      } else {
-        return INVALIDSYM;
       }
     }
   }
+  return INVALIDSYM;
 }
