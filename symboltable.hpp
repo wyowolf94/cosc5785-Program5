@@ -419,15 +419,18 @@ class BlockDec : public SymbolTable
     
     void printTable() {
       string indent = "";
-      for(int i = 1; i < level; i++) {
+      for(int i = 1; i < level-1; i++) {
         indent = indent + "  ";
-      }      
+      } 
           
       /*if(iden.find("class_") != 0) {
         cout << indent << type << " -> " << iden  << endl;
       } */
       
       for(auto it = vardecs.begin(); it != vardecs.end(); ++it) {
+        if(iden.find("class_") == 0) {
+          cout << "  ";
+        }
         cout << indent 
              << it->second->type 
              << "  " << it->second->iden
