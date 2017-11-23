@@ -341,7 +341,7 @@ class varDecNode : public Node
       }
       
       string temp = var->type;
-      int index = temp.find_first_of("[");
+      unsigned int index = temp.find_first_of("[");
       if(index != string::npos){
         temp = temp.substr(0, index);
       }
