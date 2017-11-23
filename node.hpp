@@ -330,14 +330,12 @@ class varDecNode : public Node
       
       // Add the ClassDec to the parent
       addedChild = parent->insert(new_var);
-      cout << "AddedChild(" << identifier << "): " << addedChild << endl;
-    }
-    
-    bool typeCheck() {
-      cout << "AddedChild(" << identifier << "): " << addedChild << endl;
       if(!addedChild){ 
         cerr << "Type Error: Duplicate Variable at " << lnum << endl;
       }
+    }
+    
+    bool typeCheck() {
       string found_type = parentTable->lookup_ancestors(var);
       if(found_type != INVALIDSYM) {
         return true;
