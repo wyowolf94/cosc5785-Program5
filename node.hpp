@@ -339,11 +339,18 @@ class varDecNode : public Node
       if(var->type == "int"){
         return true;
       }
-      SymbolTable* found_type = parentTable->lookup_class(var->type);
+      
+      string temp = var->type;
+      int index = temp.find_first_of("[");
+      if(index != string::npos){
+        temp = temp.substr(0, index);
+      }
+      
+      SymbolTable* found_type = parentTable->lookup_class(temp);
       if(found_type != 0) {
         return true;
       } else {
-        cerr << "Type Error: Invalid Type " << var->type << " at " 
+        cerr << "Type Error: Invalid Type " << temp << " at " 
              << lnum << endl;
         return false;
       }
