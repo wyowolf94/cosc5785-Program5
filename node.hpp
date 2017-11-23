@@ -336,6 +336,9 @@ class varDecNode : public Node
     }
     
     bool typeCheck() {
+      if(var->type == "int"){
+        return true;
+      }
       Variable var_type{var->type, var->type, true};
       string found_type = parentTable->lookup_ancestors(&var_type);
       if(found_type != INVALIDSYM) {
