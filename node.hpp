@@ -16,6 +16,7 @@ using std::endl;
 using std::ostream;
 using std::vector;
 using std::cout;
+using std::cerr;
 
 // Base Class
 class Node 
@@ -332,7 +333,7 @@ class varDecNode : public Node
     }
     
     bool typeCheck() {
-      if(!addedChild) [
+      if(!addedChild){ 
         cerr << "Type Error: Duplicate Variable at " << lnum << endl;
       }
       string found_type = parentTable->lookup_ancestors(var);
