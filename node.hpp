@@ -330,14 +330,14 @@ class constdecNode : public Node
     } 
     
     void buildTable(SymbolTable* parent) {
-      // Create SymbolTable for Class Declaration
+      // Create SymbolTable for Constructor Declaration
       ConstrDec* new_const = new ConstrDec(parent, id);
       new_const->setParams(children[0]->getParams());
       cout << "Created: " << id ;
       printParams(new_const->getParams());
       cout << endl;
       
-      // Add the ClassDec to the parent
+      // Add the ConstDec to the parent
       parent->insert(new_const);
       cout << "Added " << new_const->getIden() << " to " 
            << parent->getIden() << endl << endl;
@@ -366,29 +366,37 @@ class methoddecNode : public Node
     } 
     
     void buildTable(SymbolTable* parent) {
-      // Create SymbolTable for Class Declaration
+      // Create SymbolTable for Method Declaration
       MethodDec* new_method = new MethodDec(parent, id);
       if(type == "type") {
         new_method->set_returnType(children[0]->getType());
+        new_method->setParams(children[1]->getParams());
       } else if (type == "void") {
         new_method->set_returnType(type);
+        new_method->setParams(children[0]->getParams());
       } else { 
         cout << "PROBLEM IN METHODDECNODE - BUILDTABLE" << endl;
         new_method->set_returnType(INVALIDSYM);
       }
-      new_method->setParams(children[1]->getParams());
       cout << "Created: " << new_method->return_type() 
            << " " << new_method->getIden();
            printParams(new_method->getParams());
       cout << endl;
       
-      // Add the ClassDec to the parent
+      // Add the MethodDec to the parent
       parent->insert(new_method);
       cout << "Added " << new_method->getIden() << " to " 
            << parent->getIden() << endl << endl;
       
       // Call buildTable on the children
-      children[2]->buildTable(new_method);
+      if(type == "type") {
+        children[2]->buildTable(new_method);
+      } else if (type == "void") {
+        children[1]->buildTable(new_method);
+      } else {
+        cout << "PROBLEM IN METHODDECNODE - BUILDTABLE" << endl;
+      }
+      
     }
 
     virtual void printNode(ostream * out = 0) {
