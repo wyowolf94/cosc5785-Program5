@@ -13,7 +13,7 @@
 
 #include "symbol.h"
 
-#define INVALIDSYM "invalid symbol"
+//#define INVALIDSYM "invalid symbol"
 #define CONSTRTYPE "Constructor"
 #define METHODTYPE "Method"
 #define CLASSTYPE "Class"
@@ -61,7 +61,7 @@ class SymbolTable
     unordered_map<string, SymbolTable*> getChildren() {
       return children;
     }
-
+    
     string lookup_children(Variable* var) {
       string name = mangle(var->iden);
       unordered_map<string,Variable*>::const_iterator newvar
@@ -69,6 +69,7 @@ class SymbolTable
       if(newvar != vardecs.end()) {
         return newvar->second->type;
       }
+      
       return INVALIDSYM;
     }
     
@@ -82,7 +83,7 @@ class SymbolTable
       return INVALIDSYM;
     }
     
-    string lookup_current(Variable* var) {
+    string lookup_siblings(Variable* var) {
       if(parent != 0) {
         return parent->lookup_children(var);
       } else {
@@ -90,7 +91,7 @@ class SymbolTable
       }
     }    
     
-    string lookup_current(SymbolTable* st) {
+    string lookup_siblings(SymbolTable* st) {
       if(parent != 0) {
         return parent->lookup_children(st);
       } else {
@@ -98,9 +99,9 @@ class SymbolTable
       }
     }
     
-    string lookup_all(Variable* var) {
+    string lookup_ancestors(Variable* var) {
       //string name = mangle(var->iden);
-      string type = lookup_current(var);
+      string type = lookup_siblings(var);
       
       if(type != INVALIDSYM) {
         return type;
@@ -110,12 +111,12 @@ class SymbolTable
         return INVALIDSYM;
       }
 
-      return parent->lookup_all(var);
+      return parent->lookup_ancestors(var);
     }
     
-    string lookup_all(SymbolTable* st) {
+    string lookup_ancestors(SymbolTable* st) {
       //string name = st->mangle(st->iden);
-      string type = lookup_current(st);
+      string type = lookup_siblings(st);
       
       if(type != INVALIDSYM) {
         return type;
@@ -125,7 +126,7 @@ class SymbolTable
         return INVALIDSYM;
       } 
     
-      return parent->lookup_all(st);
+      return parent->lookup_ancestors(st);
     }
     
     // Mangles the identifier of a child being added
@@ -171,6 +172,13 @@ class SymbolTable
         return false;
       } 
       
+      /*string name = mangle(var->iden);   
+      unordered_map<string,SymbolTable*>::const_iterator child
+        = children.find(name);
+      if(child != children.end()) {
+        return false;
+      }*/
+      
       pair<string, Variable*> newVar (mangle(var->iden), var);
       vardecs.insert(newVar);
       return true;
@@ -183,6 +191,8 @@ class SymbolTable
       if(lookup_children(method) != INVALIDSYM) {
         return false;
       }
+      
+      
       
       return addChild(method);
     }

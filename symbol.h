@@ -12,6 +12,8 @@
 #include<tuple>
 #include<vector>
 
+#define INVALIDSYM "invalid symbol"
+
 using std::string;
 using std::endl;
 using std::ostream;
@@ -27,5 +29,7 @@ struct Variable{
 };
 
 void printParams(vector<Variable*> params);
+
+string lookupParams(vector<Variable*> params, Variable* var);
 
 #endif
