@@ -62,6 +62,10 @@ class SymbolTable
       iden = id;
     }
     
+    SymbolTable* getParent() {
+      return parent;
+    }
+
     unordered_map<string, SymbolTable*> getChildren() {
       return children;
     }
@@ -194,9 +198,7 @@ class SymbolTable
       //string mangled = method->mangle(method->iden);
       if(lookup_children(method) != INVALIDSYM) {
         return false;
-      }
-      
-      
+      }      
       
       return addChild(method);
     }
@@ -237,7 +239,7 @@ class ClassDec : public SymbolTable
     }
     
     void printTable() {
-      cout << type << " -> " << iden << endl;
+      cout << endl  << type << " -> " << iden << endl;
       
       for(auto it = vardecs.begin(); it != vardecs.end(); ++it) {
         cout << "  " << it->second->type 
@@ -423,8 +425,10 @@ class BlockDec : public SymbolTable
         indent = indent + "  ";
       }  
       
-      if(parent->return_type() == BLOCKTYPE) {
+      if(parent->getParent()->getParent() != 0) {
+      if(parent->getParent()->getParent()->return_type() == BLOCKTYPE) {
         cout << indent << "Block -> " << endl;
+      }
       }
       
       for(auto it = vardecs.begin(); it != vardecs.end(); ++it) {
