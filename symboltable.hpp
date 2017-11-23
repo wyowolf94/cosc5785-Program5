@@ -419,7 +419,7 @@ class BlockDec : public SymbolTable
     
     void printTable() {
       string indent = "";
-      for(int i = 1; i < level-1; i++) {
+      for(int i = 1; i < level; i++) {
         indent = indent + "  ";
       }      
           
