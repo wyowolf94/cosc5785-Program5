@@ -418,24 +418,24 @@ class BlockDec : public SymbolTable
     }
     
     void printTable() {
-      if(iden.find("class_") != 0) {
-        string indent = "";
-        for(int i = 1; i < level; i++) {
-          indent = indent + "  ";
-        }      
+      string indent = "";
+      for(int i = 1; i < level; i++) {
+        indent = indent + "  ";
+      }      
           
+      if(iden.find("class_") != 0) {
         cout << indent << type << " -> " << iden  << endl;
-                   
-        for(auto it = vardecs.begin(); it != vardecs.end(); ++it) {
-          cout << indent << it->second->type 
-               << "  "   << it->second->iden
-               << endl;
-        }
+      } 
+      
+      for(auto it = vardecs.begin(); it != vardecs.end(); ++it) {
+        cout << indent << it->second->type 
+             << "  "   << it->second->iden
+             << endl;
+      }
         
-        for(unsigned int i = 0; i < order.size(); i++) {
-          children.find(order[i])->second->printTable();
-        } // end for
-      } // end if 
+      for(unsigned int i = 0; i < order.size(); i++) {
+        children.find(order[i])->second->printTable();
+      } 
     } // end printTable()
 };
 
