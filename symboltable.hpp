@@ -423,9 +423,9 @@ class BlockDec : public SymbolTable
         indent = indent + "  ";
       }      
           
-      if(iden.find("class_") != 0) {
+      /*if(iden.find("class_") != 0) {
         cout << indent << type << " -> " << iden  << endl;
-      } 
+      } */
       
       for(auto it = vardecs.begin(); it != vardecs.end(); ++it) {
         cout << indent << it->second->type 
