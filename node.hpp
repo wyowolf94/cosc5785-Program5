@@ -444,9 +444,13 @@ class paramlistNode : public Node
 
     vector<Variable*> getParams() {
       vector<Variable*> new_paramList;
-      for(unsigned int i = 0; i < children[0]->children.size(); i++) {
-        new_paramList.push_back(children[0]->children[i]->getParam());
-      }
+      
+      if (type == "rec") {
+        for(unsigned int i = 0; i < children[0]->children.size(); i++) {
+          new_paramList.push_back(children[0]->children[i]->getParam());
+        }
+      }  
+      
       return new_paramList;
     }
     
