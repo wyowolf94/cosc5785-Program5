@@ -429,7 +429,7 @@ class BlockDec : public SymbolTable
       
       for(auto it = vardecs.begin(); it != vardecs.end(); ++it) {
         cout << indent 
-             << "  " << it->second->type 
+             << it->second->type 
              << "  " << it->second->iden
              << endl;
       }
