@@ -634,6 +634,18 @@ class locvardecNode : public Node
     locvardecNode(string i) : Node () {
       id = i;
     } 
+    
+    void buildTable(SymbolTable* parent) {
+      // Create SymbolTable for Class Declaration
+      string new_type = children[0]->getType();
+      Variable* new_var = new Variable{new_type, id, true};
+      cout << "Created: " << new_var->type << " " << new_var->iden << endl;
+      
+      // Add the ClassDec to the parent
+      parent->insert(new_var);
+      cout << "Added " << new_var->iden << " to " 
+           << parent->getIden() << endl << endl;
+    }
 
     virtual void printNode(ostream * out = 0) {
       cout << endl;
