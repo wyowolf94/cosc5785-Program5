@@ -300,8 +300,7 @@ class MethodDec : public SymbolTable
  
     void printTable() {
       cout << "  "
-           << type << " -> " 
-           << "  " << returnType 
+           << type << " -> " << returnType 
            << "  " << iden;
            
       printParams(params);
@@ -360,8 +359,7 @@ class ConstrDec : public SymbolTable
     }
     
     void printTable() {        
-      cout << "  " << type << " -> " 
-           << "  " << iden;
+      cout << "  " << type << " -> " << iden;
            
       printParams(params);
       
