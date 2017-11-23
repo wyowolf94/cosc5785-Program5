@@ -423,6 +423,10 @@ class BlockDec : public SymbolTable
         indent = indent + "  ";
       }  
       
+      if(parent->return_type() == BLOCKTYPE) {
+        cout << indent << "Block -> " << endl;
+      }
+      
       for(auto it = vardecs.begin(); it != vardecs.end(); ++it) {
         if(iden.find("class_") == 0) {
           cout << "  ";
