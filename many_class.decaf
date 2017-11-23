@@ -9,6 +9,7 @@ class foo {
   int b;
   int a;
   goo b;
+  roo c;
 
   foo()
   {
