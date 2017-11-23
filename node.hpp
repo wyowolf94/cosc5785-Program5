@@ -213,18 +213,6 @@ class classbodyNode : public Node
       for(unsigned int i = 0; i < children.size(); i++) {
         children[i]->buildTable(new_classBlock);
       }
-      /*
-      if (type == "vdecs" || type == "cdecs" || type == "mdecs") {
-        children[0]->buildTable();
-      } else if (type == "vcdecs" || type == "cmdecs" || type = "vmdecs") {
-        children[0]->buildTable();
-        children[1]->buildTable();
-      } else if (type == "vcmdecs") {
-        children[0]->buildTable();
-        children[1]->buildTable();
-        children[2]->buildTable();
-      } 
-      */
     }
 
     void printClassBody(string nonterm) {
@@ -322,11 +310,6 @@ class varDecNode : public Node
       parent->insert(new_var);
       cout << "Added " << new_var->iden << " to " 
            << parent->getIden() << endl << endl;
-      
-      // Call buildTable on the children
-      for(unsigned int i = 0; i < children.size(); i++) {
-        //children[i]->buildTable(new_class);
-      }
     }
 
     virtual void printNode(ostream * out = 0) {
@@ -360,9 +343,7 @@ class constdecNode : public Node
            << parent->getIden() << endl << endl;
       
       // Call buildTable on the children
-      for(unsigned int i = 0; i < children.size(); i++) {
-        //children[i]->buildTable(new_class);
-      }
+      children[1]->buildTable(new_const);
     }
 
     virtual void printNode(ostream * out = 0) {
@@ -407,9 +388,7 @@ class methoddecNode : public Node
            << parent->getIden() << endl << endl;
       
       // Call buildTable on the children
-      for(unsigned int i = 0; i < children.size(); i++) {
-        //children[i]->buildTable(new_class);
-      }
+      children[2]->buildTable(new_method);
     }
 
     virtual void printNode(ostream * out = 0) {
@@ -584,11 +563,29 @@ class blockNode : public Node
     } 
     
     void printBlock(string nonterm) {
-        cout << "<Block> -> { ";
-        for(unsigned int i = 0; i < children[0]->children.size(); i++) {
-          cout << "<" << nonterm << "> ";
-        }
-        cout << "}" << endl;
+      cout << "<Block> -> { ";
+      for(unsigned int i = 0; i < children[0]->children.size(); i++) {
+        cout << "<" << nonterm << "> ";
+      }
+      cout << "}" << endl;
+    }
+    
+    void buildTable(SymbolTable* parent) {
+      // Create SymbolTable for Block
+      BlockDec* new_block = new BlockDec(parent, "block_");
+      new_block->setIden(new_block->getNewName());
+      cout << "Created: " << new_block->getIden() << endl;
+      
+      // Add the Block to the parent
+      parent->insert(new_block);
+      cout << "Added " << new_block->getIden() << " to " 
+           << parent->getIden() << endl << endl;
+      
+      // Call buildTable on the children
+      for(unsigned int i = 0; i < children.size(); i++) {
+        children[i]->buildTable(new_block);
+      }
+
     }
     
     void printBlock() {

@@ -1,0 +1,30 @@
+
+class_one
+  t1 var1
+  t2 var2
+  constr_one (var4)
+    t3 var3
+    b1
+      var2
+  method_one (var1, var2)
+    var4
+    var5
+    b3
+    b4
+      var8
+  method_two ()
+    var5
+class_two  
+  constr_two ()
+    var6
+    b2
+      var8
+  constr_three (var5, var6, var7)
+  method_three ()
+    var7
+    b5
+
+- Parameter = children/siblings?
+- sibling of itself?
+- readme --> allow var and method same name
+         --> var names print backwards

@@ -51,6 +51,11 @@ class boo {
     }
     return;
   }
+  
+  boo(int a) {
+    int a;
+    return;
+  }
 
   goo f(int a, int b, boo c)
   {
