@@ -49,6 +49,7 @@ int main() {
     }
     cout << endl;
   }
+  */
   // Build Symbol Table
   SymbolTable* root = new SymbolTable();
   
@@ -62,9 +63,8 @@ int main() {
   
   // Print Symbol Table
   root->printTable();
-  */
   
-  SymbolTable* root = new SymbolTable();
+  /*SymbolTable* root = new SymbolTable();
   
   ClassDec* class1 = new ClassDec(root, "Class_One");
   ClassDec* class2 = new ClassDec(root, "Class_Two");
@@ -379,7 +379,7 @@ int main() {
   cout << "11 - " << b2->lookup_ancestors(var2) << endl;
   cout << "12 - " << b2->lookup_ancestors(const1) << endl;
   cout << "13 - " << b2->lookup_ancestors(method1) << endl;
-  cout << "14 - " << b2->lookup_ancestors(method2) << endl;
+  cout << "14 - " << b2->lookup_ancestors(method2) << endl;*/
 
   delete atts;
   

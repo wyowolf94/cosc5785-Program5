@@ -58,6 +58,10 @@ class SymbolTable
       return iden;
     }
     
+    void setIden(string id) {
+      iden = id;
+    }
+    
     unordered_map<string, SymbolTable*> getChildren() {
       return children;
     }
@@ -378,7 +382,7 @@ class BlockDec : public SymbolTable
       while(1) {
         randNum = rand() % 10000000;
         
-        possible = "block_" + to_string(randNum);
+        possible = iden + to_string(randNum);
         possibleMangled = '$' + possible + '$';
         
         if(parent != 0) {

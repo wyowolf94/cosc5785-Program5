@@ -159,7 +159,7 @@ class classdecNode : public Node
       
       // Call buildTable on the children
       for(unsigned int i = 0; i < children.size(); i++) {
-        //children[i]->buildTable(new_class, ***);
+        children[i]->buildTable(new_class);
       }
     }
     
@@ -179,20 +179,21 @@ class classbodyNode : public Node
       type = t;
     } 
     
-    /*void buildTable(SymbolTable* parent) {
+    void buildTable(SymbolTable* parent) {
       // Create SymbolTable for Class Declaration
-      ClassDec* new_class = new ClassDec(parent, id);
-      cout << "Created: " << id << endl;
+      BlockDec* new_classBlock = new BlockDec(parent, "class_");
+      new_classBlock->setIden(new_classBlock->getNewName());
+      cout << "Created: " << new_classBlock->getIden() << endl;
       
       // Add the ClassDec to the parent
-      parent->insert(new_class);
-      cout << "Added " << id << " to " << parent->getIden() << endl << endl;
+      parent->insert(new_classBlock);
+      cout << "Added " << new_classBlock->getIden() << " to " << parent->getIden() << endl << endl;
       
       // Call buildTable on the children
       for(unsigned int i = 0; i < children.size(); i++) {
-        children[i]->buildTable();
+        //children[i]->buildTable();
       }
-    }*/
+    }
 
     void printClassBody(string nonterm) {
         cout << "<ClassBody> -> { ";
