@@ -48,7 +48,6 @@ class boo {
 
     a = b;
     {
-      goo b;
       more less;
       more = less;
     }
