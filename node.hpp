@@ -313,6 +313,7 @@ class varDecNode : public Node
   public:
     varDecNode(string i) : Node () {
       identifier = i;
+      addedChild = false;
     } 
     
     void buildTable(SymbolTable* parent) {
@@ -327,10 +328,13 @@ class varDecNode : public Node
       var = new_var;
       
       // Add the ClassDec to the parent
-      parent->insert(new_var);
+      addedChild = parent->insert(new_var);
     }
     
     bool typeCheck() {
+      if(!addedChild) [
+        cerr << "Type Error: Duplicate Variable at " << lnum << endl;
+      }
       string found_type = parentTable->lookup_ancestors(var);
       if(found_type != INVALIDSYM) {
         return true;
@@ -348,6 +352,7 @@ class varDecNode : public Node
     string identifier;
     SymbolTable* parentTable;
     Variable* var;
+    bool addedChild;
 }; 
 
 // Constructor Declaration node that goes to iden ( paramlist ) block
