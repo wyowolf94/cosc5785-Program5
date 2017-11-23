@@ -101,6 +101,11 @@ class Node
       cout << "PROBLEM!PROBLEM!PROBLEM!PROBLEM!PROBLEM!PROBLEM!" << endl;
       return;
     }
+    
+    virtual bool typeCheck() {
+      cout << "BASE CLASS METHOD CALLED" << endl;
+      return false;
+    }
 
     // Print Node
     virtual void printNode(ostream * out = 0) {
@@ -181,6 +186,10 @@ class classdecNode : public Node
       }
     }
     
+    bool typeCheck() {
+      return children[0]->typeCheck(); 
+    }
+    
     virtual void printNode(ostream * out = 0) {
       cout << endl << "<ClassDec> -> class identifier (" << id << ") <ClassBody>" << endl;
       children[0]->printNode();
@@ -210,6 +219,16 @@ class classbodyNode : public Node
         children[i]->buildTable(new_classBlock);
       }
     }
+    
+    bool typeCheck() {
+      bool collected = true;
+      if(type != "empty") {
+        for(unsigned int i = 0; i < children[0]->children.size(); i++) {
+          collected = collected && children[i]->typeCheck();
+        }
+      }
+      return collected;
+    }
 
     void printClassBody(string nonterm) {
         cout << "<ClassBody> -> { ";
@@ -220,28 +239,28 @@ class classbodyNode : public Node
     }
     
     void printClassBody(string ntone, string nttwo) {
-        cout << "<ClassBody> -> { ";
-        for(unsigned int i = 0; i < children[0]->children.size(); i++) {
-          cout << "<" << ntone << "> ";
-        }
-        for(unsigned int i = 0; i < children[1]->children.size(); i++) {
-          cout << "<" << nttwo << "> ";
-        }
-        cout << "}" << endl;
+      cout << "<ClassBody> -> { ";
+      for(unsigned int i = 0; i < children[0]->children.size(); i++) {
+        cout << "<" << ntone << "> ";
+      }
+      for(unsigned int i = 0; i < children[1]->children.size(); i++) {
+        cout << "<" << nttwo << "> ";
+      }
+      cout << "}" << endl;
     }
     
     void printClassBody() {
-        cout << "<ClassBody> -> { ";
-        for(unsigned int i = 0; i < children[0]->children.size(); i++) {
-          cout << "<VarDec> ";
-        }
-        for(unsigned int i = 0; i < children[1]->children.size(); i++) {
-          cout << "<ConstDec> ";
-        }
-        for(unsigned int i = 0; i < children[2]->children.size(); i++) {
-          cout << "<MethDec> ";
-        }
-        cout << "}" << endl;
+      cout << "<ClassBody> -> { ";
+      for(unsigned int i = 0; i < children[0]->children.size(); i++) {
+        cout << "<VarDec> ";
+      }
+      for(unsigned int i = 0; i < children[1]->children.size(); i++) {
+        cout << "<ConstDec> ";
+      }
+      for(unsigned int i = 0; i < children[2]->children.size(); i++) {
+        cout << "<MethDec> ";
+      }
+      cout << "}" << endl;
     }
     
     void printChildren(int index) {
@@ -297,12 +316,27 @@ class varDecNode : public Node
     } 
     
     void buildTable(SymbolTable* parent) {
+      // Store Parent
+      parentTable = parent;
+      
       // Create SymbolTable for Class Declaration
       string new_type = children[0]->getType();
       Variable* new_var = new Variable{new_type, identifier, true};
       
+      // Store var
+      var = new_var;
+      
       // Add the ClassDec to the parent
       parent->insert(new_var);
+    }
+    
+    bool typeCheck() {
+      string found_type = parentTable->lookup_ancestors(var);
+      if(found_type != INVALIDSYM) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     virtual void printNode(ostream * out = 0) {
@@ -312,6 +346,8 @@ class varDecNode : public Node
     }
   private:
     string identifier;
+    SymbolTable* parentTable;
+    Variable* var;
 }; 
 
 // Constructor Declaration node that goes to iden ( paramlist ) block
