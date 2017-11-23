@@ -490,6 +490,10 @@ class statementNode : public Node
     statementNode(string t) : Node () {
       type = t;
     } 
+    
+    void buildTable(SymbolTable* st) {
+      return;
+    }
 
     virtual void printNode(ostream * out = 0) {
       cout << endl;
