@@ -341,7 +341,7 @@ class varDecNode : public Node
       }
       Variable var_type{var->type, var->type, true};
       string found_type = parentTable->lookup_ancestors(&var_type);
-      if(found_type == INVALIDSYM) {
+      if(found_type != INVALIDSYM) {
         return true;
       } else {
         cerr << "Type Error: Invalid Type " << var->type << " at " 
