@@ -171,11 +171,9 @@ class classdecNode : public Node
     void buildTable(SymbolTable* parent) {
       // Create SymbolTable for Class Declaration
       ClassDec* new_class = new ClassDec(parent, id);
-      cout << "Created: " << id << endl;
       
       // Add the ClassDec to the parent
       parent->insert(new_class);
-      cout << "Added " << id << " to " << parent->getIden() << endl << endl;
       
       // Call buildTable on the children
       for(unsigned int i = 0; i < children.size(); i++) {
@@ -203,11 +201,9 @@ class classbodyNode : public Node
       // Create SymbolTable for Class Declaration
       BlockDec* new_classBlock = new BlockDec(parent, "class_");
       new_classBlock->setIden(new_classBlock->getNewName());
-      cout << "Created: " << new_classBlock->getIden() << endl;
       
       // Add the ClassDec to the parent
       parent->insert(new_classBlock);
-      cout << "Added " << new_classBlock->getIden() << " to " << parent->getIden() << endl << endl;
       
       // Call buildTable on the children
       for(unsigned int i = 0; i < children.size(); i++) {
@@ -304,12 +300,9 @@ class varDecNode : public Node
       // Create SymbolTable for Class Declaration
       string new_type = children[0]->getType();
       Variable* new_var = new Variable{new_type, identifier, true};
-      cout << "Created: " << new_var->type << " " << new_var->iden << endl;
       
       // Add the ClassDec to the parent
       parent->insert(new_var);
-      cout << "Added " << new_var->iden << " to " 
-           << parent->getIden() << endl << endl;
     }
 
     virtual void printNode(ostream * out = 0) {
@@ -333,14 +326,9 @@ class constdecNode : public Node
       // Create SymbolTable for Constructor Declaration
       ConstrDec* new_const = new ConstrDec(parent, id);
       new_const->setParams(children[0]->getParams());
-      cout << "Created: " << id ;
-      printParams(new_const->getParams());
-      cout << endl;
       
       // Add the ConstDec to the parent
       parent->insert(new_const);
-      cout << "Added " << new_const->getIden() << " to " 
-           << parent->getIden() << endl << endl;
       
       // Call buildTable on the children
       children[1]->buildTable(new_const);
@@ -378,15 +366,9 @@ class methoddecNode : public Node
         cout << "PROBLEM IN METHODDECNODE - BUILDTABLE" << endl;
         new_method->set_returnType(INVALIDSYM);
       }
-      cout << "Created: " << new_method->return_type() 
-           << " " << new_method->getIden();
-           printParams(new_method->getParams());
-      cout << endl;
       
       // Add the MethodDec to the parent
       parent->insert(new_method);
-      cout << "Added " << new_method->getIden() << " to " 
-           << parent->getIden() << endl << endl;
       
       // Call buildTable on the children
       if(type == "type") {
@@ -601,12 +583,9 @@ class blockNode : public Node
       // Create SymbolTable for Block
       BlockDec* new_block = new BlockDec(parent, "block_");
       new_block->setIden(new_block->getNewName());
-      cout << "Created: " << new_block->getIden() << endl;
       
       // Add the Block to the parent
       parent->insert(new_block);
-      cout << "Added " << new_block->getIden() << " to " 
-           << parent->getIden() << endl << endl;
       
       // Call buildTable on the children
       for(unsigned int i = 0; i < children.size(); i++) {
@@ -666,12 +645,9 @@ class locvardecNode : public Node
       // Create SymbolTable for Class Declaration
       string new_type = children[0]->getType();
       Variable* new_var = new Variable{new_type, id, true};
-      cout << "Created: " << new_var->type << " " << new_var->iden << endl;
       
       // Add the ClassDec to the parent
       parent->insert(new_var);
-      cout << "Added " << new_var->iden << " to " 
-           << parent->getIden() << endl << endl;
     }
 
     virtual void printNode(ostream * out = 0) {
