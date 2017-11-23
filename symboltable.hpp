@@ -70,6 +70,21 @@ class SymbolTable
       return children;
     }
     
+    SymbolTable* lookup_class(string type) {
+      if(parent != 0) {
+        return parent->lookup_class(type);
+      } else { // At root
+        string mangled = mangle(type);
+        unordered_map<string,SymbolTable*>::const_iterator found 
+          = children.find(mangled);
+        if(found != children.end()) {
+          return found->second;
+        } else {
+          return 0;
+        }          
+      }
+    }
+    
     string lookup_children(Variable* var) {
       string name = mangle(var->iden);
       unordered_map<string,Variable*>::const_iterator newvar

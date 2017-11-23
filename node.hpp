@@ -339,9 +339,8 @@ class varDecNode : public Node
       if(var->type == "int"){
         return true;
       }
-      Variable var_type{var->type, var->type, true};
-      string found_type = parentTable->lookup_ancestors(&var_type);
-      if(found_type != INVALIDSYM) {
+      SymbolTable* found_type = parentTable->lookup_class(var->type);
+      if(found_type != 0) {
         return true;
       } else {
         cerr << "Type Error: Invalid Type " << var->type << " at " 
