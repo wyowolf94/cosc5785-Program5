@@ -224,7 +224,7 @@ class classbodyNode : public Node
       bool collected = true;
       if(type != "empty") {
         for(unsigned int i = 0; i < children[0]->children.size(); i++) {
-          collected = collected && children[i]->typeCheck();
+          collected = collected && children[0]->children[i]->typeCheck();
         }
       }
       return collected;
