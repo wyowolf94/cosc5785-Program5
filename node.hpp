@@ -330,9 +330,11 @@ class varDecNode : public Node
       
       // Add the ClassDec to the parent
       addedChild = parent->insert(new_var);
+      cout << "AddedChild: " << addedChild << endl;
     }
     
     bool typeCheck() {
+      cout << "AddedChild: " << addedChild << endl;
       if(!addedChild){ 
         cerr << "Type Error: Duplicate Variable at " << lnum << endl;
       }
