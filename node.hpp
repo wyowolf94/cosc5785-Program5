@@ -591,7 +591,9 @@ class methoddecNode : public Node
     
     bool typeCheck() {
       // Check Params and Return Type
-      bool collected = checkParameters() && checkReturnType();
+      bool cp = checkParameters();
+      bool cr = checkReturnType();
+      bool collected = cp && cr && collected;
       
       // Collect returns
       if(type == "type") {
