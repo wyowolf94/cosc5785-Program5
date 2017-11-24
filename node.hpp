@@ -225,47 +225,46 @@ class classbodyNode : public Node
       bool collected = true;
       if (type == "vdecs") {
         for(unsigned int i = 0; i < children[0]->children.size(); i++) {
-          collected = collected && children[0]->children[i]->typeCheck();
+          collected = children[0]->children[i]->typeCheck() && collected;
         }
       } else if (type == "cdecs") {
         for(unsigned int i = 0; i < children[0]->children.size(); i++) {
-          collected = collected && children[0]->children[i]->typeCheck();
+          collected = children[0]->children[i]->typeCheck() && collected;
         }
       } else if (type == "mdecs") {
         for(unsigned int i = 0; i < children[0]->children.size(); i++) {
-          collected = collected && children[0]->children[i]->typeCheck();
+          collected = children[0]->children[i]->typeCheck() && collected;
         }
       } else if (type == "vcdecs") {
         for(unsigned int i = 0; i < children[0]->children.size(); i++) {
-          collected = collected && children[0]->children[i]->typeCheck();
+          collected = children[0]->children[i]->typeCheck() && collected;
         }
         for(unsigned int i = 0; i < children[1]->children.size(); i++) {
-          collected = collected && children[1]->children[i]->typeCheck();
+          collected = children[1]->children[i]->typeCheck() && collected;
         }
       } else if (type == "cmdecs") {
         for(unsigned int i = 0; i < children[0]->children.size(); i++) {
-          collected = collected && children[0]->children[i]->typeCheck();
+          collected = children[0]->children[i]->typeCheck() && collected;
         }
         for(unsigned int i = 0; i < children[1]->children.size(); i++) {
-          collected = collected && children[1]->children[i]->typeCheck();
+          collected = children[1]->children[i]->typeCheck() && collected;
         }
       } else if (type == "vmdecs") {
         for(unsigned int i = 0; i < children[0]->children.size(); i++) {
-          collected = collected && children[0]->children[i]->typeCheck();
+          collected = children[0]->children[i]->typeCheck() && collected;
         }
         for(unsigned int i = 0; i < children[1]->children.size(); i++) {
-          collected = collected && children[1]->children[i]->typeCheck();
+          collected = children[1]->children[i]->typeCheck() && collected;
         }
       } else if (type == "vcmdecs") {
         for(unsigned int i = 0; i < children[0]->children.size(); i++) {
-          collected = collected && children[0]->children[i]->typeCheck();
+          collected = children[0]->children[i]->typeCheck() && collected; 
         }
         for(unsigned int i = 0; i < children[1]->children.size(); i++) {
-          //collected = collected && 
-         children[1]->children[i]->typeCheck();
+          collected = children[1]->children[i]->typeCheck() && collected;
         }
         for(unsigned int i = 0; i < children[2]->children.size(); i++) {
-          collected = collected && children[2]->children[i]->typeCheck();
+          collected = children[2]->children[i]->typeCheck() && collected;
         }
       }
       return collected;
@@ -479,8 +478,9 @@ class constdecNode : public Node
     }
     
     bool typeCheck() {
-      cout << "constdec::typeCheck() called" << endl;
-      return checkParameters() && checkIden() && children[1]->typeCheck();
+      bool cp = checkParameters();
+      bool ci = checkIden();
+      return children[1]->typeCheck() && cp && ci;
     }
 
     virtual void printNode(ostream * out = 0) {
@@ -595,9 +595,9 @@ class methoddecNode : public Node
       
       // Collect returns
       if(type == "type") {
-        return collective && children[2]->typeCheck();
+        return children[2]->typeCheck() && collective;
       } else if(type == "void") {
-        return collective && children[1]->typeCheck();
+        return children[1]->typeCheck() && collected;
       } else {
         cout << "PROBLEM IN METHODDEC - TYPECHECK" << endl;
         return false;

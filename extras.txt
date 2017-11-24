@@ -29,3 +29,4 @@ class_two
 - readme --> allow var and method same name
          --> var names print backwards
 - line numbers in bison file
+- redec of method name
