@@ -934,7 +934,7 @@ class locvardecNode : public Node
       if(found_type != 0) {
         return true;
       } else {
-        cerr << "Type Error: Invalid Type " << temp << " at " 
+        cerr << "Type Error: Invalid Local Var Type " << temp << " at " 
              << lnum << endl;
         return false;
       }
