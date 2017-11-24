@@ -1,0 +1,11 @@
+class foo
+{
+  int a ;
+  goo(){int a;}
+  foo(moo a){}
+  foo(int a ){}
+  
+  void meth(){}
+  moo meth(){}
+  int meth(moo var1, moo var2){}
+}
