@@ -261,7 +261,8 @@ class classbodyNode : public Node
           collected = collected && children[0]->children[i]->typeCheck();
         }
         for(unsigned int i = 0; i < children[1]->children.size(); i++) {
-          collected = collected && children[1]->children[i]->typeCheck();
+          //collected = collected && 
+         children[1]->children[i]->typeCheck();
         }
         for(unsigned int i = 0; i < children[2]->children.size(); i++) {
           collected = collected && children[2]->children[i]->typeCheck();
@@ -478,6 +479,7 @@ class constdecNode : public Node
     }
     
     bool typeCheck() {
+      cout << "constdec::typeCheck() called" << endl;
       return checkParameters() && checkIden() && children[1]->typeCheck();
     }
 
