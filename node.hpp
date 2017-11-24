@@ -722,6 +722,10 @@ class statementNode : public Node
         children[0]->buildTable(parent);
       }
     }
+    
+    bool typeCheck() {
+      return true;
+    }
 
     virtual void printNode(ostream * out = 0) {
       cout << endl;
@@ -826,7 +830,29 @@ class blockNode : public Node
     }
     
     bool typeCheck() {
-      return true;
+      bool collected = true;
+      if(type == "empty") {
+        collected = true;
+      } else if (type == "locvardecs") {
+        for(unsigned int i = 0; i < children[0]->children.size(); i++) {
+          collected = children[0]->children[i]->typeCheck() && collected;
+        }
+      } else if (type == "statements") {
+        for(unsigned int i = 0; i < children[0]->children.size(); i++) {
+          collected = children[0]->children[i]->typeCheck() && collected;
+        }
+      } else if (type == "both") {
+        for(unsigned int i = 0; i < children[0]->children.size(); i++) {
+          collected = children[0]->children[i]->typeCheck() && collected;
+        }
+        for(unsigned int i = 0; i < children[1]->children.size(); i++) {
+          collected = children[1]->children[i]->typeCheck() && collected;
+        }
+      } else {
+        cout << "PROBLEM" << endl;
+        collected = false;
+      }
+      return collected;
     }
     
     void printBlock() {
@@ -881,8 +907,37 @@ class locvardecNode : public Node
       string new_type = children[0]->getType();
       Variable* new_var = new Variable{new_type, id, true};
       
+      var = new_var;
+      
       // Add the ClassDec to the parent
       parent->insert(new_var);
+      
+      parentTable = parent;
+    }
+    
+    bool typeCheck() {
+      // Get the type of the variable 
+      string temp = var->type;
+      
+      // Parse the []'s off
+      unsigned int index = temp.find_first_of("[");
+      if(index != string::npos){
+        temp = temp.substr(0, index);
+      }
+      
+      // if it is an int, it is good
+      if(temp == "int"){
+        return true;
+      }
+      
+      SymbolTable* found_type = parentTable->lookup_class(temp);
+      if(found_type != 0) {
+        return true;
+      } else {
+        cerr << "Type Error: Invalid Type " << temp << " at " 
+             << lnum << endl;
+        return false;
+      }
     }
 
     virtual void printNode(ostream * out = 0) {
@@ -892,6 +947,8 @@ class locvardecNode : public Node
     }
   private:
     string id;
+    Variable* var;
+    SymbolTable* parentTable;
 }; 
 
 // Optional Expression Node that goes to epsilon or exp
