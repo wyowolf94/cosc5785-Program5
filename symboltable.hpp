@@ -62,6 +62,10 @@ class SymbolTable
       iden = id;
     }
     
+    string getType() {
+      return type;
+    }
+    
     SymbolTable* getParent() {
       return parent;
     }

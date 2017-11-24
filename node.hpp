@@ -336,14 +336,14 @@ class varDecNode : public Node
     }
     
     bool typeCheck() {
-      if(var->type == "int"){
-        return true;
-      }
-      
       string temp = var->type;
       unsigned int index = temp.find_first_of("[");
       if(index != string::npos){
         temp = temp.substr(0, index);
+      }
+      
+      if(temp == "int"){
+        return true;
       }
       
       SymbolTable* found_type = parentTable->lookup_class(temp);
@@ -383,9 +383,63 @@ class constdecNode : public Node
       
       // Add the ConstDec to the parent
       parent->insert(new_const);
+      parentTable = parent;
       
       // Call buildTable on the children
       children[1]->buildTable(new_const);
+    }
+    
+    bool checkParameters() {
+      // Check Parameters
+      vector<Variable*> params = children[0]->getParams();
+      bool collective = true;
+      for(unsigned int i = 0; i < params.size(); i++) {
+        // get type of each param
+        string temp = params[i]->type;
+        
+        // Parse off the "[]"'s
+        unsigned int index = temp.find_first_of("[");
+        if(index != string::npos){
+          temp = temp.substr(0, index);
+        }
+        
+        // if it is int, the param is good, otherwise lookup in root table
+        if(temp != "int"){
+          // lookup class
+          SymbolTable* found_type = parentTable->lookup_class(temp);
+          if(found_type == 0) {
+            cerr << "Type Error: Invalid Parameter Type " << temp << " at " 
+                 << lnum << endl;
+            collective =  false;
+          }
+        }   
+      } // end for
+      return collective; 
+    }
+    
+    bool checkIden() {
+      // Get grandparent (should be classdec)
+      SymbolTable* grandparent = parentTable->getParent();
+      
+      // Check the grandparent type
+      if(grandparent->getType() != CLASSTYPE) {
+        cout << "PROBLEM" << endl;
+        return false;
+      }
+      
+      // Check the class name with id
+      if(grandparent->getIden() == id) {
+        return true;
+      }
+      
+      cerr << "Type Error: Invalid Constructor Name " << id << " at "
+           << lnum << endl;
+           
+      return false;
+    }
+    
+    bool typeCheck() {
+      return checkParameters() && checkIden() && children[1]->typeCheck();
     }
 
     virtual void printNode(ostream * out = 0) {
@@ -396,6 +450,7 @@ class constdecNode : public Node
     }
   private:
     string id;
+    SymbolTable* parentTable;
 }; 
 
 // Method Declaration node that goes to resulttype iden ( paramlist ) block
@@ -423,6 +478,7 @@ class methoddecNode : public Node
       
       // Add the MethodDec to the parent
       parent->insert(new_method);
+      parentTable = parent;
       
       // Call buildTable on the children
       if(type == "type") {
@@ -432,7 +488,79 @@ class methoddecNode : public Node
       } else {
         cout << "PROBLEM IN METHODDECNODE - BUILDTABLE" << endl;
       }
+    }
+    
+    bool checkParameters() {
+      // Get Parameters
+      vector<Variable*> params = children[0]->getParams();
       
+      bool collective = true;
+      for(unsigned int i = 0; i < params.size(); i++) {
+        // get type of each param
+        string temp = params[i]->type;
+        
+        // Parse off the "[]"'s
+        unsigned int index = temp.find_first_of("[");
+        if(index != string::npos){
+          temp = temp.substr(0, index);
+        }
+        
+        // if it is int, the param is good, otherwise lookup in root table
+        if(temp != "int"){
+          // lookup class
+          SymbolTable* found_type = parentTable->lookup_class(temp);
+          if(found_type == 0) {
+            cerr << "Type Error: Invalid Parameter Type " << temp << " at " 
+                 << lnum << endl;
+            collective =  false;
+          }
+        }   
+      } 
+      return collective;
+    }
+    
+    bool checkReturnType() {
+      // if it is void it is valid
+      if(type == "void") {
+        return true;
+      } 
+      
+      // get the return type if it is not void
+      string rtype = children[0]->getType();
+      
+      // parse off the "[]"'s
+      unsigned int index = rtype.find_first_of("[");
+        if(index != string::npos){
+          rtype = rtype.substr(0, index);
+        }
+      
+      // if it is not an int, look it up in root table
+      if(rtype != "int"){
+        // lookup class
+        SymbolTable* found_type = parentTable->lookup_class(rtype);
+        if(found_type == 0) {
+          cerr << "Type Error: Invalid Return Type " << rtype << " at " 
+               << lnum << endl;
+          return false;
+        }
+      }  
+      
+      return true;
+    }
+    
+    bool typeCheck() {
+      // Check Params and Return Type
+      bool collective = checkParameters() && checkReturnType();
+      
+      // Collect returns
+      if(type == "type") {
+        return collective && children[2]->typeCheck();
+      } else if(type == "void") {
+        return collective && children[1]->typeCheck();
+      } else {
+        cout << "PROBLEM IN METHODDEC - TYPECHECK" << endl;
+        return false;
+      }
     }
 
     virtual void printNode(ostream * out = 0) {
@@ -455,6 +583,7 @@ class methoddecNode : public Node
   private:
     string type;
     string id;
+    SymbolTable* parentTable;
 }; 
 
 // paramlistNode that goes to empty or a paramstarNode
@@ -645,7 +774,10 @@ class blockNode : public Node
       for(unsigned int i = 0; i < children.size(); i++) {
         children[i]->buildTable(new_block);
       }
-
+    }
+    
+    bool typeCheck() {
+      return true;
     }
     
     void printBlock() {
