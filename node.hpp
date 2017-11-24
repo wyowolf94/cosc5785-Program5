@@ -533,7 +533,14 @@ class methoddecNode : public Node
     
     bool checkParameters() {
       // Get Parameters
-      vector<Variable*> params = children[0]->getParams();
+        vector<Variable*> params
+      if(type == "void") { 
+        params = children[0]->getParams();
+      } else if(type == "type") {
+        params = children[1]->getParams();
+      } else {
+        cout << "PROBLEM" << endl;
+      }
       
       bool collected = true;
       for(unsigned int i = 0; i < params.size(); i++) {
@@ -593,13 +600,12 @@ class methoddecNode : public Node
       // Check Params and Return Type
       bool cp = checkParameters();
       bool cr = checkReturnType();
-      bool collected = cp && cr && collected;
       
       // Collect returns
       if(type == "type") {
-        return children[2]->typeCheck() && collected;
+        return children[2]->typeCheck() && cp && cr;
       } else if(type == "void") {
-        return children[1]->typeCheck() && collected;
+        return children[1]->typeCheck() && cp && cr;
       } else {
         cout << "PROBLEM IN METHODDEC - TYPECHECK" << endl;
         return false;
