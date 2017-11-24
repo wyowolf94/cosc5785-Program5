@@ -2,10 +2,10 @@ class foo
 {
   int a ;
   goo(){int a;}
-  foo(moo a){}
-  foo(int a ){}
+  foo(moo[] a){}
+  foo(int[][][] a ){}
   
   void meth(){}
   moo meth(int a){}
-  int meth(moo var1, moo var2){}
+  int[] meth(int a, moo[] var1, moo var2){}
 }
