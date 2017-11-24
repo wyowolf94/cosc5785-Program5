@@ -533,7 +533,7 @@ class methoddecNode : public Node
     
     bool checkParameters() {
       // Get Parameters
-        vector<Variable*> params
+      vector<Variable*> params;
       if(type == "void") { 
         params = children[0]->getParams();
       } else if(type == "type") {
