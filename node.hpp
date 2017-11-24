@@ -223,9 +223,48 @@ class classbodyNode : public Node
     
     bool typeCheck() {
       bool collected = true;
-      if(type != "empty") {
+      if (type == "vdecs") {
         for(unsigned int i = 0; i < children[0]->children.size(); i++) {
           collected = collected && children[0]->children[i]->typeCheck();
+        }
+      } else if (type == "cdecs") {
+        for(unsigned int i = 0; i < children[0]->children.size(); i++) {
+          collected = collected && children[0]->children[i]->typeCheck();
+        }
+      } else if (type == "mdecs") {
+        for(unsigned int i = 0; i < children[0]->children.size(); i++) {
+          collected = collected && children[0]->children[i]->typeCheck();
+        }
+      } else if (type == "vcdecs") {
+        for(unsigned int i = 0; i < children[0]->children.size(); i++) {
+          collected = collected && children[0]->children[i]->typeCheck();
+        }
+        for(unsigned int i = 0; i < children[1]->children.size(); i++) {
+          collected = collected && children[1]->children[i]->typeCheck();
+        }
+      } else if (type == "cmdecs") {
+        for(unsigned int i = 0; i < children[0]->children.size(); i++) {
+          collected = collected && children[0]->children[i]->typeCheck();
+        }
+        for(unsigned int i = 0; i < children[1]->children.size(); i++) {
+          collected = collected && children[1]->children[i]->typeCheck();
+        }
+      } else if (type == "vmdecs") {
+        for(unsigned int i = 0; i < children[0]->children.size(); i++) {
+          collected = collected && children[0]->children[i]->typeCheck();
+        }
+        for(unsigned int i = 0; i < children[1]->children.size(); i++) {
+          collected = collected && children[1]->children[i]->typeCheck();
+        }
+      } else if (type == "vcmdecs") {
+        for(unsigned int i = 0; i < children[0]->children.size(); i++) {
+          collected = collected && children[0]->children[i]->typeCheck();
+        }
+        for(unsigned int i = 0; i < children[1]->children.size(); i++) {
+          collected = collected && children[1]->children[i]->typeCheck();
+        }
+        for(unsigned int i = 0; i < children[2]->children.size(); i++) {
+          collected = collected && children[2]->children[i]->typeCheck();
         }
       }
       return collected;
