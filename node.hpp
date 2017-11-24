@@ -431,7 +431,7 @@ class constdecNode : public Node
     bool checkParameters() {
       // Check Parameters
       vector<Variable*> params = children[0]->getParams();
-      bool collective = true;
+      bool collected = true;
       for(unsigned int i = 0; i < params.size(); i++) {
         // get type of each param
         string temp = params[i]->type;
@@ -449,11 +449,11 @@ class constdecNode : public Node
           if(found_type == 0) {
             cerr << "Type Error: Invalid Parameter Type " << temp << " at " 
                  << lnum << endl;
-            collective =  false;
+            collected =  false;
           }
         }   
       } // end for
-      return collective; 
+      return collected; 
     }
     
     bool checkIden() {
@@ -535,7 +535,7 @@ class methoddecNode : public Node
       // Get Parameters
       vector<Variable*> params = children[0]->getParams();
       
-      bool collective = true;
+      bool collected = true;
       for(unsigned int i = 0; i < params.size(); i++) {
         // get type of each param
         string temp = params[i]->type;
@@ -553,11 +553,11 @@ class methoddecNode : public Node
           if(found_type == 0) {
             cerr << "Type Error: Invalid Parameter Type " << temp << " at " 
                  << lnum << endl;
-            collective =  false;
+            collected =  false;
           }
         }   
       } 
-      return collective;
+      return collected;
     }
     
     bool checkReturnType() {
@@ -591,11 +591,11 @@ class methoddecNode : public Node
     
     bool typeCheck() {
       // Check Params and Return Type
-      bool collective = checkParameters() && checkReturnType();
+      bool collected = checkParameters() && checkReturnType();
       
       // Collect returns
       if(type == "type") {
-        return children[2]->typeCheck() && collective;
+        return children[2]->typeCheck() && collected;
       } else if(type == "void") {
         return children[1]->typeCheck() && collected;
       } else {
