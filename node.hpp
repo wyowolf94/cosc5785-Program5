@@ -107,6 +107,11 @@ class Node
       cout << "BASE CLASS METHOD CALLED" << endl;
       return false;
     }
+    
+    virtual string typeCheckStr(SymbolTable* parent) {
+      cout << "BASE CLASS METHOD CALLED" << endl;
+      return INVALIDTYPE;
+    }
 
     // Print Node
     virtual void printNode(ostream * out = 0) {
@@ -714,6 +719,7 @@ class statementNode : public Node
     } 
     
     void buildTable(SymbolTable* parent) {
+      parentTable = parent;
       if(type == "cond"){
         children[0]->buildTable(parent);
       } else if(type == "while") {
@@ -724,9 +730,41 @@ class statementNode : public Node
     }
     
     bool typeCheck() {
-      return true;
+      if(type == "semi") {
+        // <Statement> -> ;
+        return true;
+      } else if(type == "nameeq") {
+        // <Statement> -> <Name> = <Expression> ;
+        string name = children[0]->typeCheckStr(parentTable);
+        string expression = children[1]->typeCheckStr(parentTable);
+        return (name == expression);
+      } else if(type == "namearglist") {
+        // <Statement> -> <Name> ( <ArgList> ) ;
+        string name = children[0]->typeCheckStr(parentTable);
+        bool arglist = children[1]->typeCheck();
+        return (name != INVALIDTYPE) && arglist;
+      } else if(type == "printarglist") {
+        // <Statement> -> print ( <ArgList> ) ;
+        return children[0]->typeCheck();
+      }else if(type == "cond") {
+        // <Statement> -> <ConditionalStatement>
+        return children[0]->typeCheck();
+      } else if(type == "while") {
+        // <Statement> -> while ( <Expression> ) <Statement>
+        string expression = children[0]->typeCheckStr(parentTable);
+        return children[1]->typeCheck() && (expression != INVALIDTYPE);
+      } else if(type == "optexp") {
+        // <Statement> -> return <OptionalExpression> ;
+        return children[0]->typeCheck();
+      } else if (type == "block") {
+        // <Statement> -> <Block>
+        return children[0]->typeCheck();
+      } else {
+        cout << endl << "statement problem" << endl;
+        return false;
+      }
     }
-
+    
     virtual void printNode(ostream * out = 0) {
       cout << endl;
       if(type == "semi") {
@@ -761,6 +799,7 @@ class statementNode : public Node
     }
   private:
     string type;
+    SymbolTable* parentTable;
 };
 
 // ConditionalStatementNode goes to an if statement or an if-else statement
@@ -778,6 +817,10 @@ class condstatementNode : public Node
         children[1]->buildTable(parent);
         children[2]->buildTable(parent);
       }
+    }
+    
+    bool typeCheck() {
+      return true;
     }
     
     virtual void printNode(ostream * out = 0) {
@@ -958,6 +1001,10 @@ class optexpNode : public Node
     optexpNode(string t) : Node () {
       type = t;
     } 
+    
+    bool typeCheck() {
+      return true;
+    }
 
     virtual void printNode(ostream * out = 0) {
       if(type == "empty") {
@@ -985,6 +1032,10 @@ class expNode : public Node
     expNode(string t, string n) : Node () {
       expType = t;
       num = atoi(n.c_str());
+    }
+    
+    string typeCheckStr(SymbolTable* parent) {
+      return "";
     }
 
     virtual void printNode(ostream * out = 0) {
@@ -1090,6 +1141,10 @@ class arglistNode : public Node
       type = t;
     } 
 
+    bool typeCheck() {
+      return true;
+    }
+    
     void printArgList() {
         cout << "<ArgList> -> ";
         for(unsigned int i = 0; i < children[0]->children.size() - 1; i++) {
@@ -1126,6 +1181,10 @@ class nameNode : public Node
       type = t;
       id = i;
     } 
+    
+    string typeCheckStr(SymbolTable* parent) {
+      return "";
+    }
 
     virtual void printNode(ostream * out = 0) {
       cout << "<Name> -> ";
