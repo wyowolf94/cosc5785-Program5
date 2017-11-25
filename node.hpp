@@ -895,7 +895,7 @@ class statementNode : public Node
         }
         string expression = children[1]->typeCheckStr(parentTable);
         if(expression == INVALIDSYM){
-          //cerr << "Type Error: Unrecognized identifier at " << lnum << endl;
+          cerr << "Type Error: Unrecognized expression at " << lnum << endl;
           return false;
         }
         if (name != expression){
@@ -1619,8 +1619,21 @@ class nameNode : public Node
         cerr << "Type Error: Just wrong " << id << " at " << lnum << endl;
         return INVALIDSYM;
       } else if (type == "id") {
-        Variable tempVar{"", id, "null", true};
-        return parent->lookup_ancestors(&tempVar);
+         // Lookup Id in nameClass
+        SymbolTable* tempTable = new MethodDec(0,id);
+        ((MethodDec*)tempTable)->setParams(args);
+
+        string found = nameClass->lookup_children(tempTable);
+        if(found == INVALIDSYM) {
+          cerr << "Type Error: Invalid Method " << id 
+               << " for class " << nameClass->getIden()
+               << " at line " << lnum << endl;
+        }
+        
+        delete tempTable;
+        return found;
+        
+        //return parent->lookup_ancestors(&tempVar);
       }else {
         cout << "Name problem" << endl;
         return INVALIDSYM;
