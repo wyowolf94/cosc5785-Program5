@@ -1619,7 +1619,7 @@ class nameNode : public Node
         cerr << "Type Error: Just wrong " << id << " at " << lnum << endl;
         return INVALIDSYM;
       } else if (type == "id") {
-        string nameType = parent->getEnclosingClass();
+        string nameType = parent->getEnclosingClass(parent);
         
         if(nameType == INVALIDSYM){
           
