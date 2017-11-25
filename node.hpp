@@ -1603,7 +1603,7 @@ class nameNode : public Node
         SymbolTable* nameClass = parent->lookup_class(nameType);
         
          // Lookup Id in nameClass
-        SymbolTable* tempTable = new MethodDec(0,id);
+        SymbolTable* tempTable = new MethodDec(parent,id);
         ((MethodDec*)tempTable)->setParams(args);
 
         string found = nameClass->lookup_children(tempTable);
@@ -1628,7 +1628,7 @@ class nameNode : public Node
         SymbolTable* nameClass = parent->lookup_class(nameType);
         
          // Lookup Id in nameClass
-        SymbolTable* tempTable = new MethodDec(0,id);
+        SymbolTable* tempTable = new MethodDec(parent,id);
         ((MethodDec*)tempTable)->setParams(args);
 
         string found = nameClass->lookup_children(tempTable);
