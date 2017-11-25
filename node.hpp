@@ -806,7 +806,9 @@ class statementNode : public Node
         if (name != expression){
           cerr << "Type Error: Type Mismatch " << name << " != " << expression
                << " at " << lnum << endl;
+          return INVALIDSYM;
         }
+        return true;
       } else if(type == "namearglist") {
         // <Statement> -> <Name> ( <ArgList> ) ;
         
