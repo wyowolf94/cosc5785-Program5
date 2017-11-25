@@ -1472,8 +1472,14 @@ class newexpNode : public Node
         return children[0]->getType();
       } else if(type == "bracks") {
         string simpType = children[0]->getType();
+        if(simpType == INVALIDSYM){
+          cerr << "Type Error: Invalid identifier " << id << " at " 
+               << lnum << endl;
+        }
         
-        unsigned int total = children[1]->children.size() + children[2]->children.size();
+        
+        unsigned int total = children[1]->children.size() + 
+                             children[2]->children.size();
         for(unsigned int i = 0; i < total; i++) {
           simpType = simpType + "[]";
         }
