@@ -58,7 +58,8 @@ class ClassA
   }
    //int method2(int a, ClassA b, ClassB c){} //error method redeclared
    //void method2(int a, ClassA b, ClassB c){}//error method redeclared
-   int method3(ClassA x, ClassA x){int x; int x; x = 5;} //error x declared twice
+   //int method3(ClassA x, ClassA x){} //error x declared twice
+   int method4(ClassA x) {int x;}//error x declared twice
 //   ClassNone method4(){} //error invalid type
 //   void method5(ClassNone x, ClassA y){}//error invalid type
 }
@@ -66,7 +67,9 @@ class ClassA
 // class ClassA{} //error class declared twice
 
 class ClassB
-{}
+{
+  ClassB(ClassC x){int x;}
+}
 
 class ClassC
 {}

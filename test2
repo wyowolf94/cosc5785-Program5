@@ -1,7 +1,7 @@
 class A{
   int a;
-  A(){}
-  A(){}
-  int method(){}
+  A(A x){int x;}
+  
+  int method(A x){int x;}
   void method(){}
 }
