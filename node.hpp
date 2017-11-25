@@ -906,7 +906,7 @@ class statementNode : public Node
         // <Statement> -> <Name> ( <ArgList> ) ;
        
         vector<Variable*> args;
-        for(unsigned int i = 0; i < children[1]->children->[0]children.size(); i++) {
+        for(unsigned int i = 0; i < children[1]->children[0]->children.size(); i++) {
           string paramType = children[1]->children[0]->children[i]->typeCheckStr(parentTable);
           if(paramType == INVALIDSYM){
             return false;
