@@ -890,10 +890,12 @@ class statementNode : public Node
         // <Statement> -> <Name> = <Expression> ;
         string name = children[0]->typeCheckStr(parentTable);
         if(name == INVALIDSYM){
+          cerr << "Type Error: Unrecognized identifier at " << lnum << endl;
           return false;
         }
         string expression = children[1]->typeCheckStr(parentTable);
         if(expression == INVALIDSYM){
+          //cerr << "Type Error: Unrecognized identifier at " << lnum << endl;
           return false;
         }
         if (name != expression){
