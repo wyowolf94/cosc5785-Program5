@@ -452,12 +452,12 @@ class constdecNode : public Node
       
       vector<Variable*> params = children[0]->getParams();
       
-      for(unsigned int i = 0; i < params.size(); i++) {
+      /*for(unsigned int i = 0; i < params.size(); i++) {
         bool check = new_const->insert(params[i]);
         if(!check){
           cerr << "Type Error: Redeclared Parameter at " << lnum << endl;
         }
-      }
+      }*/
       
       new_const->setParams(params);
         
@@ -475,7 +475,7 @@ class constdecNode : public Node
       for(unsigned int i = 0; i < params.size(); i++) {
         bool check = children[1]->getTable()->insert(params[i]);
         if(!check){
-          cerr << "Type Error: Redeclared Parameter at " << lnum << endl;
+          cerr << "Type Error: Redeclared Variable at " << lnum << endl;
         }
       }
     }
@@ -610,7 +610,7 @@ class methoddecNode : public Node
       for(unsigned int i = 0; i < params.size(); i++) {
         bool check = children[childi]->getTable()->insert(params[i]);
         if(!check){
-          cerr << "Type Error: Redeclared Parameter at " << lnum << endl;
+          cerr << "Type Error: Redeclared Variable at " << lnum << endl;
         }
       }
     }
