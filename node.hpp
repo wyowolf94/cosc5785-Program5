@@ -444,8 +444,18 @@ class constdecNode : public Node
     void buildTable(SymbolTable* parent) {
       // Create SymbolTable for Constructor Declaration
       ConstrDec* new_const = new ConstrDec(parent, id);
-      new_const->setParams(children[0]->getParams());
       
+      vector<Variable*> params = children[0]->getParams();
+      
+      for(unsigned int i = 0; i < params.size(); i++) {
+        bool check = new_const->insert(params[i]);
+        if(!check){
+          cerr << "Type Error: Redeclared Parameter at " << lnum << endl;
+        }
+      }
+      
+      new_const->setParams(params);
+        
       // Add the ConstDec to the parent
       bool check = parent->insert(new_const);
       if(!check){
@@ -492,12 +502,6 @@ class constdecNode : public Node
                  << lnum << endl;
             collected =  false;
           }
-        }
-
-        bool check = parentTable->insert(params[i]);
-        if(!check){
-          cerr << "Type Error: Redeclared Parameter at " << lnum << endl;
-          return false;
         }
       } // end for
       
@@ -557,16 +561,24 @@ class methoddecNode : public Node
     void buildTable(SymbolTable* parent) {
       // Create SymbolTable for Method Declaration
       MethodDec* new_method = new MethodDec(parent, id);
+      vector<Variable*> params;
       if(type == "type") {
         new_method->set_returnType(children[0]->getType());
-        new_method->setParams(children[1]->getParams());
+        params = children[1]->getParams();
       } else if (type == "void") {
         new_method->set_returnType(type);
-        new_method->setParams(children[0]->getParams());
+        params = children[0]->getParams();
       } else { 
         cout << "PROBLEM IN METHODDECNODE - BUILDTABLE" << endl;
         new_method->set_returnType(INVALIDSYM);
       }
+      for(unsigned int i = 0; i < params.size(); i++) {
+        bool check = new_method->insert(params[i]);
+        if(!check){
+          cerr << "Type Error: Redeclared Parameter at " << lnum << endl;
+        }
+      }
+      new_method->setParams(params);
       
       // Add the MethodDec to the parent
       bool check = parent->insert(new_method);
@@ -629,14 +641,7 @@ class methoddecNode : public Node
                  << lnum << endl;
             collected =  false;
           }
-        }
-        
-        bool check = parentTable->insert(params[i]);
-        if(!check){
-          cerr << "Type Error: Redeclared Parameter at " << lnum << endl;
-          return false;
-        }
-        
+        }        
       } 
       return collected;
     }
