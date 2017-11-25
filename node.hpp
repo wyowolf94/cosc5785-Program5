@@ -904,10 +904,10 @@ class statementNode : public Node
         return true;
       } else if(type == "namearglist") {
         // <Statement> -> <Name> ( <ArgList> ) ;
-        
+        ve
         vector<Variable*> args;
-        for(unsigned int i = 0; i < children[1]->children.size(); i++) {
-          string paramType = children[1]->children[i]->typeCheckStr(parentTable);
+        for(unsigned int i = 0; i < children[1]->children->[0]children.size(); i++) {
+          string paramType = children[1]->children[0]->children[i]->typeCheckStr(parentTable);
           if(paramType == INVALIDSYM){
             return false;
           }

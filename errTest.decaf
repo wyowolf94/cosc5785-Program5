@@ -64,7 +64,7 @@ class ClassA
    //void method5(ClassNone x, ClassA y){}//error invalid type
 }
 
- class ClassA{} //error class declared twice
+ // class ClassA{} //error class declared twice
 
 class ClassB
 {
