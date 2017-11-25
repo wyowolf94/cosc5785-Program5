@@ -1473,7 +1473,7 @@ class newexpNode : public Node
       } else if(type == "bracks") {
         string simpType = children[0]->getType();
         
-        unsigned int total = children[0]->children.size() + children[1]->children.size();
+        unsigned int total = children[1]->children.size() + children[2]->children.size();
         for(unsigned int i = 0; i < total; i++) {
           simpType = simpType + "[]";
         }
@@ -1643,7 +1643,7 @@ class nameNode : public Node
         string name = children[0]->typeCheckStr(parent);
         string exp = children[1]->typeCheckStr(parent);
         if(exp != "int"){
-          cerr << "Type Error : expression does not evaluate to int at " 
+          cerr << "Type Error : Invalid expression (does not evaluate to [int]) at " 
                << lnum << endl;
         }
         
