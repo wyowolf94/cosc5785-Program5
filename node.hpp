@@ -1471,10 +1471,18 @@ class newexpNode : public Node
       } else if(type == "empty") {
         return children[0]->getType();
       } else if(type == "bracks") {
+        SymbolTable* idenClass = parent->lookup_class(id);
+        if(idenClass == 0) {
+          cerr << "Type Error: Invalid Identifier " << id << " at " 
+               << lnum << endl;  
+          return INVALIDSYM;
+        }
+        
         string simpType = children[0]->getType();
         if(simpType == INVALIDSYM){
-          cerr << "Type Error: Invalid identifier " << id << " at " 
+          cerr << "Type Error: Invalid Identifier " << id << " at " 
                << lnum << endl;
+          return INVALIDSYM;
         }
         
         
