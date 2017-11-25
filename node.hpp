@@ -1471,20 +1471,22 @@ class newexpNode : public Node
       } else if(type == "empty") {
         return children[0]->getType();
       } else if(type == "bracks") {
-        SymbolTable* idenClass = parent->lookup_class(id);
-        if(idenClass == 0) {
-          cerr << "Type Error: Invalid Identifier " << id << " at " 
-               << lnum << endl;  
-          return INVALIDSYM;
-        }
-        
         string simpType = children[0]->getType();
+        
         if(simpType == INVALIDSYM){
-          cerr << "Type Error: Invalid Identifier " << id << " at " 
+          cerr << "Type Error: Invalid type " << simpType << " at " 
                << lnum << endl;
           return INVALIDSYM;
         }
         
+        if(simpType != "int"){
+          SymbolTable* idenClass = parent->lookup_class(simpType);
+          if(idenClass == 0) {
+            cerr << "Type Error: Invalid type " << simpType << " at " 
+                 << lnum << endl;  
+            return INVALIDSYM;
+          }
+        }   
         
         unsigned int total = children[1]->children.size() + 
                              children[2]->children.size();

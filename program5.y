@@ -750,7 +750,7 @@ newexp : NEW IDEN LPAREN arglist RPAREN
             delete $3;
             yyerrok;}
        | NEW simpleType expstar brackstar
-           {$$ = new newexpNode("bracks", $2->getIden());
+           {$$ = new newexpNode("bracks");
             $$->setlnum($1->lNum);
             if(!$3->getValid()) {
               $$->setValid(false);
