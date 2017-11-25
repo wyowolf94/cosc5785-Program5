@@ -25,6 +25,7 @@ using std::vector;
 struct Variable{
   string type;
   string iden;
+  string val;
   bool valid;
 };
 

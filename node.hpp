@@ -376,7 +376,13 @@ class varDecNode : public Node
       
       // Create SymbolTable for Class Declaration
       string new_type = children[0]->getType();
-      Variable* new_var = new Variable{new_type, identifier, true};
+      string initVal = "";
+      if(new_type == "int") {
+        initVal = "0";
+      } else {
+        initVal = "null";
+      }
+      Variable* new_var = new Variable{new_type, identifier, initVal, true};
       
       // Store var
       var = new_var;
@@ -707,7 +713,13 @@ class paramNode : public Node
     
     Variable* getParam() {
       string new_type = children[0]->getType();
-      Variable* param = new Variable{new_type,id,true};
+      string initVal = "";
+      if(new_type == "int") {
+        initVal = "0";
+      } else {
+        initVal = "null";
+      }
+      Variable* param = new Variable{new_type,id,initVal,true};
       return param;
     }
 
@@ -822,11 +834,21 @@ class statementNode : public Node
           if(paramType == INVALIDSYM){
             return false;
           }
-          Variable temp{paramType, "id", true};
-          args.push_back(&temp);
+          string initVal = "";
+          if(paramType == "int") {
+            initVal = "0";
+          } else {
+            initVal = "null";
+          }
+          Variable*  temp = new Variable{paramType, "id", initVal, true};
+          args.push_back(temp);
         }
         
         string name = children[0]->typeCheckMet(parentTable, args);
+        
+        for(unsigned int i = 0; i < args.size(); i++){
+          delete args[i];
+        }
         return (name != INVALIDSYM);
       } else if(type == "printarglist") {
         // <Statement> -> print ( <ArgList> ) ;
@@ -1068,7 +1090,13 @@ class locvardecNode : public Node
     void buildTable(SymbolTable* parent) {
       // Create SymbolTable for Class Declaration
       string new_type = children[0]->getType();
-      Variable* new_var = new Variable{new_type, id, true};
+      string initVal = "";
+      if(new_type == "int") {
+        initVal = "0";
+      } else {
+        initVal = "null";
+      }
+      Variable* new_var = new Variable{new_type, id, initVal, true};
       
       var = new_var;
       
@@ -1215,11 +1243,21 @@ class expNode : public Node
           if(paramType == INVALIDSYM){
             return INVALIDSYM;
           }
-          Variable temp{paramType, "id", true};
-          args.push_back(&temp);
+          string initVal = "";
+          if(paramType == "int") {
+            initVal = "0";
+          } else {
+            initVal = "null";
+          }
+          Variable*  temp = new Variable{paramType, "id", initVal, true};
+          args.push_back(temp);
         }
         
         string name = children[0]->typeCheckMet(parent, args);
+        
+        for(unsigned int i = 0; i < args.size(); i++){
+          delete args[i];
+        }
         return name;
       } else if (expType == "read") {
         // <Expression> -> read ()
@@ -1312,8 +1350,14 @@ class newexpNode : public Node
         vector<Variable*> args;
         for(unsigned int i = 0; i < children[0]->children.size(); i++) {
           string paramType = children[0]->children[i]->typeCheckStr(parent);
-          Variable temp{paramType, "id", true};
-          args.push_back(&temp);
+          string initVal = "";
+          if(paramType == "int") {
+            initVal = "0";
+          } else {
+            initVal = "null";
+          }
+          Variable* temp = new Variable {paramType, "id", initVal, true};
+          args.push_back(temp);
         }
         
         if(args.size() == 0) {
@@ -1329,6 +1373,9 @@ class newexpNode : public Node
                << lnum << endl;
         }
         
+        for(unsigned int i = 0; i < args.size(); i++){
+          delete args[i];
+        }
         delete tempTable;
         return id;
       } else if(type == "empty") {
@@ -1457,6 +1504,7 @@ class nameNode : public Node
                << " at line " << lnum << endl;
         }
         
+        delete tempTable;
         return found;
       } else if (type == "exp"){
         cerr << "Type Error: Just wrong " << id << " at " << lnum << endl;
@@ -1474,7 +1522,7 @@ class nameNode : public Node
       } else if(type == "id") {
         // Check that the identifier exists
         // Return the type of the identifier
-        Variable tempVar{"", id, true};
+        Variable tempVar{"", id, "null", true};
         return parent->lookup_ancestors(&tempVar);
       } else if(type == "dotid") {
         // Get the type of <name> and the class that it is in
@@ -1484,8 +1532,14 @@ class nameNode : public Node
         }
         SymbolTable* nameClass = parent->lookup_class(nameType);
         
+        string initVal = "";
+        if(nameType == "int") {
+          initVal = "0";
+        } else {
+          initVal = "null";
+        }
         // Lookup Id in nameClass
-        Variable tempVar{"", id, true};
+        Variable tempVar{"", id, initVal, true};
         string found = nameClass->lookup_children(&tempVar);
         
         if(found == INVALIDSYM) {

@@ -1,6 +1,6 @@
 
 + line numbers in bison file
-- Initialize 
++ Initialize 
 
 - redec of method name
 
