@@ -1656,8 +1656,8 @@ class nameNode : public Node
       } else if(type == "id") {
         // Check that the identifier exists
         // Return the type of the identifier
-        Variable tempVar{"", id, "null", true};
-        return parent->lookup_ancestors(&tempVar);
+        Variable* tempVar = new Variable{"", id, "null", true};
+        return parent->lookup_ancestors(tempVar);
       } else if(type == "dotid") {
         // Get the type of <name> and the class that it is in
         string nameType = children[0]->typeCheckStr(parent);
