@@ -1619,6 +1619,14 @@ class nameNode : public Node
         cerr << "Type Error: Just wrong " << id << " at " << lnum << endl;
         return INVALIDSYM;
       } else if (type == "id") {
+        
+        string nameType = id;
+        if(nameType == INVALIDSYM){
+          return INVALIDSYM;
+        }
+        
+        SymbolTable* nameClass = parent->lookup_class(nameType);
+        
          // Lookup Id in nameClass
         SymbolTable* tempTable = new MethodDec(0,id);
         ((MethodDec*)tempTable)->setParams(args);
