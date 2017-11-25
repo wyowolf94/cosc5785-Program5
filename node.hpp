@@ -1022,7 +1022,7 @@ class condstatementNode : public Node
         string exp = children[0]->typeCheckStr(parentTable);
         bool t = true;
         if(exp != "int"){
-          //cerr << "Type Error: Invalid bool expression at " << lnum << endl;
+          cerr << "Type Error: Invalid bool expression at " << lnum << endl;
           t = false;
         }
         bool stmt = children[1]->typeCheck();
