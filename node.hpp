@@ -946,7 +946,7 @@ class statementNode : public Node
         string expression = children[0]->typeCheckStr(parentTable);
         bool t = true;
         if(expression != "int"){
-          //cerr << "Type Error: Invalid bool expression at " << lnum << endl;
+          cerr << "Type Error: Invalid bool expression at " << lnum << endl;
           t = false;
         }
         return children[1]->typeCheck() && t;
