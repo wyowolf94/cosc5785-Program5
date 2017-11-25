@@ -1619,10 +1619,10 @@ class nameNode : public Node
         cerr << "Type Error: Just wrong " << id << " at " << lnum << endl;
         return INVALIDSYM;
       } else if (type == "id") {
-        Variable tempVar{"", id, "null", true};
-        string nameType = parent->lookup_ancestors(&tempVar);
+        string nameType = parent->getEnclosingClass();
         
         if(nameType == INVALIDSYM){
+          
           return INVALIDSYM;
         }
         
