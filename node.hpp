@@ -455,6 +455,17 @@ class constdecNode : public Node
     bool checkParameters() {
       // Check Parameters
       vector<Variable*> params = children[0]->getParams();
+      /*vector<string> names;
+      for(unsigned int i = 0; i < params.size(); i++){
+        for(unsigned int i = 0; i < names.size(); i++) {
+          if(names[i] == params[i]->iden) {
+            cerr << "Type Error: Redeclared Parameter at " << lnum << endl;
+            return false;
+          } else {
+            names.push_back(params[i]->iden);
+          }
+        }
+      }*/
       bool collected = true;
       for(unsigned int i = 0; i < params.size(); i++) {
         // get type of each param
@@ -475,8 +486,18 @@ class constdecNode : public Node
                  << lnum << endl;
             collected =  false;
           }
-        }   
+        }
+
+        bool check = parentTable->insert(params[i]);
+        if(!check){
+          cerr << "Type Error: Redeclared Parameter at " << lnum << endl;
+          return false;
+        }
       } // end for
+      
+      
+      
+      
       return collected; 
     }
     
@@ -570,6 +591,18 @@ class methoddecNode : public Node
         cout << "PROBLEM" << endl;
       }
       
+      /*vector<string> names;
+      for(unsigned int i = 0; i < params.size(); i++){
+        for(unsigned int i = 0; i < names.size(); i++) {
+          if(names[i] == params[i]->iden) {
+            cerr << "Type Error: Redeclared Parameter at " << lnum << endl;
+            return false;
+          } else {
+            names.push_back(params[i]->iden);
+          }
+        }
+      }*/
+      
       bool collected = true;
       for(unsigned int i = 0; i < params.size(); i++) {
         // get type of each param
@@ -590,7 +623,14 @@ class methoddecNode : public Node
                  << lnum << endl;
             collected =  false;
           }
-        }   
+        }
+        
+        bool check = parentTable->insert(params[i]);
+        if(!check){
+          cerr << "Type Error: Redeclared Parameter at " << lnum << endl;
+          return false;
+        }
+        
       } 
       return collected;
     }
