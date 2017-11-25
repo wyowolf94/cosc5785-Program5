@@ -796,23 +796,40 @@ class statementNode : public Node
       } else if(type == "nameeq") {
         // <Statement> -> <Name> = <Expression> ;
         string name = children[0]->typeCheckStr(parentTable);
+        if(name == INVALIDSYM){
+          return false;
+        }
         string expression = children[1]->typeCheckStr(parentTable);
-        return (name == expression);
+        if(expression == INVALIDSYM){
+          return false;
+        }
+        if (name != expression){
+          cerr << "Type Error: Type Mismatch " << name << " != " << expression
+               << " at " << lnum << endl;
+        }
       } else if(type == "namearglist") {
         // <Statement> -> <Name> ( <ArgList> ) ;
         
         vector<Variable*> args;
-        for(unsigned int i = 0; i < children[0]->children.size(); i++) {
-          string paramType = children[0]->children[i]->typeCheckStr(parentTable);
+        for(unsigned int i = 0; i < children[1]->children.size(); i++) {
+          string paramType = children[1]->children[i]->typeCheckStr(parentTable);
+          if(paramType == INVALIDSYM){
+            return false;
+          }
           Variable temp{paramType, "id", true};
           args.push_back(&temp);
         }
         
         string name = children[0]->typeCheckMet(parentTable, args);
-        //bool arglist = children[1]->typeCheck();
         return (name != INVALIDSYM);
       } else if(type == "printarglist") {
         // <Statement> -> print ( <ArgList> ) ;
+        for(unsigned int i = 0; i < children[1]->children.size(); i++) {
+          string paramType = children[1]->children[i]->typeCheckStr(parentTable);
+          if(paramType == INVALIDSYM){
+            return false;
+          }
+        }
         return children[0]->typeCheck();
       }else if(type == "cond") {
         // <Statement> -> <ConditionalStatement>
@@ -820,7 +837,12 @@ class statementNode : public Node
       } else if(type == "while") {
         // <Statement> -> while ( <Expression> ) <Statement>
         string expression = children[0]->typeCheckStr(parentTable);
-        return children[1]->typeCheck() && (expression != INVALIDSYM);
+        bool t = true;
+        if(expression != "int"){
+          cerr << "Type Error: Invalid bool expression at " << lnum << endl;
+          t = false;
+        }
+        return children[1]->typeCheck() && t;
       } else if(type == "optexp") {
         // <Statement> -> return <OptionalExpression> ;
         return children[0]->typeCheck();
@@ -891,13 +913,23 @@ class condstatementNode : public Node
     bool typeCheck() {
       if(type == "if") {
         string exp = children[0]->typeCheckStr(parentTable);
+        bool t = true;
+        if(exp != "int"){
+          cerr << "Type Error: Invalid bool expression at " << lnum << endl;
+          t = false;
+        }
         bool stmt = children[1]->typeCheck();
-        return stmt && (exp != INVALIDSYM);
+        return stmt && t;
       } else if (type == "if-else") {
         string exp = children[0]->typeCheckStr(parentTable);
+        bool t = true;
+        if(exp != "int"){
+          cerr << "Type Error: Invalid bool expression at " << lnum << endl;
+          t = false;
+        }
         bool stmt1 = children[1]->typeCheck();
         bool stmt2 = children[2]->typeCheck();
-        return stmt1 && stmt2 && (exp != INVALIDSYM);
+        return stmt1 && stmt2 && t;
       } else { 
         cout << "cond statement prob" << endl;
         return false;
@@ -1088,7 +1120,20 @@ class optexpNode : public Node
       if(type == "empty") {
         return "void";
       } else if(type == "exp") {
-        return children[0]->typeCheckStr(parent);
+        string expressionType = children[0]->typeCheckStr(parent);
+        SymbolTable* getSome = parent->getEnclosingMethod();
+        string mchammer = getSome->getType();
+        if(mchammer == CLASSTYPE) {
+          cerr << "Type Error: Invalid return for constructor at " << lnum 
+               << endl;
+          return INVALIDSYM;
+        }
+        string rType = getSome->return_type();
+        if(expressionType != rType) {
+          cerr << "Type Error: Invalid return type at " << lnum << endl;
+          return INVALIDSYM;
+        }
+        return expressionType;
       } else {
         cout << "optional expression problem" << endl;
         return INVALIDSYM;
@@ -1124,7 +1169,71 @@ class expNode : public Node
     }
     
     string typeCheckStr(SymbolTable* parent) {
-      return "";
+      if(expType == "relop") {
+        // <Expression> -> <Expression> Relop <Expression>
+        string e1 = children[0]->typeCheckStr(parent);
+        string e2 = children[0]->typeCheckStr(parent);
+        if(e1 == INVALIDSYM || e2 == INVALIDSYM) {
+          cerr << "Type Error: Invalid Expression at " << lnum << endl;
+          return INVALIDSYM;
+        }
+        if((e1 == "int" && e2 == "null") ||(e1 == "null" && e2 == "int")) {
+          cerr << "Type Error: Invalid Expression at " << lnum << endl;
+          return INVALIDSYM;
+        }
+        if(e1 == e2 || e1 == "null" || e2 == "null") {
+          return "int";
+        }
+        cerr << "Type Error: Invalid Expression at " << lnum << endl;
+        return INVALIDSYM;
+      } else if (expType == "sumop" || expType == "proop") {
+        // <Expression> -> <Expression> Sumop/Proop <Expression>
+        string e1 = children[0]->typeCheckStr(parent);
+        string e2 = children[0]->typeCheckStr(parent);
+        if(e1 == INVALIDSYM || e2 == INVALIDSYM || e1 != e2) {
+          cerr << "Type Error: Invalid Expression at " << lnum << endl;
+          return INVALIDSYM;
+        }
+        return e1;
+      } else if (expType == "unyop") {
+        // <Expression> -> Unyop <Expression?"
+        return children[0]->typeCheckStr(parent);
+      } else if (expType == "name") {
+        // <Expression> -> <Name>
+        return children[0]->typeCheckStr(parent);        
+      } else if (expType == "name paren") {
+        // <Expression> -> <Name> (<ArgList>)
+        vector<Variable*> args;
+        for(unsigned int i = 0; i < children[1]->children.size(); i++) {
+          string paramType = children[1]->children[i]->typeCheckStr(parent);
+          if(paramType == INVALIDSYM){
+            return INVALIDSYM;
+          }
+          Variable temp{paramType, "id", true};
+          args.push_back(&temp);
+        }
+        
+        string name = children[0]->typeCheckMet(parent, args);
+        return name;
+      } else if (expType == "read") {
+        // <Expression> -> read ()
+        return "int";
+      } else if (expType == "newexp") {
+        // <Expression> -> <NewExpression>
+        return children[0]->typeCheckStr(parent);
+      } else if (expType == "paren") {
+        // <Expression) -> ( <Expression> )
+        return children[0]->typeCheckStr(parent);
+      } else if (expType == "null") {
+        // <Expression> -> null
+        return "null";
+      } else if (expType == "num") {
+        // <Expression> -> Number 
+        return "int";
+      }  else {
+        cout << "expression problem" << endl;
+        return INVALIDSYM;
+      }
     }
 
     virtual void printNode(ostream * out = 0) {
@@ -1146,10 +1255,11 @@ class expNode : public Node
         cout << "<Expression> -> <Name>" << endl;
         children[0]->printNode();
       } else if (expType == "name paren") {
-        cout << "<Expression> -> <Name> ()" << endl;
+        cout << "<Expression> -> <Name> (<ArgList>)" << endl;
         children[0]->printNode();
+        children[1]->printNode();
       } else if (expType == "read") {
-        cout << "<Expression> -> read ()" << endl;;
+        cout << "<Expression> -> read ()" << endl;
       } else if (expType == "newexp") {
         cout << "<Expression> -> <NewExpression>" << endl;
         children[0]->printNode();
@@ -1231,7 +1341,7 @@ class newexpNode : public Node
           
           if(expType != "int") {
             cerr << "Type Error: Invalid Type " << simpType << "...[" 
-                 << expType << "] at line" << lnum;
+                 << expType << "] at line" << lnum << endl;
             return INVALIDSYM;
           }
         }
@@ -1298,12 +1408,34 @@ class nameNode : public Node
     
     string typeCheckMet(SymbolTable* parent, vector<Variable*> args){
       if(type == "this"){
-        //TODO: calling a construcotr of in class
+          // Check the classes for identifier
+        SymbolTable* idenClass = parent->getEnclosingClass();
+        if(idenClass == 0) {
+          cerr << "Type Error: Invalid Identifier " << id << " at " 
+               << lnum << endl;  
+          return INVALIDSYM;
+        }
+        
+        if(args.size() == 0) {
+          return idenClass->getIden();
+        }
+        
+        SymbolTable* tempTable = new ConstrDec(idenClass,id);
+        ((ConstrDec*)tempTable)->setParams(args);
+        
+        string ctype = idenClass->lookup_children(tempTable);
+        if(ctype == INVALIDSYM){
+          cerr << "Type Error: No matching constructor in " << id << " at "
+               << lnum << endl;
+        }
+        
+        delete tempTable;
+        return idenClass->getIden();
         
       } else if (type == "dotid"){
         string nameType = children[0]->typeCheckStr(parent);
         if(nameType == INVALIDSYM){
-          //TODO: some error message
+          return INVALIDSYM;
         }
         
         SymbolTable* nameClass = parent->lookup_class(nameType);
@@ -1314,16 +1446,15 @@ class nameNode : public Node
 
         string found = nameClass->lookup_children(tempTable);
         if(found == INVALIDSYM) {
-          //TODO nameclass is a pointer, won't print rigth
           cerr << "Type Error: Invalid Method " << id 
-               << " for class " << nameClass 
+               << " for class " << nameClass->getIden()
                << " at line " << lnum << endl;
         }
         
         return found;
       } else if (type == "exp"){
-        //TODO: figure out wtf this means in this context. think it might be an error??
-        
+        cerr << "Type Error: Just wrong " << id << " at " << lnum << endl;
+        return INVALIDSYM;
       } else {
         cout << "Name problem" << endl;
         return INVALIDSYM;
@@ -1343,7 +1474,7 @@ class nameNode : public Node
         // Get the type of <name> and the class that it is in
         string nameType = children[0]->typeCheckStr(parent);
         if(nameType == INVALIDSYM){
-          //TODO: some error message
+          return INVALIDSYM;
         }
         SymbolTable* nameClass = parent->lookup_class(nameType);
         
@@ -1352,9 +1483,8 @@ class nameNode : public Node
         string found = nameClass->lookup_children(&tempVar);
         
         if(found == INVALIDSYM) {
-          //TODO nameclass is a pointer, won't print right
           cerr << "Type Error: Invalid Identifier " << id 
-               << " for class " << nameClass 
+               << " for class " << nameClass->getIden()
                << " at line " << lnum << endl;
         }
         

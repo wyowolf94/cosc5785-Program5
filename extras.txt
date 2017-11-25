@@ -32,3 +32,5 @@ class_two
          --> var names print backwards
 - line numbers in bison file
 - redec of method name
+- can't add a "null" so like x = 5 + null is bogus.
+-this[]?

@@ -81,6 +81,20 @@ class SymbolTable
       return getEnclosingClass(table->getParent());
     }
     
+    SymbolTable* getEnclosingClass(){
+      if(this->getType() == CLASSTYPE) {
+        return this;
+      }
+      return parent->getEnclosingClass();
+    }
+    
+    SymbolTable* getEnclosingMethod() {
+      if(this->getType() == CONSTRTYPE || this->getType() == METHODTYPE) {
+        return this;
+      } 
+      return parent->getEnclosingMethod();
+    }
+    
     SymbolTable* lookup_class(string type) {
       if(parent != 0) {
         return parent->lookup_class(type);
