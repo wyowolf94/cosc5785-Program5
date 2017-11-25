@@ -1483,8 +1483,8 @@ class newexpNode : public Node
           expType = children[1]->children[i]->typeCheck();
           
           if(expType != "int") {
-            cerr << "Type Error: Invalid Type " << simpType << "...[" 
-                 << expType << "] at line" << lnum << endl;
+            cerr << "Type Error: Invalid Type (does not evaluate to [int]) " 
+                 << simpType  << " at line" << lnum << endl;
             return INVALIDSYM;
           }
         }
@@ -1642,6 +1642,15 @@ class nameNode : public Node
       } else if(type == "exp") {
         string name = children[0]->typeCheckStr(parent);
         string exp = children[1]->typeCheckStr(parent);
+        if(exp != "int"){
+          cerr << "Type Error : expression does not evaluate to int at " 
+               << lnum << endl;
+        }
+        
+        unsigned int index = name.find_first_of("[");
+        if(index != string::npos){
+          name = name.substr(0, index);
+        }
         return name;
       } else {
         cout << "Name problem" << endl;
