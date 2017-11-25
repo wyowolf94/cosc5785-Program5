@@ -1,7 +1,6 @@
 class A{
   int a;
-  A(A x){int x;}
-  
-  int method(A x){int x;}
-  void method(){}
+  void method(){
+  if(a == null){}
+}
 }

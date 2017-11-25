@@ -1019,7 +1019,7 @@ class condstatementNode : public Node
         string exp = children[0]->typeCheckStr(parentTable);
         bool t = true;
         if(exp != "int"){
-          cerr << "Type Error: Invalid bool expression at " << lnum << endl;
+          //cerr << "Type Error: Invalid bool expression at " << lnum << endl;
           t = false;
         }
         bool stmt = children[1]->typeCheck();
@@ -1296,7 +1296,7 @@ class expNode : public Node
       if(expType == "relop") {
         // <Expression> -> <Expression> Relop <Expression>
         string e1 = children[0]->typeCheckStr(parent);
-        string e2 = children[1]->typeCheckStr(parent);
+        string e2 = children[2]->typeCheckStr(parent);
         if(e1 == INVALIDSYM || e2 == INVALIDSYM) {
           cerr << "Type Error: Invalid Bool Expression at " << lnum << endl;
           return INVALIDSYM;
