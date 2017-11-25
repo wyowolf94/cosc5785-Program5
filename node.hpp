@@ -47,6 +47,8 @@ class Node
     string getstr()   const { return sval; }
     
     bool   getValid() const { return valid;}
+    
+    int    getlnum()  const { return lnum; }
 
     // Set Functions
     void setVal(int i)          { ival = i; }
@@ -58,6 +60,8 @@ class Node
     void setVal(const char * c) { sval = c; }
     
     void setValid(const bool b) { valid = b; }
+    
+    void setlnum(int l)         { lnum = l; }
     
     // Crap code
     virtual string getType() {
