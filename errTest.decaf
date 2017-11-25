@@ -47,7 +47,7 @@ class ClassA
      //myint1 = new ClassNone();//error classnone dne
      //myint1 = new ClassNone(myint1);//error classnone dne
      //myint1 = new ClassNone[][];//error classnone dne
-     myint1 = new ClassNone[5][];//error classnone dne
+     //myint1 = new ClassNone[5][];//error classnone dne
      //this.x = 0; //errror x not declared within ClassA
 
   }

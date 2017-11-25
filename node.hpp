@@ -200,7 +200,8 @@ class classdecNode : public Node
       // Add the ClassDec to the parent
       bool check = parent->insert(new_class);
       if(!check){
-        cerr << "Something went horribly wrong " << endl;
+        cerr << "Type Error: Class declared Twice " << id << " at " 
+             << lnum << endl;
       }
       
       // Call buildTable on the children
