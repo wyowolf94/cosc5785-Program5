@@ -943,7 +943,7 @@ class statementNode : public Node
         string expression = children[0]->typeCheckStr(parentTable);
         bool t = true;
         if(expression != "int"){
-          cerr << "Type Error: Invalid bool expression at " << lnum << endl;
+          //cerr << "Type Error: Invalid bool expression at " << lnum << endl;
           t = false;
         }
         return children[1]->typeCheck() && t;
@@ -1296,19 +1296,19 @@ class expNode : public Node
       if(expType == "relop") {
         // <Expression> -> <Expression> Relop <Expression>
         string e1 = children[0]->typeCheckStr(parent);
-        string e2 = children[0]->typeCheckStr(parent);
+        string e2 = children[1]->typeCheckStr(parent);
         if(e1 == INVALIDSYM || e2 == INVALIDSYM) {
-          cerr << "Type Error: Invalid Expression at " << lnum << endl;
+          cerr << "Type Error: Invalid Bool Expression at " << lnum << endl;
           return INVALIDSYM;
         }
         if((e1 == "int" && e2 == "null") ||(e1 == "null" && e2 == "int")) {
-          cerr << "Type Error: Invalid Expression at " << lnum << endl;
+          cerr << "Type Error: Invalid Bool Expression at " << lnum << endl;
           return INVALIDSYM;
         }
         if(e1 == e2 || e1 == "null" || e2 == "null") {
           return "int";
         }
-        cerr << "Type Error: Invalid Expression at " << lnum << endl;
+        cerr << "Type Error: Invalid Bool Expression at " << lnum << endl;
         return INVALIDSYM;
       } else if (expType == "sumop" || expType == "proop") {
         // <Expression> -> <Expression> Sumop/Proop <Expression>
