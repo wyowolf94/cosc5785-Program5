@@ -1616,7 +1616,10 @@ class nameNode : public Node
       } else if (type == "exp"){
         cerr << "Type Error: Just wrong " << id << " at " << lnum << endl;
         return INVALIDSYM;
-      } else {
+      } else if (type == "id") {
+        Variable tempVar{"", id, "null", true};
+        return parent->lookup_ancestors(&tempVar);
+      }else {
         cout << "Name problem" << endl;
         return INVALIDSYM;
       }
