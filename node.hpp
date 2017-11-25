@@ -950,7 +950,7 @@ class statementNode : public Node
         return children[1]->typeCheck() && t;
       } else if(type == "optexp") {
         // <Statement> -> return <OptionalExpression> ;
-        return children[0]->typeCheck();
+        return children[0]->typeCheckStr(parentTable) != INVALIDSYM;
       } else if (type == "block") {
         // <Statement> -> <Block>
         return children[0]->typeCheck();
