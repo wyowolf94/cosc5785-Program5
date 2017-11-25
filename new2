@@ -17,7 +17,7 @@ class ClassA
      if((myClassA1 == null) && (myint1 == null)){}//error expressions not of same tyupe
 
      method2(myint1, myint2, myClassB1);//error no matching function call
-     while(myClassA1){}//error expression does not evaluate to boolean
+     //while(myClassA1){}//error expression does not evaluate to boolean
      //if(myClassA1){}//error expression does not evaluate to boolean
      //myint1 = myint2 + myClassA1;//errro expressions different types
 

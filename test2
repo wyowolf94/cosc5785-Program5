@@ -1,6 +1,7 @@
 class A{
-  int a;
+  A a;
   void method1(){
-  method1 = a;
-}
+    int x;
+    x = x + a;
+  }
 }
