@@ -193,7 +193,10 @@ class classdecNode : public Node
       ClassDec* new_class = new ClassDec(parent, id);
       
       // Add the ClassDec to the parent
-      parent->insert(new_class);
+      bool check = parent->insert(new_class);
+      if(!check){
+        cerr << "Something went horribly wrong " << endl;
+      }
       
       // Call buildTable on the children
       for(unsigned int i = 0; i < children.size(); i++) {
@@ -227,7 +230,10 @@ class classbodyNode : public Node
       new_classBlock->setIden(new_classBlock->getNewName());
       
       // Add the ClassDec to the parent
-      parent->insert(new_classBlock);
+      bool check = parent->insert(new_classBlock);
+      if(!check){
+        cerr << "Something went horribly wrong " << endl;
+      }
       
       // Call buildTable on the children
       for(unsigned int i = 0; i < children.size(); i++) {
@@ -1054,7 +1060,10 @@ class blockNode : public Node
       new_block->setIden(new_block->getNewName());
       
       // Add the Block to the parent
-      parent->insert(new_block);
+      bool check = parent->insert(new_block);
+      if(!check){
+        cerr << "Something went horribly wrong " << endl;
+      }
       
       // Call buildTable on the children
       for(unsigned int i = 0; i < children.size(); i++) {
@@ -1149,7 +1158,11 @@ class locvardecNode : public Node
       var = new_var;
       
       // Add the ClassDec to the parent
-      parent->insert(new_var);
+      bool check = parent->insert(new_var);
+      if(!check){
+        cerr << "Type Error: Variable " << id << " redeclared at " 
+             << lnum << endl;  
+      }
       
       parentTable = parent;
     }
