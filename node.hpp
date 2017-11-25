@@ -441,7 +441,11 @@ class constdecNode : public Node
       new_const->setParams(children[0]->getParams());
       
       // Add the ConstDec to the parent
-      parent->insert(new_const);
+      bool check = parent->insert(new_const);
+      if(!check){
+        cerr << "Type Error: Constructor " << id << " declared twice at " 
+             << lnum << endl; 
+      }
       parentTable = parent;
       
       // Call buildTable on the children
@@ -538,7 +542,11 @@ class methoddecNode : public Node
       }
       
       // Add the MethodDec to the parent
-      parent->insert(new_method);
+      bool check = parent->insert(new_method);
+      if(!check){
+        cerr << "Type Error: Method " << id << " declared twice at " 
+             << lnum << endl; 
+      }
       parentTable = parent;
       
       // Call buildTable on the children
