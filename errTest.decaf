@@ -2,11 +2,11 @@ class ClassA
 {
   int myint1;
   int myint2;
-//   int myint2; //error var declared twice
+  //int myint2; //error var declared twice
   int[] myintarr1;
   int [][] myintarr2;
   ClassA myClassA1;
-//   ClassA myClassA1; //error var declared twice
+   //ClassA myClassA1; //error var declared twice
   ClassB myClassB1;
 //   int myClassB1; //error var declared twice
 //   ClassNone mybadvar;//error invalid type
