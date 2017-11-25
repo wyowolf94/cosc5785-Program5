@@ -1,6 +1,6 @@
 class A{
   int a;
-  void method(){
-  if(a == null){}
+  void method1(){
+  method1 = a;
 }
 }
