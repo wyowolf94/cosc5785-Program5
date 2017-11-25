@@ -110,7 +110,12 @@ class Node
     
     virtual string typeCheckStr(SymbolTable* parent) {
       cout << "BASE CLASS METHOD CALLED" << endl;
-      return INVALIDTYPE;
+      return INVALIDSYM;
+    }
+    
+    virtual string typeCheckMet(SymbolTable* parent, vector<Variable*> args){
+      cout << "BASE CLASS METHOD CALLED" << endl;
+      return INVALIDSYM;
     }
 
     // Print Node
@@ -710,6 +715,61 @@ class paramNode : public Node
     string id;
 }; 
 
+// argList node that either prints to epsilon or to expList
+class arglistNode : public Node 
+{
+  public:
+    arglistNode(string t) : Node () {
+      type = t;
+    } 
+    
+    vector<Node*> getArgs(){
+      return children[0]->children;
+      
+     /* vector<Variable*> args;
+      
+      if(type == "empty") {
+        return args;
+      } else if (type == "rec") {
+        for(unsigned int i = 0; i < children[0]->children.size(); i++) {
+          Variable temp{children[0]->children[i]->typeCheckStr(), "", true}
+          args.push_back(temp);
+        }
+        return args;
+      } else {
+        cout << "arglist error" << endl;
+        return args;
+      }*/
+    }
+    
+    void printArgList() {
+        cout << "<ArgList> -> ";
+        for(unsigned int i = 0; i < children[0]->children.size() - 1; i++) {
+          cout << "<Expression> , ";
+        }
+        cout << "<Expression>" << endl;
+    }
+    
+    void printChildren() {
+        for(unsigned int i = 0; i < children[0]->children.size(); i++) {
+          children[0]->children[i]->printNode();
+        }
+    }
+    
+    virtual void printNode(ostream * out = 0) {
+      if(type == "empty") {
+        cout << "<ArgList> -> epsilon" << endl;
+      } else if (type == "rec") {
+        printArgList();
+        printChildren();
+      } else {
+        cout << "arglist problem" << endl;
+      }
+    }
+  private:
+    string type;
+}; 
+
 // Statement Node ... for now just a simple statement
 class statementNode : public Node 
 {
@@ -740,9 +800,17 @@ class statementNode : public Node
         return (name == expression);
       } else if(type == "namearglist") {
         // <Statement> -> <Name> ( <ArgList> ) ;
-        string name = children[0]->typeCheckStr(parentTable);
-        bool arglist = children[1]->typeCheck();
-        return (name != INVALIDTYPE) && arglist;
+        
+        vector<Variable*> args;
+        for(unsigned int i = 0; i < children[0]->children.size(); i++) {
+          string paramType = children[0]->children[i]->typeCheckStr(parentTable);
+          Variable temp{paramType, "id", true};
+          args.push_back(&temp);
+        }
+        
+        string name = children[0]->typeCheckMet(parentTable, args);
+        //bool arglist = children[1]->typeCheck();
+        return (name != INVALIDSYM);
       } else if(type == "printarglist") {
         // <Statement> -> print ( <ArgList> ) ;
         return children[0]->typeCheck();
@@ -752,7 +820,7 @@ class statementNode : public Node
       } else if(type == "while") {
         // <Statement> -> while ( <Expression> ) <Statement>
         string expression = children[0]->typeCheckStr(parentTable);
-        return children[1]->typeCheck() && (expression != INVALIDTYPE);
+        return children[1]->typeCheck() && (expression != INVALIDSYM);
       } else if(type == "optexp") {
         // <Statement> -> return <OptionalExpression> ;
         return children[0]->typeCheck();
@@ -811,6 +879,7 @@ class condstatementNode : public Node
     } 
 
     void buildTable(SymbolTable* parent){
+      parentTable = parent;
       if(type == "if"){
         children[1]->buildTable(parent);
       } else if(type == "if-else"){
@@ -820,7 +889,19 @@ class condstatementNode : public Node
     }
     
     bool typeCheck() {
-      return true;
+      if(type == "if") {
+        string exp = children[0]->typeCheckStr(parentTable);
+        bool stmt = children[1]->typeCheck();
+        return stmt && (exp != INVALIDSYM);
+      } else if (type == "if-else") {
+        string exp = children[0]->typeCheckStr(parentTable);
+        bool stmt1 = children[1]->typeCheck();
+        bool stmt2 = children[2]->typeCheck();
+        return stmt1 && stmt2 && (exp != INVALIDSYM);
+      } else { 
+        cout << "cond statement prob" << endl;
+        return false;
+      }
     }
     
     virtual void printNode(ostream * out = 0) {
@@ -840,6 +921,7 @@ class condstatementNode : public Node
     }
   private:
     string type;
+    SymbolTable* parentTable;
 };
 
 // Block Node goes to any number of vardecs followed by any number of statements
@@ -1002,8 +1084,15 @@ class optexpNode : public Node
       type = t;
     } 
     
-    bool typeCheck() {
-      return true;
+    string typeCheckStr(SymbolTable* parent) {
+      if(type == "empty") {
+        return "void";
+      } else if(type == "exp") {
+        return children[0]->typeCheckStr(parent);
+      } else {
+        cout << "optional expression problem" << endl;
+        return INVALIDSYM;
+      }
     }
 
     virtual void printNode(ostream * out = 0) {
@@ -1094,6 +1183,66 @@ class newexpNode : public Node
       id = i;
     } 
     
+    string typeCheckStr(SymbolTable* parent) {
+      if(type == "parens") {
+        // Check the classes for identifier
+        SymbolTable* idenClass = parent->lookup_class(id);
+        if(idenClass == 0) {
+          cerr << "Type Error: Invalid Identifier " << id << " at " 
+               << lnum << endl;  
+          return INVALIDSYM;
+        }
+        
+        vector<Variable*> args;
+        for(unsigned int i = 0; i < children[0]->children.size(); i++) {
+          string paramType = children[0]->children[i]->typeCheckStr(parent);
+          Variable temp{paramType, "id", true};
+          args.push_back(&temp);
+        }
+        
+        if(args.size() == 0) {
+          return id;
+        }
+        
+        SymbolTable* tempTable = new ConstrDec(idenClass,id);
+        ((ConstrDec*)tempTable)->setParams(args);
+        
+        string ctype = idenClass->lookup_children(tempTable);
+        if(ctype == INVALIDSYM){
+          cerr << "Type Error: No matching constructor in " << id << " at "
+               << lnum << endl;
+        }
+        
+        delete tempTable;
+        return id;
+      } else if(type == "empty") {
+        return children[0]->getType();
+      } else if(type == "bracks") {
+        string simpType = children[0]->getType();
+        
+        unsigned int total = children[0]->children.size() + children[1]->children.size();
+        for(unsigned int i = 0; i < total; i++) {
+          simpType = simpType + "[]";
+        }
+        
+        string expType = "";
+        for(unsigned int i = 0; i < children[1]->children.size(); i++) {
+          expType = children[1]->children[i]->typeCheck();
+          
+          if(expType != "int") {
+            cerr << "Type Error: Invalid Type " << simpType << "...[" 
+                 << expType << "] at line" << lnum;
+            return INVALIDSYM;
+          }
+        }
+        
+        return simpType;
+      } else {
+        cout << "new exp problem" << endl;
+        return INVALIDSYM;
+      }
+    }
+    
     void printNewExp() {
         cout << "<NewExpression> -> new <SimpleType> ";
         for(unsigned int i = 0; i < children[1]->children.size(); i++) {
@@ -1133,45 +1282,6 @@ class newexpNode : public Node
     string id;
 }; 
 
-// argList node that either prints to epsilon or to expList
-class arglistNode : public Node 
-{
-  public:
-    arglistNode(string t) : Node () {
-      type = t;
-    } 
-
-    bool typeCheck() {
-      return true;
-    }
-    
-    void printArgList() {
-        cout << "<ArgList> -> ";
-        for(unsigned int i = 0; i < children[0]->children.size() - 1; i++) {
-          cout << "<Expression> , ";
-        }
-        cout << "<Expression>" << endl;
-    }
-    
-    void printChildren() {
-        for(unsigned int i = 0; i < children[0]->children.size(); i++) {
-          children[0]->children[i]->printNode();
-        }
-    }
-    
-    virtual void printNode(ostream * out = 0) {
-      if(type == "empty") {
-        cout << "<ArgList> -> epsilon" << endl;
-      } else if (type == "rec") {
-        printArgList();
-        printChildren();
-      } else {
-        cout << "arglist problem" << endl;
-      }
-    }
-  private:
-    string type;
-}; 
 
 // Name Node
 class nameNode : public Node 
@@ -1182,8 +1292,81 @@ class nameNode : public Node
       id = i;
     } 
     
+    string getFuncName(){
+    return id;
+    }
+    
+    string typeCheckMet(SymbolTable* parent, vector<Variable*> args){
+      if(type == "this"){
+        //TODO: calling a construcotr of in class
+        
+      } else if (type == "dotid"){
+        string nameType = children[0]->typeCheckStr(parent);
+        if(nameType == INVALIDSYM){
+          //TODO: some error message
+        }
+        
+        SymbolTable* nameClass = parent->lookup_class(nameType);
+        
+         // Lookup Id in nameClass
+        SymbolTable* tempTable = new MethodDec(0,id);
+        ((MethodDec*)tempTable)->setParams(args);
+
+        string found = nameClass->lookup_children(tempTable);
+        if(found == INVALIDSYM) {
+          //TODO nameclass is a pointer, won't print rigth
+          cerr << "Type Error: Invalid Method " << id 
+               << " for class " << nameClass 
+               << " at line " << lnum << endl;
+        }
+        
+        return found;
+      } else if (type == "exp"){
+        //TODO: figure out wtf this means in this context. think it might be an error??
+        
+      } else {
+        cout << "Name problem" << endl;
+        return INVALIDSYM;
+      }
+    }
+    
     string typeCheckStr(SymbolTable* parent) {
-      return "";
+      // return the type of name
+      if(type == "this") {
+        return parent->getEnclosingClass(parent);
+      } else if(type == "id") {
+        // Check that the identifier exists
+        // Return the type of the identifier
+        Variable tempVar{"", id, true};
+        return parent->lookup_ancestors(&tempVar);
+      } else if(type == "dotid") {
+        // Get the type of <name> and the class that it is in
+        string nameType = children[0]->typeCheckStr(parent);
+        if(nameType == INVALIDSYM){
+          //TODO: some error message
+        }
+        SymbolTable* nameClass = parent->lookup_class(nameType);
+        
+        // Lookup Id in nameClass
+        Variable tempVar{"", id, true};
+        string found = nameClass->lookup_children(&tempVar);
+        
+        if(found == INVALIDSYM) {
+          //TODO nameclass is a pointer, won't print right
+          cerr << "Type Error: Invalid Identifier " << id 
+               << " for class " << nameClass 
+               << " at line " << lnum << endl;
+        }
+        
+        return found;
+      } else if(type == "exp") {
+        string name = children[0]->typeCheckStr(parent);
+        string exp = children[1]->typeCheckStr(parent);
+        return name;
+      } else {
+        cout << "Name problem" << endl;
+        return INVALIDSYM;
+      }
     }
 
     virtual void printNode(ostream * out = 0) {

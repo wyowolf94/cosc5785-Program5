@@ -13,7 +13,6 @@
 #include<vector>
 
 #define INVALIDSYM "invalid symbol"
-#define INVALIDTYPE "invalid type"
 
 using std::string;
 using std::endl;

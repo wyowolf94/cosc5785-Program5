@@ -74,6 +74,13 @@ class SymbolTable
       return children;
     }
     
+    string getEnclosingClass(SymbolTable* table) {
+      if(table->getType() == CLASSTYPE) {
+        return table->return_type();
+      }
+      return getEnclosingClass(table->getParent());
+    }
+    
     SymbolTable* lookup_class(string type) {
       if(parent != 0) {
         return parent->lookup_class(type);
