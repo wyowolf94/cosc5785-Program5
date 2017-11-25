@@ -1,0 +1,7 @@
+class A{
+  int a;
+  A(){}
+  A(){}
+  int method(){}
+  void method(){}
+}
