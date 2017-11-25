@@ -102,6 +102,11 @@ class Node
       return;
     }
     
+    virtual SymbolTable* getTable(){
+      cout << "BASE CLASS METHOD CALLED" << endl;
+      return 0;
+    }
+    
     virtual void buildTable(SymbolTable* st) {
       cout << "PROBLEM!PROBLEM!PROBLEM!PROBLEM!PROBLEM!PROBLEM!" << endl;
       return;
@@ -466,6 +471,13 @@ class constdecNode : public Node
       
       // Call buildTable on the children
       children[1]->buildTable(new_const);
+      
+      for(unsigned int i = 0; i < params.size(); i++) {
+        bool check = children[1]->getTable()->insert(params[i]);
+        if(!check){
+          cerr << "Type Error: Redeclared Parameter at " << lnum << endl;
+        }
+      }
     }
     
     bool checkParameters() {
@@ -572,12 +584,7 @@ class methoddecNode : public Node
         cout << "PROBLEM IN METHODDECNODE - BUILDTABLE" << endl;
         new_method->set_returnType(INVALIDSYM);
       }
-      for(unsigned int i = 0; i < params.size(); i++) {
-        bool check = new_method->insert(params[i]);
-        if(!check){
-          cerr << "Type Error: Redeclared Parameter at " << lnum << endl;
-        }
-      }
+
       new_method->setParams(params);
       
       // Add the MethodDec to the parent
@@ -589,12 +596,22 @@ class methoddecNode : public Node
       parentTable = parent;
       
       // Call buildTable on the children
+      int childi = -1;
+      
       if(type == "type") {
-        children[2]->buildTable(new_method);
+        childi = 2;
       } else if (type == "void") {
-        children[1]->buildTable(new_method);
+        childi = 1;
       } else {
         cout << "PROBLEM IN METHODDECNODE - BUILDTABLE" << endl;
+      }
+      
+      children[childi]->buildTable(new_method);
+      for(unsigned int i = 0; i < params.size(); i++) {
+        bool check = children[childi]->getTable()->insert(params[i]);
+        if(!check){
+          cerr << "Type Error: Redeclared Parameter at " << lnum << endl;
+        }
       }
     }
     
@@ -1074,6 +1091,12 @@ class blockNode : public Node
       for(unsigned int i = 0; i < children.size(); i++) {
         children[i]->buildTable(new_block);
       }
+      
+      thisTable = new_block;
+    }
+    
+    SymbolTable* getTable(){
+      return thisTable;
     }
     
     bool typeCheck() {
@@ -1139,6 +1162,7 @@ class blockNode : public Node
     }
   private:
     string type;
+    SymbolTable* thisTable;
 };
 
 // LocalVarDec Node with just prints type identifier;
