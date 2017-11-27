@@ -11,7 +11,10 @@ class ClassA
 //   int myClassB1; //error var declared twice
 //   ClassNone mybadvar;//error invalid type
   
-  ClassA(){}
+  ClassA(){
+    return myint1;
+    return;
+  }
    //ClassA(){}//error constructor delcared twice
   
 //   A(){}//Error constructor name does not match class name
