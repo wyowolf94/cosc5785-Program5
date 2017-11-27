@@ -896,7 +896,7 @@ class statementNode : public Node
         }
         string expression = children[1]->typeCheckStr(parentTable);
         if(expression == INVALIDSYM){
-          cerr << "Type Error: Unrecognized expression at " << lnum << endl;
+          //cerr << "Type Error: Unrecognized expression at " << lnum << endl;
           return false;
         }
         if (name != expression){
