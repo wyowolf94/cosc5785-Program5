@@ -1661,7 +1661,7 @@ class nameNode : public Node
         SymbolTable* tempTable = new MethodDec(parent,id);
         ((MethodDec*)tempTable)->setParams(args);
 
-        string found = nameClass->lookup_children(tempTable);
+        string found = nameClass->getBlockChild()->lookup_children(tempTable);
         if(found == INVALIDSYM) {
           cerr << "Type Error: Invalid Method " << id 
                << " for class " << nameClass->getIden()

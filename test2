@@ -1,8 +1,8 @@
 class A{
   int x;
-  void meth()
+  int meth()
   {
-    this.x = 5;
+    x = meth();
   }
 }
 
