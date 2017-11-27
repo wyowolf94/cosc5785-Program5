@@ -1529,7 +1529,7 @@ class newexpNode : public Node
         
         string expType = "";
         for(unsigned int i = 0; i < children[1]->children.size(); i++) {
-          expType = children[1]->children[i]->typeCheck();
+          expType = children[1]->children[i]->typeCheckStr(parent);
           
           if(expType != "int") {
             cerr << "Type Error: Invalid Type (does not evaluate to [int]) " 
