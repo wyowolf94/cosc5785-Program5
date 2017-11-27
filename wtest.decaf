@@ -52,13 +52,8 @@ class ClassC
   ClassB myClassB1;
   int myint1;
   ClassC(){
-<<<<<<< HEAD:wtest.cpp
-//     this();
+    this();
     this(myint1);
-=======
-    //this();
-    //this(myint1);
->>>>>>> bc4fe727945ac0097b0e7f22ea7aceb6201acc51:wtest.decaf
     this.myint1 = 10;
     this.myint1 = this.myint1;
   }
