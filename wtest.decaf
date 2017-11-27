@@ -39,7 +39,7 @@ class ClassB
     {}
     else
     {}
-//     if((myvar1 == myA1) && (myA1 == new ClassA())){}//error exp not of same type
+    if((myvar1 == myA1) && (myA1 == new ClassA())){}//error exp not of same type
     while(1){}
   }
 }
@@ -75,7 +75,7 @@ class ClassC
     }
     
     myClassC1.myClassA1.y[0] = myClassB1;
-//     myClassC1.myClassA1.y[0] = myClassB1.myint;//error type mismatch
+    myClassC1.myClassA1.y[0] = myClassB1.myint;//error type mismatch
     myClassC1.myClassA1.y[0].myintarr2[4][myint1] = myint1;
     
     objArray = new ClassA[][];//correct
