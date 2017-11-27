@@ -617,8 +617,7 @@ locvardec : type IDEN SEMI
           ;
            
 optexp : %empty
-           {$$ = new optexpNode("empty");
-            $$->setlnum($$->getlnum());}
+           {$$ = new optexpNode("empty");}
        | exp
            {$$ = new optexpNode("exp");
             $$->setlnum($1->getlnum());
