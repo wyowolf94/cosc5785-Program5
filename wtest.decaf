@@ -88,11 +88,11 @@ class ClassC
     myClassA1 = null;
     myClassA1 = myClassA1 + null;//error for shaya
     myClassA1 = null + myClassA1;//error for shaya
-//     myClassA1 = null + null;//error for shaya
+    myClassA1 = null + null;//error for shaya
     if(method2()){}
     if(null == null){}
     if((myClassA1 == null) && (myint1 == 0)){}
-//     this[2] = myClassC1;//error for shaya
+    this[2] = myClassC1;//error for shaya
     this.myint1 = 0;
     myClassC1 = this;
     this = myClassC1;
