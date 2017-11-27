@@ -2,7 +2,7 @@
  * This is a bigger input file for the 4th program that will be their compiler.
  * It tests quite a bit.
  */
-
+#include 
 class foo {
 
   int a;
@@ -40,7 +40,7 @@ class goo {
   {
     foo f;
 
-    while(a == b) {
+    while(a == b {
       int b;
       b = b+1; 
     }
@@ -94,7 +94,7 @@ class boo {
 
     goo a;
 
-    a.main();
+    //a.main();
     a.c.a=a.boo(5);
     return ;
   }
