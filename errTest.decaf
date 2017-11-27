@@ -46,8 +46,8 @@ class ClassA
 // //     myintarr1[new int] = 5;//syntax error [doesnt evaluate to int]
      //myintarr1[new ClassA()] = 5; //error [doesnt evaluate to int]
      //myintarr1[myClassA1] = 5;//error [doesnt evaluate to int]
-     myint1 = myint2 + myClassA1;//errro expressions different types
-     myint1 = myClassA1 + myClassA1; // error type mismatch
+     //myint1 = myint2 + myClassA1;//errro expressions different types
+     //myint1 = myClassA1 + myClassA1; // error type mismatch
      //myint1 = new ClassNone();//error classnone dne
      //myint1 = new ClassNone(myint1);//error classnone dne
      //myint1 = new ClassNone[][];//error classnone dne

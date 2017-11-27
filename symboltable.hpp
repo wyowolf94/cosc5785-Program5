@@ -99,7 +99,7 @@ class SymbolTable
       if(parent != 0) {
         return parent->lookup_class(type);
       } else { // At root
-        string mangled = mangle(type);
+        string mangled = this->mangle(type);
         unordered_map<string,SymbolTable*>::const_iterator found 
           = children.find(mangled);
         if(found != children.end()) {

@@ -1609,7 +1609,7 @@ class nameNode : public Node
                << lnum << endl;
         }
         
-        delete tempTable;
+        //delete tempTable;
         return idenClass->getIden();
         
       } else if (type == "dotid"){
@@ -1629,9 +1629,10 @@ class nameNode : public Node
           cerr << "Type Error: Invalid Method " << id 
                << " for class " << nameClass->getIden()
                << " at line " << lnum << endl;
+          
         }
         
-        delete tempTable;
+        //delete tempTable;
         return found;
       } else if (type == "exp"){
         cerr << "Type Error: Just wrong " << id << " at " << lnum << endl;
@@ -1657,7 +1658,7 @@ class nameNode : public Node
                << " at line " << lnum << endl;
         }
         
-        delete tempTable;
+        //delete tempTable;
         return found;
         
         //return parent->lookup_ancestors(&tempVar);
