@@ -12,7 +12,7 @@ LEXFLAGS=--warn
 YACC=bison
 YACCFLAGS=--report=state -W -d
 
-.PHONY: clean
+.PHONY: clean tar
 
 program5: program5.tab.c program5.tab.h program5_lex.cpp program5.cpp \
 		attributes.h node.hpp symbol.h symboltable.hpp
@@ -24,6 +24,11 @@ program5.tab.c : program5.y node.hpp attributes.h
 
 program5_lex.cpp: program5.lpp node.hpp
 	${LEX} ${LEXFLAGS} program5.lpp
+
+tar:
+	tar -cf Wolf_HW5.tar attributes.cpp attributes.h Makefile node.hpp \
+ 	program5.cpp program5.lpp program5.y symbol.cpp symbol.h \
+	symboltable.hpp readme.txt
 
 clean: 
 	/bin/rm -f *.o a.out core.* program5 program5_lex.cpp program5.tab.*
