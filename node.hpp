@@ -1331,7 +1331,7 @@ class expNode : public Node
       } else if (expType == "sumop" || expType == "proop") {
         // <Expression> -> <Expression> Sumop/Proop <Expression>
         string e1 = children[0]->typeCheckStr(parent);
-        string e2 = children[0]->typeCheckStr(parent);
+        string e2 = children[1]->typeCheckStr(parent);
         if(e1 == INVALIDSYM || e2 == INVALIDSYM) {
           cerr << "Type Error: Invalid Expression at " << lnum << endl;
           return INVALIDSYM;
