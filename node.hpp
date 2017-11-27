@@ -919,19 +919,22 @@ class statementNode : public Node
         // <Statement> -> <Name> ( <ArgList> ) ;
        
         vector<Variable*> args;
-        for(unsigned int i = 0; i < children[1]->children[0]->children.size(); i++) {
-          string paramType = children[1]->children[0]->children[i]->typeCheckStr(parentTable);
-          if(paramType == INVALIDSYM){
-            return false;
+        if(children[1]->children[0]->children.size() > 0) {
+            for(unsigned int i = 0; i < children[1]->children[0]->children.size(); i++) {
+            string paramType = children[1]->children[0]->children[i]->typeCheckStr(parentTable);
+            if(paramType == INVALIDSYM){
+              return false;
+            }
+            string initVal = "";
+            if(paramType == "int") {
+              initVal = "0";
+            } else {
+              initVal = "null";
+            }
+            Variable*  temp = new Variable{paramType, "id", initVal, true};
+            args.push_back(temp);
           }
-          string initVal = "";
-          if(paramType == "int") {
-            initVal = "0";
-          } else {
-            initVal = "null";
-          }
-          Variable*  temp = new Variable{paramType, "id", initVal, true};
-          args.push_back(temp);
+
         }
         
         string name = children[0]->typeCheckMet(parentTable, args);
