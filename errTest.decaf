@@ -12,8 +12,8 @@ class ClassA
 //   ClassNone mybadvar;//error invalid type
   
   ClassA(){
-    //return myint1;
-    //return;
+    return myint1;
+    return;
   }
    //ClassA(){}//error constructor delcared twice
   
@@ -58,9 +58,9 @@ class ClassA
   int method2(int x, ClassA y, ClassB c)
   {
      //return; //error does not match func return type
-     //return myintarr1;
-     //return myClassB1;
-     //return myint1;
+     return myintarr1;
+     return myClassB1;
+     return myint1;
   }
    //int method2(int a, ClassA b, ClassB c){} //error method redeclared
    //void method2(int a, ClassA b, ClassB c){}//error method redeclared
