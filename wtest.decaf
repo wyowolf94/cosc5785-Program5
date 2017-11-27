@@ -22,7 +22,7 @@ class ClassB
   int mymethod1(int x, ClassA y)
   {
     x = 5;
-//     x = y; //error mismatched types
+    x = y; //error mismatched types
     mymethod2(myAarr2, myint);
     myint = mymethod1(x, y);
 //     mymethod2(myint, myAarr2); //error no method
