@@ -9,6 +9,7 @@
 #include<iostream>
 #include<string>
 #include<vector>
+#include<algorithm>
 #include<unordered_map>
 
 #include "symbol.h"
@@ -27,6 +28,7 @@ using std::vector;
 using std::cout;
 using std::unordered_map;
 using std::pair;
+using std::find;
 
 
 class SymbolTable 
@@ -110,7 +112,7 @@ class SymbolTable
       }
     }
     
-    string lookup_children(Variable* var) {
+    virtual string lookup_children(Variable* var) {
       string name = mangle(var->iden);
       unordered_map<string,Variable*>::const_iterator newvar
         = vardecs.find(name);
@@ -318,6 +320,26 @@ class MethodDec : public SymbolTable
       return params;
     }
     
+    string lookup_children(Variable* var) {
+      string name = this->mangle(var->iden);
+      unordered_map<string,Variable*>::const_iterator newvar
+      = vardecs.find(name);
+      if(newvar != vardecs.end()) {
+        return newvar->second->type;
+      }
+      for(unsigned int i = 0; i < params.size(); i++){
+         if(params[i]->iden == var->iden){
+           return params[i]->type; 
+        } 
+      }
+      return INVALIDSYM;
+    }
+      
+      
+    string mangle(string name) {
+      return '$' + name + '$';
+    }
+    
     string mangle() {
       string temp = '$' + iden + '$';
       for(unsigned int i = 0; i < params.size(); i++) {
@@ -376,6 +398,25 @@ class ConstrDec : public SymbolTable
         return true;
       }
       return false;
+    }
+    
+    string lookup_children(Variable* var) {
+      string name = mangle(var->iden);
+      unordered_map<string,Variable*>::const_iterator newvar
+      = vardecs.find(name);
+      if(newvar != vardecs.end()) {
+        return newvar->second->type;
+      }
+      for(unsigned int i = 0; i < params.size(); i++){
+        if(params[i]->iden == var->iden){
+          return params[i]->type; 
+        } 
+      }
+      return INVALIDSYM;
+    }
+    
+    string mangle(string name) {
+      return '$' + name + '$';
     }
     
     string mangle() {
