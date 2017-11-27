@@ -1254,7 +1254,7 @@ class optexpNode : public Node
         }
         string rType = enclMethod->return_type();
         if(expressionType != rType) {
-          cerr << "Type Error: Invalid return type in " 
+          cerr << "Type Error: Invalid void return type in " 
                << enclMethod->getIden() << endl;
           return INVALIDSYM;
         }
