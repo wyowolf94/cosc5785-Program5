@@ -31,4 +31,5 @@ tar:
 	symboltable.hpp readme.txt
 
 clean: 
-	/bin/rm -f *.o a.out core.* program5 program5_lex.cpp program5.tab.*
+	/bin/rm -f *.o a.out core.* program5 program5_lex.cpp program5.tab.* \
+  Wolf_HW5.tar
