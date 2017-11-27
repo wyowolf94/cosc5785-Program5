@@ -143,7 +143,11 @@ class SymbolTable
     
     string lookup_siblings(Variable* var) {
       if(parent != 0) {
-        return parent->lookup_children(var);
+        string type = lookup_children(var);
+        if(type == INVALIDSYM){
+          return parent->lookup_children(var);
+        }
+        return type;
       } else {
         return INVALIDSYM;
       }

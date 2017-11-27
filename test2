@@ -1,8 +1,9 @@
 class A{
-  int x;
+  
   int meth()
   {
-    x = meth();
+    A[][] objArray;
+    objArray = new A[][];
   }
 }
 
