@@ -912,6 +912,9 @@ class statementNode : public Node
         }
         
         return false;
+        cerr << "Type Error: Type Mismatch " << name << " != " << expression
+             << " at " << lnum << endl;
+           
       } else if(type == "namearglist") {
         // <Statement> -> <Name> ( <ArgList> ) ;
        
