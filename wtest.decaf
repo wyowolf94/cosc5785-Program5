@@ -86,8 +86,8 @@ class ClassC
     objArray = new ClassA[a][myAobj.y[0].myint];//correct
     
     myClassA1 = null;
-    //     myClassA1 = myClassA1 + null;//error for shaya
-    //     myClassA1 = null + myClassA1;//error for shaya
+    myClassA1 = myClassA1 + null;//error for shaya
+    myClassA1 = null + myClassA1;//error for shaya
 //     myClassA1 = null + null;//error for shaya
     if(method2()){}
     if(null == null){}
@@ -97,7 +97,7 @@ class ClassC
     myClassC1 = this;
     this = myClassC1;
     
-//     objArray = new ClassA[myCobject][];//Error
+    objArray = new ClassA[myCobject][];//Error
   }
   
   int method2(){}

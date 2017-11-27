@@ -10,7 +10,8 @@ Shaya Wolf
    because the production in bison is %empty... so I just return the 
    method it is enclosed in.
  - The Errors don't print in the exact order of the line numbers but it 
-   is close
+   is close. Also, some type errors don't collapse down quite smoothly 
+   and problems will print two/three errors for one line. 
 
    
    Should work -- I am interested to see what you find that doesn't work 
