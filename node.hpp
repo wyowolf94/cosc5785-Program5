@@ -1359,19 +1359,21 @@ class expNode : public Node
       } else if (expType == "name paren") {
         // <Expression> -> <Name> (<ArgList>)
         vector<Variable*> args;
-        for(unsigned int i = 0; i < children[1]->children.size(); i++) {
-          string paramType = children[1]->children[i]->typeCheckStr(parent);
-          if(paramType == INVALIDSYM){
-            return INVALIDSYM;
+        if(children[1]->children.size() > 0){
+          for(unsigned int i = 0; i < children[1]->children[0]->children.size(); i++) {
+            string paramType = children[1]->children[0]->children[i]->typeCheckStr(parent);
+            if(paramType == INVALIDSYM){
+              return INVALIDSYM;
+            }
+            string initVal = "";
+            if(paramType == "int") {
+              initVal = "0";
+            } else {
+              initVal = "null";
+            }
+            Variable*  temp = new Variable{paramType, "id", initVal, true};
+            args.push_back(temp);
           }
-          string initVal = "";
-          if(paramType == "int") {
-            initVal = "0";
-          } else {
-            initVal = "null";
-          }
-          Variable*  temp = new Variable{paramType, "id", initVal, true};
-          args.push_back(temp);
         }
         
         string name = children[0]->typeCheckMet(parent, args);

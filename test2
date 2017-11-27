@@ -1,9 +1,9 @@
 class A{
-  
-  int meth()
+  int myint;
+  int method1(int x, A y)
   {
-    A[][] objArray;
-    objArray = new A[][];
+    if(method2()){}
   }
+  int method2(){}
 }
 
