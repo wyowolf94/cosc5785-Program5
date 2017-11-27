@@ -1,7 +1,7 @@
 class A{
   int method1(A[][] myvar1)
   {
-    myvar1 = new A[5][];
+    print();
   }
 }
 

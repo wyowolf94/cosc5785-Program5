@@ -950,8 +950,7 @@ class statementNode : public Node
             }
           }
         }
-
-        return children[0]->typeCheck();
+        return true;
       }else if(type == "cond") {
         // <Statement> -> <ConditionalStatement>
         return children[0]->typeCheck();
