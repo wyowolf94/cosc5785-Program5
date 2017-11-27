@@ -1245,17 +1245,29 @@ class optexpNode : public Node
     
     string typeCheckStr(SymbolTable* parent) {
       if(type == "empty") {
-        return "void";
+        //return "void";
+        string expressionType = "void";
+        SymbolTable* enclMethod = parent->getEnclosingMethod();
+        string mchammer = enclMethod->getType();
+        if(mchammer == CONSTRTYPE) {
+          return mchammer;
+        }
+        string rType = enclMethod->return_type();
+        if(expressionType != rType) {
+          cerr << "Type Error: Invalid return type at " << lnum << endl;
+          return INVALIDSYM;
+        }
+        return expressionType;
       } else if(type == "exp") {
         string expressionType = children[0]->typeCheckStr(parent);
-        SymbolTable* getSome = parent->getEnclosingMethod();
-        string mchammer = getSome->getType();
-        if(mchammer == CLASSTYPE) {
+        SymbolTable* enclMethod = parent->getEnclosingMethod();
+        string mchammer = enclMethod->getType();
+        if(mchammer == CONSTRTYPE) {
           cerr << "Type Error: Invalid return for constructor at " << lnum 
                << endl;
           return INVALIDSYM;
         }
-        string rType = getSome->return_type();
+        string rType = enclMethod->return_type();
         if(expressionType != rType) {
           cerr << "Type Error: Invalid return type at " << lnum << endl;
           return INVALIDSYM;
