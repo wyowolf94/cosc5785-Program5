@@ -25,7 +25,7 @@ class ClassB
     x = y; //error mismatched types
     mymethod2(myAarr2, myint);
     myint = mymethod1(x, y);
-//     mymethod2(myint, myAarr2); //error no method
+    mymethod2(myint, myAarr2); //error no method
     return x * 2;
   }
   void mymethod2(ClassA[][] myvar1, int myvar2)
@@ -34,7 +34,7 @@ class ClassB
     myvar1 = new ClassA[5][];
     myvar1 = new ClassA[mymethod1(myvar2, myA1)][myvar2];
     myA1 = new ClassA();
-    //print(5, new ClassA());
+    print(5, new ClassA());
     if((myvar1 == myvar1) && (myA1 == new ClassA()))
     {}
     else
