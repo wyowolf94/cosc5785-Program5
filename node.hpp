@@ -225,6 +225,7 @@ class classdecNode : public Node
 // classbodyNode that goes to { vardecs constdecs methdecs }
 class classbodyNode : public Node 
 {
+  
   public:
     classbodyNode(string t) : Node () {
       type = t;
@@ -1331,9 +1332,12 @@ class expNode : public Node
         // <Expression> -> <Expression> Sumop/Proop <Expression>
         string e1 = children[0]->typeCheckStr(parent);
         string e2 = children[0]->typeCheckStr(parent);
-        if(e1 == INVALIDSYM || e2 == INVALIDSYM || e1 != e2) {
+        if(e1 == INVALIDSYM || e2 == INVALIDSYM) {
           cerr << "Type Error: Invalid Expression at " << lnum << endl;
           return INVALIDSYM;
+        }
+        if(e1 != e2) {
+          cerr << "Type Error: Type Mismatch at " << lnum << endl;
         }
         return e1;
       } else if (expType == "unyop") {
