@@ -1703,7 +1703,7 @@ class nameNode : public Node
         }
         // Lookup Id in nameClass
         Variable tempVar{"", id, initVal, true};
-        string found = nameClass->lookup_children(&tempVar);
+        string found = nameClass->getBlockChild()->lookup_children(&tempVar);
         
         if(found == INVALIDSYM) {
           cerr << "Type Error: Invalid Identifier " << id 

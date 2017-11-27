@@ -72,6 +72,14 @@ class SymbolTable
       return parent;
     }
 
+    SymbolTable* getBlockChild(){
+      auto it = children.begin();
+      if(it == children.end()){
+        return 0;
+      }
+      return it->second;
+    }
+    
     unordered_map<string, SymbolTable*> getChildren() {
       return children;
     }
