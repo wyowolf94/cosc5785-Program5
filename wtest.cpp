@@ -52,7 +52,7 @@ class ClassC
   ClassB myClassB1;
   int myint1;
   ClassC(){
-    this();
+//     this();
     this(myint1);
     this.myint1 = 10;
     this.myint1 = this.myint1;

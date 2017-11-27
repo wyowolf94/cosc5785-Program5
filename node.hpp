@@ -932,12 +932,15 @@ class statementNode : public Node
         return (name != INVALIDSYM);
       } else if(type == "printarglist") {
         // <Statement> -> print ( <ArgList> ) ;
-        for(unsigned int i = 0; i < children[1]->children.size(); i++) {
-          string paramType = children[1]->children[i]->typeCheckStr(parentTable);
-          if(paramType == INVALIDSYM){
-            return false;
+        if(children[1] != 0){
+          for(unsigned int i = 0; i < children[1]->children.size(); i++) {
+            string paramType = children[1]->children[i]->typeCheckStr(parentTable);
+            if(paramType == INVALIDSYM){
+              return false;
+            }
           }
         }
+
         return children[0]->typeCheck();
       }else if(type == "cond") {
         // <Statement> -> <ConditionalStatement>
