@@ -899,12 +899,19 @@ class statementNode : public Node
           cerr << "Type Error: Unrecognized expression at " << lnum << endl;
           return false;
         }
-        if (name != expression){
+        
+        if((name == "int" && expression == "null") 
+          ||(name == "null" && expression == "int")) {
           cerr << "Type Error: Type Mismatch " << name << " != " << expression
-               << " at " << lnum << endl;
-          return INVALIDSYM;
+          << " at " << lnum << endl;
+          return false;
         }
-        return true;
+        
+        if(name == expression || name == "null" || expression == "null") {
+          return true;
+        }
+        
+        return false;
       } else if(type == "namearglist") {
         // <Statement> -> <Name> ( <ArgList> ) ;
        

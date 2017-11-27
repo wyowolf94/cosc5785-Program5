@@ -75,7 +75,6 @@ class ClassC
     }
     
     myClassC1.myClassA1.y[0] = myClassB1;
-    
 //     myClassC1.myClassA1.y[0] = myClassB1.myint;//error type mismatch
     myClassC1.myClassA1.y[0].myintarr2[4][myint1] = myint1;
     
