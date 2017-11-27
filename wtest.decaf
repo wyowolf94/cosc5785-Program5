@@ -34,7 +34,7 @@ class ClassB
     myvar1 = new ClassA[5][];
     myvar1 = new ClassA[mymethod1(myvar2, myA1)][myvar2];
     myA1 = new ClassA();
-    print(5, new ClassA());
+    //print(5, new ClassA());
     if((myvar1 == myvar1) && (myA1 == new ClassA()))
     {}
     else
@@ -52,8 +52,13 @@ class ClassC
   ClassB myClassB1;
   int myint1;
   ClassC(){
+<<<<<<< HEAD:wtest.cpp
 //     this();
     this(myint1);
+=======
+    //this();
+    //this(myint1);
+>>>>>>> bc4fe727945ac0097b0e7f22ea7aceb6201acc51:wtest.decaf
     this.myint1 = 10;
     this.myint1 = this.myint1;
   }
