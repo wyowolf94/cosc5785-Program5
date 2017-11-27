@@ -1536,7 +1536,7 @@ class newexpNode : public Node
           
           if(expType != "int") {
             cerr << "Type Error: Invalid Type (does not evaluate to [int]) " 
-                 << simpType  << " at line" << lnum << endl;
+                 << simpType  << " at line " << lnum << endl;
             return INVALIDSYM;
           }
         }
@@ -1721,7 +1721,7 @@ class nameNode : public Node
         string name = children[0]->typeCheckStr(parent);
         string exp = children[1]->typeCheckStr(parent);
         if(exp != "int"){
-          cerr << "Type Error : Invalid expression (does not evaluate to [int]) at " 
+          cerr << "Type Error: Invalid expression (does not evaluate to [int]) at " 
                << lnum << endl;
         }
         

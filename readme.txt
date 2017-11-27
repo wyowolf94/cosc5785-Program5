@@ -9,9 +9,12 @@ Shaya Wolf
  - If you have "return;" in a non-void method, it can't print a line num
    because the production in bison is %empty... so I just return the 
    method it is enclosed in.
- - matching parameters in a method call to the correct entry in a symboltable
-   sometimes doesn't work right
- - most lval rval stuff works, but sometimes you can add two variables of 
-   different types together without it throwing an error
+ - The Errors don't print in the exact order of the line numbers but it 
+   is close
+
    
- will try to fix tonight, but I needed to turn in something
+   Should work -- I am interested to see what you find that doesn't work 
+   since there will probably be something. I spent more time on this one
+   assignment than my OS final last year :D
+   
+   
