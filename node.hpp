@@ -919,7 +919,7 @@ class statementNode : public Node
         // <Statement> -> <Name> ( <ArgList> ) ;
        
         vector<Variable*> args;
-        if(children[1]->children[0]->children.size() > 0) {
+        if(children[1]->children.size() > 0) {
             for(unsigned int i = 0; i < children[1]->children[0]->children.size(); i++) {
             string paramType = children[1]->children[0]->children[i]->typeCheckStr(parentTable);
             if(paramType == INVALIDSYM){
